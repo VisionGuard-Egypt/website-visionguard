@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vision Guard | كاميرات مراقبة وأنظمة أمان في مصر</title>
+<meta name="description" content="كاميرات مراقبة وايرلس وأنالوج، أجهزة تسجيل DVR و XVR، هاردات مراقبة وبور سبلاي. Dahua و Skyworth و Tapo بأفضل سعر مع شحن سريع ودعم فني.">
+<link rel="canonical" href="https://visionguardeg.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vision Guard">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:url" content="https://visionguardeg.com/">
+<meta property="og:image" content="https://visionguardeg.com/assets/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Vision Guard — كاميرات مراقبة وأنظمة أمان في مصر">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F6F7F9">
+
+<!-- Facebook Business Manager domain verification. Must stay in <head>, in the
+     served HTML — Facebook fetches the page and parses it without running any
+     JavaScript, so this cannot move into a script or a template that renders
+     client-side. Leave it here even after verification passes: Meta re-checks
+     periodically and removing it un-verifies the domain. -->
+<meta name="facebook-domain-verification" content="5ab55jog8kqu0qz2g4iftw6dzbf7e3">
+
+<meta property="og:title" content="Vision Guard | كاميرات مراقبة وأنظمة أمان في مصر">
+<meta property="og:description" content="كاميرات مراقبة، أجهزة تسجيل، وحدات تخزين وبور سبلاي — بأفضل سعر مع شحن سريع ودعم فني.">
+
+<link rel="icon" href="assets/logo-trim.png">
+<link rel="apple-touch-icon" href="assets/logo-trim.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap">
+<!-- ?v= is a cache buster. Bump it on any CSS or JS change, on every page and
+     in every module import, together.
+
+     It is no longer propping up a broken zone setting. visionguardeg.com used
+     to carry a Browser Cache TTL of 14400 at the zone level, which rewrote the
+     Cache-Control from _headers before it reached anyone: app.css was declared
+     max-age=3600 and served as 14400, and catalog.js was declared 300 — five
+     minutes, because it carries PRICES — and served as four hours. That
+     setting is now "Respect Existing Headers", so _headers is authoritative
+     and those values arrive as written.
+
+     Keep bumping this anyway. A new URL is an unconditional edge miss, which
+     is what makes a deploy visible immediately rather than after the file TTL
+     expires — and a stale account.js talking to a changed API is a broken
+     sign-in, not a stale colour. Module imports do not inherit the query, so
+     the ?v= inside account.js/shop.js/page.js/product.js has to move with it.
+     The HTML itself revalidates every time, so a changed href here is picked
+     up on the next request. -->
+<link rel="stylesheet" href="styles.css?v=66">
+
+<script>(function(d){var c=d.documentElement;c.className=c.className.replace('no-js','js');var t='light';try{var s=localStorage.getItem('vg-theme');if(s==='dark'||s==='light'){t=s;}}catch(e){}c.setAttribute('data-theme',t);})(document);</script>
+<!-- Meta Pixel. The loader lives in pixel.js so the CSP needs no second
+     inline-script hash - see that file. The id below is public; the ACCESS
+     TOKEN is a secret and lives only in META_ACCESS_TOKEN, server-side.
+
+     consent.js MUST stay ahead of pixel.js. Both are `defer`, so document
+     order is execution order, and the pixel waits on window.vgConsent to
+     exist. Reorder these two and the pixel silently never loads - which is
+     the safe direction to fail, and the reason it is written that way.
+
+     The <noscript> beacon that used to sit here is gone on purpose. It fired
+     a tracking request from the markup itself, before and regardless of any
+     consent, and a visitor with JavaScript off cannot be shown a bar to
+     answer. There is no way to make that request consented, so it is not
+     made. The server-side Conversions API in functions/api/capi.js already
+     covers the visitors the browser pixel misses. -->
+<script src="consent.js?v=66" defer></script>
+<script src="worklink.js?v=66" defer></script>
+<script src="promo.js?v=66" defer></script>
+<script src="pixel.js?v=66" defer></script>
+<script src="track.js?v=66" defer></script>
+</head>
+<body>
+
+<div class="boot" aria-hidden="true">
+  <div class="boot__mark"><img src="assets/logo-trim.png" alt="" width="322" height="190"></div>
+  <div class="boot__bar"><i></i></div>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+
+<a class="skip" href="#categories" data-en="Skip to content">تخطَّ إلى المحتوى</a>
+
+<!-- ============ TOP CONTACT STRIP ============ -->
+<div class="strip">
+  <div class="shell strip__in">
+    <p class="strip__item"><span class="dot"></span><span data-en="Fast contact">تواصل سريع</span></p>
+    <a class="strip__item" href="tel:+201260087815" dir="ltr">01260087815</a>
+    <a class="strip__item strip__wa" href="https://wa.me/201105006854" target="_blank" rel="noopener">
+      <span data-en="WhatsApp">واتساب</span> <span dir="ltr">01105006854</span>
+    </a>
+    <p class="strip__item strip__hours" data-en="10 AM – 8 PM · Closed Friday">١٠ص – ٨م · الجمعة إجازة</p>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav__inner shell">
+    <a class="brand" href="#top" aria-label="Vision Guard">
+      <img class="brand__logo" src="assets/logo-trim.png" alt="Vision Guard" width="322" height="190">
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="shop.html"   data-en="Shop">المتجر</a>
+      <a href="game.html" data-en="Planner">المخطّط</a>
+      <a href="#categories" data-nav="categories" data-en="Categories">الأقسام</a>
+      <a href="#products"   data-nav="products"   data-en="Products">المنتجات</a>
+      <a href="#how"        data-nav="how"        data-en="How to order">طريقة الطلب</a>
+      <a href="#why"        data-nav="why"        data-en="Why us">لماذا نحن</a>
+      <a href="#contact"    data-nav="contact"    data-en="Contact">تواصل</a>
+    </nav>
+
+    <div class="nav__end">
+      <button class="lang" id="lang" type="button" aria-label="Switch language">EN</button>
+      <button class="theme" id="theme" type="button" aria-label="Switch theme" aria-pressed="false" title="الوضع الفاتح / الداكن">
+        <svg class="theme__sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2"/>
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>
+        </svg>
+        <svg class="theme__moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.4 8.4 0 1 0 10.8 10.8Z"/>
+        </svg>
+      </button>
+      <a class="navlink-account" href="account.html" data-en="Account">حسابي</a>
+      <a class="btn btn--sm" href="shop.html" data-en="Order now">اطلب دلوقتي</a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <div class="menu__inner">
+    <a href="shop.html"><i>01</i><span data-en="Shop">المتجر</span></a>
+    <a href="account.html"><i>02</i><span data-en="Account">حسابي</span></a>
+    <a href="#categories"><i>03</i><span data-en="Categories">الأقسام</span></a>
+    <a href="#how"><i>04</i><span data-en="How to order">طريقة الطلب</span></a>
+    <a href="#contact"><i>05</i><span data-en="Contact">تواصل</span></a>
+    <a href="game.html"><i>06</i><span data-en="Planner">المخطّط</span></a>
+    <div class="menu__foot">
+      <a href="tel:+201260087815" dir="ltr">01260087815</a>
+      <a href="https://wa.me/201105006854" target="_blank" rel="noopener" dir="ltr">WhatsApp 01105006854</a>
+    </div>
+  </div>
+</div>
+<!-- A second copy of the Meta base code used to sit here, inline, with its own
+     <noscript> beacon. Both are removed.
+
+     The inline block was already dead: the CSP allows exactly one inline
+     script, pinned by the hash of the no-js/js swap in <head>, so this one
+     was blocked on every page load and had been for as long as the header
+     existed. Left in place it was a loaded gun - relax the CSP for any
+     unrelated reason and it comes back to life as a SECOND, unconsented
+     pixel firing a duplicate PageView that pixel.js has no way to
+     deduplicate against.
+
+     The <noscript> beacon was not dead. It fired for every visitor with
+     JavaScript off, ahead of any consent and with no way to ask for one. -->
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero__stage">
+      <div class="hero__field" aria-hidden="true"></div>
+      <div class="hero__vignette" aria-hidden="true"></div>
+
+      <div class="hero__content shell">
+        <p class="eyebrow hero__eyebrow"><span class="dot"></span><span data-en="Vision Guard — Egypt">Vision Guard — مصر</span></p>
+        <h1 class="display hero__title" data-split data-en="Watch over what matters. From anywhere.">تابع اللي يهمّك. من أي مكان.</h1>
+        <p class="lede hero__lede" data-en="Wireless and analog cameras, DVR and XVR recorders, surveillance drives and power supplies — Dahua, Skyworth and Tapo. We recommend the right system for your place, at the right price.">
+          كاميرات وايرلس وأنالوج، أجهزة تسجيل DVR و XVR، هاردات مراقبة وبور سبلاي — من Dahua و Skyworth و Tapo.
+          نرشّح لك النظام المناسب لمكانك، وبأفضل سعر.
+        </p>
+        <div class="hero__actions">
+          <a class="btn" href="shop.html" data-en="Shop and order online">تسوّق واطلب أونلاين</a>
+          <a class="btn btn--ghost" href="https://wa.me/201105006854" target="_blank" rel="noopener" data-en="Get a recommendation on WhatsApp">اطلب ترشيح على واتساب</a>
+        </div>
+      </div>
+
+      <aside class="hud" aria-hidden="true">
+        <p class="hud__title" data-en="System layers">طبقات النظام</p>
+        <ol class="hud__list">
+          <li><i>01</i><span data-en="Cameras">الكاميرات</span></li>
+          <li><i>02</i><span data-en="DVR / XVR">جهاز التسجيل</span></li>
+          <li><i>03</i><span data-en="Storage">التخزين</span></li>
+          <li><i>04</i><span data-en="Phone viewing">المشاهدة من الموبايل</span></li>
+        </ol>
+      </aside>
+
+      <div class="hero__cue" aria-hidden="true">
+        <span data-en="Scroll">انزل</span>
+        <i></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TICKER ============ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__row" id="ticker">
+      <div class="ticker__set">
+        <span><b></b><span data-en="Fast shipping">شحن سريع</span></span>
+        <span><b></b><span data-en="Best price and offers">أفضل سعر وعروض</span></span>
+        <span><b></b><span data-en="Customer support">دعم العملاء</span></span>
+        <span><b></b><span data-en="High quality products">منتجات بجودة عالية</span></span>
+        <span><b></b>Dahua</span><span><b></b>Skyworth</span><span><b></b>Tapo</span>
+        <span><b></b>WD Purple</span><span><b></b>Seagate</span>
+      </div>
+      <div class="ticker__set">
+        <span><b></b><span data-en="Fast shipping">شحن سريع</span></span>
+        <span><b></b><span data-en="Best price and offers">أفضل سعر وعروض</span></span>
+        <span><b></b><span data-en="Customer support">دعم العملاء</span></span>
+        <span><b></b><span data-en="High quality products">منتجات بجودة عالية</span></span>
+        <span><b></b>Dahua</span><span><b></b>Skyworth</span><span><b></b>Tapo</span>
+        <span><b></b>WD Purple</span><span><b></b>Seagate</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section class="section" id="categories">
+    <div class="shell">
+      <header class="sechead">
+        <p class="eyebrow reveal" data-en="Categories">الأقسام</p>
+        <h2 class="h2" data-split data-en="Everything a complete system needs.">كل اللي النظام الكامل محتاجه.</h2>
+        <p class="sechead__note reveal" data-en="Five categories that cover the whole chain: what sees, what records, what stores, and what powers it.">
+          خمسة أقسام تغطي السلسلة كاملة: اللي بيشوف، واللي بيسجّل، واللي بيخزّن، واللي بيغذّي النظام بالكهرباء.
+        </p>
+      </header>
+
+      <!-- rendered from catalog.js by home.js -->
+      <div class="cats"></div>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCTS ============ -->
+  <section class="section products" id="products">
+    <div class="shell">
+      <header class="sechead">
+        <p class="eyebrow reveal" data-en="Price list">قائمة الأسعار</p>
+        <h2 class="h2" data-split data-en="Current stock and prices.">المتوفر حاليًا وأسعاره.</h2>
+        <p class="sechead__note reveal" data-en="Prices in Egyptian pounds. Availability and pricing change — confirm on WhatsApp before ordering.">
+          الأسعار بالجنيه المصري. التوافر والأسعار بيتغيّروا — أكّد على واتساب قبل الطلب.
+        </p>
+      </header>
+
+      <!-- rendered from catalog.js by home.js -->
+      <div class="plist"></div>
+
+      <div class="plist__cta reveal">
+        <a class="btn" href="shop.html" data-en="Order from the shop">اطلب من المتجر</a>
+        <a class="btn btn--ghost" href="https://wa.me/201105006854" target="_blank" rel="noopener" data-en="Ask before you order">اسأل قبل ما تطلب</a>
+        <p class="plist__note" data-en="Prices last checked 31 July 2026 and may change. Order online — it reaches us the moment you confirm it.">آخر تحديث للأسعار ٣١ يوليو ٢٠٢٦ وقابلة للتغيير. اطلب أونلاين — الطلب بيوصلنا لحظة ما تأكده.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW TO ORDER ============ -->
+  <section class="process" id="how">
+    <div class="shell process__grid">
+      <div class="process__sticky">
+        <p class="eyebrow" data-en="How to order">طريقة الطلب</p>
+        <div class="stepviz" aria-hidden="true">
+          <span class="stepviz__num" id="stepNum">01</span>
+          <svg class="stepviz__art" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+            <g class="sv" data-sv="0">
+              <circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="44"/>
+              <circle cx="100" cy="100" r="4" fill="currentColor" stroke="none"/>
+              <path d="M100 12v18M100 170v18M12 100h18M170 100h18"/>
+              <path class="sv__sweep" d="M100 100L100 30"/>
+            </g>
+            <g class="sv" data-sv="1">
+              <rect x="34" y="34" width="132" height="132" rx="6"/>
+              <path d="M34 78h132M34 122h132M78 34v132M122 34v132"/>
+              <rect class="sv__lock" x="78" y="78" width="44" height="44"/>
+              <path d="M56 56h10M144 56h-10M56 144h10M144 144h-10"/>
+            </g>
+            <g class="sv" data-sv="2">
+              <path d="M100 24l62 30v42c0 38-26 62-62 80-36-18-62-42-62-80V54l62-30Z"/>
+              <path d="M74 100l18 18 36-40"/>
+              <path class="sv__pulse" d="M20 100h34M146 100h34"/>
+            </g>
+          </svg>
+        </div>
+        <p class="process__stickynote" id="stepNote">قول لنا المكان وعدد النقط، ونرشّح النظام المناسب.</p>
+      </div>
+
+      <ol class="steps">
+        <li class="step" data-step="0">
+          <p class="step__kicker" data-en="Step 01">الخطوة ٠١</p>
+          <h3 class="step__title" data-split data-en="Tell us the place">قول لنا المكان</h3>
+          <p class="step__body" data-en="Send us the type of place — home, shop, warehouse, building entrance — and roughly how many points you want covered. We come back with a recommendation: how many cameras, which type, which recorder, and what drive size.">
+            ابعت لنا نوع المكان — بيت، محل، مخزن، مدخل عمارة — وعدد النقط اللي عايز تغطيها تقريبًا.
+            نرجع لك بترشيح: كام كاميرا، نوعها إيه، أنهي جهاز تسجيل، وسعة الهارد المناسبة.
+          </p>
+          <ul class="step__list">
+            <li data-en="Wireless or analog, based on the place">وايرلس ولا أنالوج حسب المكان</li>
+            <li data-en="Channel count sized to the cameras">عدد القنوات حسب عدد الكاميرات</li>
+            <li data-en="Drive size based on retention needed">سعة الهارد حسب مدة التسجيل المطلوبة</li>
+          </ul>
+        </li>
+
+        <li class="step" data-step="1">
+          <p class="step__kicker" data-en="Step 02">الخطوة ٠٢</p>
+          <h3 class="step__title" data-split data-en="Confirm and order">أكّد واطلب</h3>
+          <p class="step__body" data-en="Order straight from the store, or finish it on WhatsApp if you would rather talk it through. You see the price of every part before anything is confirmed — no bundled surprises. The order is placed unpaid and you complete the payment with us on WhatsApp.">
+            اطلب من المتجر مباشرة، أو كمّل على واتساب لو تحب تتكلم. هتشوف سعر كل قطعة قبل التأكيد —
+            من غير مفاجآت في الفاتورة. الطلب بيتسجّل من غير دفع، وبتكمّل الدفع معانا على واتساب.
+          </p>
+          <ul class="step__list">
+            <li data-en="Itemised price, part by part">سعر مفصّل لكل قطعة</li>
+            <li data-en="Order via the store or WhatsApp">الطلب من المتجر أو واتساب</li>
+            <li data-en="InstaPay or e-wallet, on WhatsApp">إنستاباي أو محفظة، على واتساب</li>
+            <li data-en="Exchange and refund policy applies">سياسة استبدال واسترجاع واضحة</li>
+          </ul>
+        </li>
+
+        <li class="step" data-step="2">
+          <p class="step__kicker" data-en="Step 03">الخطوة ٠٣</p>
+          <h3 class="step__title" data-split data-en="Receive and set up">استلم وركّب</h3>
+          <p class="step__body" data-en="Fast shipping, then support while you set it up — wiring the recorder, formatting the drive, and getting the phone app connected so you can actually watch from anywhere.">
+            شحن سريع، وبعدها دعم أثناء التركيب — توصيل جهاز التسجيل، تهيئة الهارد، وضبط التطبيق
+            على الموبايل عشان تقدر تتابع فعلًا من أي مكان.
+          </p>
+          <ul class="step__list">
+            <li data-en="Fast shipping across Egypt">شحن سريع لكل المحافظات</li>
+            <li data-en="Setup support on WhatsApp">دعم التركيب على واتساب</li>
+            <li data-en="Phone app configured with you">ضبط التطبيق معاك خطوة بخطوة</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ STATEMENT ============ -->
+  <section class="statement">
+    <div class="statement__bg" aria-hidden="true" data-parallax="0.12"></div>
+    <div class="shell">
+      <p class="statement__text display" data-split data-en="A camera you cannot check is just a decoration.">الكاميرا اللي مش قادر تتابعها مجرد ديكور.</p>
+      <p class="statement__by reveal" data-en="— Which is why every system we recommend is one you can open on your phone">— عشان كده أي نظام بنرشّحه بتقدر تفتحه من موبايلك</p>
+    </div>
+  </section>
+
+  <!-- ============ WHY US ============ -->
+  <section class="section trust" id="why">
+    <div class="shell trust__grid">
+      <div class="trust__lead">
+        <p class="eyebrow reveal" data-en="Why us">لماذا نحن</p>
+        <h2 class="h2" data-split data-en="We sell what we would install.">بنبيع اللي كنا هنركّبه لنفسنا.</h2>
+        <p class="trust__copy reveal" data-en="We carry names that have already proven themselves in the field — Dahua, Skyworth, Tapo, WD Purple, Seagate — instead of whatever happens to be cheapest that week. A cheap camera that fails in its second summer costs more than the one you did not buy.">
+          بنشتغل بأسماء أثبتت نفسها فعليًا في السوق — Dahua و Skyworth و Tapo و WD Purple و Seagate —
+          مش أرخص حاجة متوفرة الأسبوع ده. الكاميرا الرخيصة اللي بتقع في تاني صيف بتتكلّف أكتر من اللي ما اشتريتهاش.
+        </p>
+        <p class="trust__copy reveal" data-en="And we would rather talk you out of a bigger system than sell you one you do not need. If four cameras cover your place, we will not quote you eight.">
+          وبنفضّل نقنعك بنظام أصغر على إننا نبيعلك حاجة مش محتاجها. لو أربع كاميرات بتغطي مكانك،
+          مش هنعرض عليك تمانية.
+        </p>
+        <a class="link reveal" href="https://wa.me/201105006854" target="_blank" rel="noopener">
+          <span data-en="Ask us on WhatsApp">اسألنا على واتساب</span><i aria-hidden="true">←</i>
+        </a>
+      </div>
+
+      <ul class="pillars">
+        <li class="pillar reveal">
+          <h3 data-en="Fast shipping">شحن سريع</h3>
+          <p data-en="Orders go out quickly and reach every governorate in Egypt.">الطلبات بتخرج بسرعة وبتوصل لكل محافظات مصر.</p>
+        </li>
+        <li class="pillar reveal">
+          <h3 data-en="Best price and offers">أفضل سعر وعروض</h3>
+          <p data-en="Discounted pricing on every listed item, plus coupons and seasonal offers.">سعر مخفّض على كل المنتجات المعروضة، بالإضافة لكوبونات وعروض موسمية.</p>
+        </li>
+        <li class="pillar reveal">
+          <h3 data-en="Support that answers">دعم بيرد فعلًا</h3>
+          <p data-en="Reachable on WhatsApp during opening hours — before you buy and after you install.">متاحين على واتساب في مواعيد العمل — قبل الشراء وبعد التركيب.</p>
+        </li>
+        <li class="pillar reveal">
+          <h3 data-en="Equipment built to last">منتجات بجودة عالية</h3>
+          <p data-en="Surveillance-rated drives and cameras specified for continuous 24/7 operation.">هاردات وكاميرات مخصصة للمراقبة ومصممة للعمل المستمر ٢٤/٧.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section contact" id="contact">
+    <div class="shell">
+      <div class="contact__grid">
+        <div class="contact__lead">
+          <p class="eyebrow reveal" data-en="Contact">تواصل</p>
+          <h2 class="h2" data-split data-en="Tell us the place. We will size the system.">قول لنا المكان. واحنا نظبّط النظام.</h2>
+          <p class="contact__copy reveal" data-en="Fastest way to reach us is WhatsApp — send a photo of the place if you can, it makes the recommendation much more accurate.">
+            أسرع طريقة للتواصل هي واتساب — وابعت صورة للمكان لو تقدر، ده بيخلّي الترشيح أدق بكتير.
+          </p>
+          <div class="contact__actions reveal">
+            <a class="btn" href="https://wa.me/201105006854" target="_blank" rel="noopener" data-en="Message on WhatsApp">راسلنا على واتساب</a>
+            <a class="btn btn--ghost" href="tel:+201260087815" data-en="Call 01260087815">اتصل ٠١٢٦٠٠٨٧٨١٥</a>
+          </div>
+        </div>
+
+        <dl class="contact__meta reveal">
+          <div>
+            <dt data-en="Phone">تليفون</dt>
+            <dd><a href="tel:+201260087815" dir="ltr">01260087815</a></dd>
+          </div>
+          <div>
+            <dt data-en="WhatsApp">واتساب</dt>
+            <dd><a href="https://wa.me/201105006854" target="_blank" rel="noopener" dir="ltr">01105006854</a></dd>
+          </div>
+          <div>
+            <dt data-en="Opening hours">مواعيد العمل</dt>
+            <dd data-en="10 AM – 8 PM daily<br>Friday closed">يوميًا من ١٠ صباحا حتى ٨ مساءً<br>الجمعة إجازة</dd>
+          </div>
+          <div>
+            <dt data-en="Online">على الإنترنت</dt>
+            <dd>
+              <a href="https://www.facebook.com/visionguardegypt/" target="_blank" rel="noopener">Facebook</a> ·
+              <a href="https://www.instagram.com/visionguardegypt/" target="_blank" rel="noopener">Instagram</a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="shell">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="#top" aria-label="Vision Guard">
+          <img class="brand__logo" src="assets/logo-trim.png" alt="Vision Guard" width="322" height="190" loading="lazy">
+        </a>
+        <p class="footer__tag" data-en="Cameras, recorders, storage and power — for homes, shops and businesses across Egypt.">
+          كاميرات وأجهزة تسجيل ووحدات تخزين وبور سبلاي — للبيوت والمحلات والشركات في كل مصر.
+        </p>
+        <p class="footer__status"><span class="dot"></span><span data-en="10 AM – 8 PM · Closed Friday">١٠ صباحًا – ٨ مساءً · الجمعة إجازة</span></p>
+      </div>
+
+      <nav class="footer__col" aria-label="Categories">
+        <h4 data-en="Categories">الأقسام</h4>
+        <a href="shop.html?cat=wireless" data-en="Wireless Cameras">كاميرات Wireless</a>
+        <a href="shop.html?cat=analog" data-en="HD Analog Cameras">كاميرات HD (Analog)</a>
+        <a href="shop.html?cat=dvr" data-en="DVR / XVR Recorders">أجهزة تسجيل DVR — XVR</a>
+        <a href="shop.html?cat=storage" data-en="Storage Devices">وحدات التخزين</a>
+        <a href="shop.html?cat=power" data-en="Power Supply">البور سبلاي</a>
+      </nav>
+
+      <nav class="footer__col" aria-label="Policies">
+        <h4 data-en="Policies">السياسات</h4>
+        <!-- These three pointed at /pages/terms-and-conditions, /pages/refund-policy
+             and /pages/shipping-policy — paths that do not exist on this site.
+             Cloudflare Pages answers an unmatched path with index.html and a 200,
+             so all three silently returned the HOMEPAGE: same 29,597 bytes, no
+             error, nothing to notice unless you followed the link and wondered
+             why you were back where you started. The real pages are right here,
+             and the shop and product pages were already linking to them. -->
+        <a href="privacy.html" data-en="Privacy policy">سياسات الخصوصية</a>
+        <a href="terms.html" data-en="Terms of use">شروط الاستخدام</a>
+        <a href="refund.html" data-en="Exchange &amp; refund">سياسة الاستبدال والاسترجاع</a>
+        <a href="shipping.html" data-en="Shipping policy">سياسة الشحن</a>
+        <!-- consent.js listens for data-consent="open" anywhere on the page
+             and reopens the cookie bar. It is a real href as well, so it
+             still leads somewhere useful with JavaScript off. -->
+        <a href="privacy.html#cookies" data-consent="open" data-en="Cookie settings">إعدادات الكوكيز</a>
+      </nav>
+
+      <div class="footer__col footer__col--contact">
+        <h4 data-en="Contact">تواصل</h4>
+        <a href="tel:+201260087815" dir="ltr">01260087815</a>
+        <a href="https://wa.me/201105006854" target="_blank" rel="noopener" dir="ltr">WhatsApp 01105006854</a>
+        <a href="https://www.facebook.com/visionguardegypt/" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.instagram.com/visionguardegypt/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+
+    <div class="footer__word" aria-hidden="true"><span>VISION</span>GUARD</div>
+
+    <div class="footer__bar">
+      <p>&copy; <span id="year">2026</span> Vision Guard. <span data-en="All rights reserved.">جميع الحقوق محفوظة.</span></p>
+      <a class="totop" href="#top"><span data-en="Back to top">أعلى الصفحة</span> <i aria-hidden="true">↑</i></a>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js?v=66" defer></script>
+<script type="module" src="home.js?v=66"></script>
+<script src="assistant.js?v=66" defer></script>
+</body>
+</html>

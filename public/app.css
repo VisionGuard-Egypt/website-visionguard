@@ -1,0 +1,1950 @@
+/* =========================================================================
+   Vision Guard — app.css
+   Shop, account and attendance. Loaded only on those pages; the landing page
+   never pays for it.
+
+   Every token, button, hairline and radius comes from styles.css — this file
+   introduces no new colours and no second design language. If something here
+   looks like a new idea, it is a mistake.
+   ========================================================================= */
+
+/* ---------- utilities ---------- */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+[hidden]{ display:none !important; }
+
+/* =========================================================================
+   PAGE HEAD
+   ========================================================================= */
+.pagehead{
+  display:grid; gap:18px; max-width:760px;
+  padding-block:clamp(40px,6vw,76px) clamp(28px,3.6vw,44px);
+}
+.pagehead--tight{ padding-block:0 clamp(20px,2.6vw,30px); }
+.pagehead__note{ color:var(--ink-2); max-width:56ch; }
+
+.view{ min-height:60vh; }
+
+/* =========================================================================
+   LEGAL — long-form policy pages (privacy.html)
+
+   A measure of about 70 characters, and headings that are clearly heavier
+   than the paragraphs under them: a policy is only useful if someone can
+   find the one clause they came for. Arabic is the source language here, so
+   the rhythm is set for it and Latin text inherits the same scale.
+   ========================================================================= */
+.legal{
+  max-width:74ch; padding-block:0 clamp(48px,7vw,96px);
+  color:var(--ink-2); line-height:1.85;
+}
+.legal__stamp{ font-size:.8125rem; color:var(--ink-3); }
+.legal__stamp b{ font-family:var(--latin); color:var(--ink-2); }
+.legal h2{
+  margin-block:clamp(30px,4vw,44px) 12px;
+  font-size:clamp(1.0625rem,2.4vw,1.25rem); font-weight:700;
+  letter-spacing:-.02em; color:var(--ink);
+}
+.legal h2:first-child{ margin-block-start:0; }
+.legal h3{
+  margin-block:22px 8px;
+  font-size:.9375rem; font-weight:600; color:var(--ink);
+}
+.legal p{ margin-block:0 12px; }
+.legal ul{ margin-block:0 12px; padding-inline-start:0; list-style:none; display:grid; gap:9px; }
+.legal li{ position:relative; padding-inline-start:20px; }
+/* A marker drawn rather than inherited: list-style bullets sit outside the
+   content box and get clipped at the RTL edge on narrow screens. */
+.legal li::before{
+  content:""; position:absolute; inset-inline-start:4px; inset-block-start:.72em;
+  width:5px; height:5px; border-radius:50%; background:var(--accent); opacity:.75;
+}
+.legal a{ color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+
+/* =========================================================================
+   NAV ADDITIONS — account + cart buttons
+   ========================================================================= */
+.iconbtn{
+  position:relative; display:grid; place-items:center;
+  width:40px; height:40px; border-radius:50%;
+  border:1px solid var(--line-2); color:var(--ink-2);
+  transition:color .3s, border-color .3s, background .3s;
+}
+.iconbtn:hover{ color:var(--accent); border-color:rgba(var(--accent-rgb),.6); background:var(--accent-dim); }
+.iconbtn--cart.has-items{ color:var(--ink); border-color:rgba(var(--accent-rgb),.5); }
+.iconbtn__count{
+  position:absolute; inset-block-start:-5px; inset-inline-end:-5px;
+  min-width:19px; height:19px; padding:0 5px; border-radius:999px;
+  display:grid; place-items:center;
+  background:var(--accent); color:var(--accent-ink);
+  font-family:var(--latin); font-size:.6875rem; font-weight:700; line-height:1;
+}
+
+/* =========================================================================
+   TOOLBAR — search, sort, category chips
+   ========================================================================= */
+.toolbar{
+  display:flex; flex-wrap:wrap; gap:12px; align-items:flex-end;
+  margin-bottom:18px;
+}
+.toolbar .field--search{ flex:1 1 280px; position:relative; }
+.toolbar .field--sort{ flex:0 0 auto; min-width:200px; }
+.field__icon{
+  position:absolute; inset-inline-start:15px; inset-block-start:50%;
+  transform:translateY(-50%); color:var(--ink-4); pointer-events:none;
+}
+.field--search input{ padding-inline-start:42px; }
+
+.chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+.chip{
+  /* inline-flex, not block: the icon and the label are one line that has to
+     stay centred on each other at every text size and in both directions. */
+  display:inline-flex; align-items:center; gap:7px;
+  padding:9px 15px; border-radius:999px;
+  border:1px solid var(--line-2); background:transparent;
+  font-size:.8125rem; font-weight:600; color:var(--ink-2);
+  transition:color .3s, border-color .3s, background .3s;
+}
+.chip:hover{ color:var(--ink); border-color:var(--ink-4); }
+.chip.is-on{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+
+/* The glyph inherits the chip's colour, which is the whole reason it is
+   inline SVG on currentColor: it dims with the resting label, brightens on
+   hover, and inverts with .is-on, without a second file or a filter.
+
+   Slightly under full opacity at rest so the label still leads; it comes up
+   to full whenever the chip is hovered or active. */
+.chip__ico{ flex:none; opacity:.72; transition:opacity .3s; }
+.chip:hover .chip__ico,
+.chip.is-on .chip__ico{ opacity:1; }
+
+.resultline{
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-4); margin-bottom:20px;
+}
+html[lang="ar"] .resultline{ font-family:var(--arabic); font-size:.8125rem; letter-spacing:normal; text-transform:none; }
+
+.empty{
+  padding:56px 24px; text-align:center; color:var(--ink-3);
+  border:1px dashed var(--line-2); border-radius:14px; max-width:52ch;
+  margin-inline:auto; font-size:.9375rem;
+}
+.shopnote{ margin-top:clamp(34px,4vw,54px); padding-bottom:clamp(60px,8vw,110px); }
+
+/* =========================================================================
+   PRODUCT GRID
+   ========================================================================= */
+.grid{
+  display:grid; gap:clamp(14px,1.6vw,22px);
+  grid-template-columns:repeat(auto-fill, minmax(255px, 1fr));
+}
+.pcard{
+  display:grid; grid-template-rows:auto 1fr;
+  border:1px solid var(--line); border-radius:14px;
+  background:var(--bg-1); overflow:hidden;
+  cursor:pointer;
+  transition:border-color .5s var(--e-out), transform .6s var(--e-out);
+}
+.pcard:hover{ border-color:rgba(var(--accent-rgb),.4); transform:translateY(-3px); }
+.pcard.is-in-cart{ border-color:rgba(var(--accent-rgb),.45); }
+
+/* Same light plate as the landing page: the catalogue is shot on white. */
+.pcard__plate{
+  position:relative;
+  background:var(--plate); aspect-ratio:4/3; overflow:hidden;
+}
+/* See the note on .cat__plate img in styles.css — the absolute positioning is
+   required, not cosmetic: it is the only way the artwork is guaranteed to fit
+   inside a plate whose height comes from aspect-ratio. */
+.pcard__plate img{
+  position:absolute;
+  inset-block-start:18px; inset-inline-start:18px;
+  inline-size:calc(100% - 36px); block-size:calc(100% - 36px);
+  object-fit:contain;
+  mix-blend-mode:multiply; transition:transform .8s var(--e-out);
+}
+.pcard:hover .pcard__plate img{ transform:scale(1.045); }
+
+.pcard__body{
+  display:grid; gap:7px; align-content:start;
+  padding:clamp(16px,1.8vw,22px);
+}
+.pcard__cat{ font-family:var(--mono); font-size:.625rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-4); }
+html[lang="ar"] .pcard__cat{ font-family:var(--arabic); font-size:.75rem; letter-spacing:normal; text-transform:none; }
+.pcard__name{ font-family:var(--latin); font-size:.9375rem; font-weight:600; letter-spacing:-.015em; line-height:1.35; }
+.pcard__spec{ font-size:.8125rem; color:var(--ink-3); line-height:1.55; }
+.pcard__foot{
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  gap:12px; margin-top:12px; padding-top:14px; border-top:1px solid var(--line);
+}
+.pcard__price{ display:inline-flex; align-items:baseline; gap:7px; font-family:var(--latin); }
+.pcard__price b{ font-size:1.06rem; font-weight:700; letter-spacing:-.02em; color:var(--accent); }
+.pcard__price s{ font-size:.75rem; color:var(--ink-4); }
+.pcard__price em{ font-style:normal; font-size:.6875rem; color:var(--ink-3); font-family:var(--sans); }
+.pcard__buy{ flex:none; }
+
+/* ---------- product detail page ---------- */
+.product-shell{ padding-block:clamp(38px, 6vw, 78px); }
+.product-card{
+  display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px, 3vw, 42px);
+  align-items:start; padding:clamp(18px,2.5vw,28px);
+  border:1px solid var(--line); background:var(--bg-1); border-radius:20px;
+}
+.product-card__plate{
+  background:var(--plate); border-radius:18px; aspect-ratio:1/1; overflow:hidden; display:grid; place-items:center;
+}
+.product-card__plate img{
+  width:100%; height:100%; object-fit:contain; padding:20px;
+}
+.product-card__body{ display:grid; gap:16px; align-content:start; }
+.product-card__spec{ color:var(--ink-3); font-size:1rem; }
+.product-card__meta{
+  display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:18px;
+  padding-block:12px; border-block:1px solid var(--line);
+}
+.product-card__label{ display:block; font-size:.73rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-4); margin-bottom:6px; }
+html[lang="ar"] .product-card__label{ letter-spacing:normal; text-transform:none; }
+.product-card__desc{ max-width:62ch; }
+.product-card__actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
+.pcard__link{
+  display:inline-flex; margin-top:12px; align-self:start;
+  font-size:.8125rem; font-weight:700;
+}
+
+/* ---------- live interest on a product page ----------
+   A quiet line, not a flashing urgency banner: the number is real, so it does
+   not need theatre to be believed. */
+.product-live{
+  display:inline-flex; align-items:center; gap:8px;
+  margin-block:2px 14px; padding:7px 14px; border-radius:999px;
+  background:var(--accent-dim); border:1px solid rgba(var(--accent-rgb),.28);
+  font-size:.8125rem; font-weight:600; color:var(--ink-2);
+}
+.product-live[hidden]{ display:none; }
+.product-live__dot{
+  width:7px; height:7px; border-radius:50%; background:var(--accent);
+  animation:pulse 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce){ .product-live__dot{ animation:none; } }
+
+/* =========================================================================
+   COVERAGE PLANNER (game.html)
+
+   The floor plan is an SVG whose viewBox is measured in METRES, so every
+   stroke width and font size below is also in metres — 0.08 is an
+   eight-centimetre line. That is why the numbers look strange and why they
+   must stay small: the plan scales to its container, and a 1px stroke would
+   become a wall three metres thick on a compound.
+   ========================================================================= */
+.gstep{ margin-block:clamp(28px,4vw,46px); }
+.gstep__title{
+  display:flex; align-items:center; gap:12px;
+  font-size:1.05rem; font-weight:700; letter-spacing:-.02em; margin-bottom:16px;
+}
+.gstep__n{
+  width:28px; height:28px; flex:none; border-radius:50%;
+  display:grid; place-items:center;
+  background:var(--accent); color:var(--accent-ink);
+  font-family:var(--latin); font-size:.8125rem; font-weight:700;
+}
+
+/* ---------- step 1: property cards ---------- */
+/* ---------- step 1, as three questions ----------
+   One question visible at a time. The others stay in the DOM rather than
+   being removed, so the answers and the focus order survive going back. */
+.quiz{ display:grid; gap:clamp(14px,2vw,20px); }
+.quiz__steps{ list-style:none; margin:0; padding:0; display:grid; gap:14px; }
+.quiz__step{ display:none; }
+.quiz__step.is-on{ display:grid; gap:12px; }
+.quiz__q{
+  display:flex; align-items:center; gap:10px; margin:0;
+  font-size:clamp(1rem,2.2vw,1.15rem); font-weight:700; color:var(--ink);
+}
+/* TWO COUNTERS, AND ONLY ONE OF THEM IS A STEP.
+
+   .gstep__n above is the STEP — 1 of 3 across the whole page. This is the
+   QUESTION within step one. Both used to be a filled accent disc showing a
+   bare digit, so the screen showed a blue "1" and, directly beneath it,
+   another blue "1". Two counters, identical badges, stacked: it read as the
+   interface repeating itself, or as two steps that were both numbered one.
+
+   Making it an outline was not enough — both still said "1". So it is a
+   FRACTION now. "1/3" states which of three questions you are on and cannot
+   be mistaken for a step number, because steps are not written as fractions.
+
+   Shaped as a pill rather than a disc, because a fraction does not fit in a
+   circle without either clipping or making the circle large enough to
+   outweigh the step badge it is subordinate to. */
+.quiz__n{
+  flex:0 0 auto; display:inline-grid; place-items:center;
+  min-width:34px; height:22px; padding:0 7px;
+  border-radius:999px;
+  background:rgba(var(--accent-rgb),.10); color:var(--accent);
+  border:1px solid rgba(var(--accent-rgb),.28);
+  font-family:var(--latin); font-size:.75rem; font-weight:700;
+  font-variant-numeric:tabular-nums;
+  /* Latin digits and a slash inside a right-to-left sentence: without this
+     the browser is free to reorder them and "1/3" can render as "3/1". */
+  direction:ltr;
+}
+.quiz__opts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:clamp(8px,1.4vw,14px); }
+/* The area-count row is a set of single digits; without a cap each one
+   stretches to a sixth of the page and reads as a row of billboards. */
+.quiz__opts:has(.qopt--n){ grid-template-columns:repeat(auto-fit,minmax(64px,88px)); }
+
+.qopt{
+  display:grid; gap:4px; justify-items:center; text-align:center;
+  padding:clamp(12px,1.8vw,18px) 10px;
+  border:1px solid var(--line); border-radius:14px; background:var(--bg-1);
+  /* In the light theme this is the ONLY thing separating a white card from a
+     near-white page — see --lift in styles.css. Empty in dark, where the
+     card is already lighter than what is behind it. */
+  box-shadow:var(--lift);
+  cursor:pointer;
+  transition:border-color .3s, transform .35s var(--e-out), box-shadow .35s var(--e-out);
+}
+.qopt:hover{ border-color:var(--line-2); transform:translateY(-2px); box-shadow:var(--lift-hover); }
+/* The chosen one keeps its ring AND its elevation: dropping the lift here
+   made the selected card sink into the page in light mode, which is the
+   opposite of what selecting something should look like. */
+.qopt.is-on{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(var(--accent-rgb),.14), var(--lift);
+}
+.qopt__icon{ font-size:1.6rem; line-height:1; }
+.qopt__label{ font-weight:700; font-size:.9375rem; color:var(--ink); }
+.qopt--n .qopt__label{ font-family:var(--latin); font-size:1.25rem; }
+.qopt__sub{ font-family:var(--latin); font-size:.75rem; color:var(--ink-3); }
+
+.quiz__foot{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; min-height:32px; }
+.quiz__sum{ margin:0; font-size:.8125rem; color:var(--ink-3); font-weight:600; }
+
+/* The ready-made plans, folded away. They are the shortcut, not the path. */
+.quiz__ready{ margin-top:clamp(14px,2vw,20px); border-top:1px solid var(--line); padding-top:14px; }
+.quiz__ready summary{
+  cursor:pointer; font-size:.875rem; font-weight:600; color:var(--ink-2);
+  padding:4px 0; list-style-position:inside;
+}
+.quiz__ready summary:hover{ color:var(--ink); }
+.quiz__ready .propgrid{ margin-top:14px; }
+
+@media (prefers-reduced-motion: reduce){
+  .qopt{ transition:none; }
+  .qopt:hover{ transform:none; }
+}
+
+.propgrid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:clamp(10px,1.6vw,16px); }
+.prop{
+  display:grid; gap:6px; justify-items:center; text-align:center;
+  padding:clamp(16px,2.2vw,24px) 14px;
+  border:1px solid var(--line); border-radius:16px; background:var(--bg-1);
+  /* Same reason as .qopt — these are the ready-made plans and they had the
+     same white-on-white problem. */
+  box-shadow:var(--lift);
+  transition:border-color .3s, transform .35s var(--e-out), box-shadow .35s var(--e-out);
+}
+.prop:hover{ border-color:var(--line-2); transform:translateY(-2px); box-shadow:var(--lift-hover); }
+.prop.is-on{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(var(--accent-rgb),.14), var(--lift);
+}
+.prop__icon{ font-size:2rem; line-height:1; }
+.prop__name{ font-weight:700; font-size:.9375rem; color:var(--ink); }
+.prop__note{ font-size:.75rem; color:var(--ink-3); line-height:1.5; }
+
+/* ---------- toolbar ---------- */
+.gtoolbar{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.gtoolbar__acts{ display:flex; flex-wrap:wrap; gap:8px; }
+.seg{ display:inline-flex; padding:3px; border:1px solid var(--line-2); border-radius:999px; background:var(--bg-2); }
+.seg__b{
+  padding:8px 18px; border-radius:999px;
+  font-size:.8125rem; font-weight:600; color:var(--ink-3);
+  transition:background .3s, color .3s;
+}
+.seg__b.is-on{ background:var(--accent); color:var(--accent-ink); }
+
+/* ---------- layout ---------- */
+.glayout{ display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:clamp(14px,2vw,22px); align-items:start; }
+.gside{ display:grid; gap:clamp(14px,2vw,20px); }
+
+.gplan{
+  border:1px solid var(--line); border-radius:16px; background:var(--bg-1);
+  padding:clamp(10px,1.6vw,18px);
+}
+.planwrap{
+  width:100%; height:auto; display:block;
+  aspect-ratio:3/2; cursor:crosshair; touch-action:manipulation;
+  border-radius:10px; background:var(--bg-2);
+}
+.gplan__hint{ margin-top:10px; font-size:.75rem; color:var(--ink-4); text-align:center; }
+
+/* ---------- the plan itself (all lengths in metres) ---------- */
+.pl-room{ fill:rgba(var(--ink-rgb),.035); stroke:none; }
+.pl-roomlabel{
+  fill:var(--ink-4); font-size:.55px; text-anchor:middle;
+  font-family:var(--sans); pointer-events:none;
+}
+.pl-wall{ stroke:var(--ink-3); stroke-width:.14; stroke-linecap:round; }
+
+/* =========================================================================
+   EDITING THE PLAN
+   ========================================================================= */
+
+/* The ground the building sits on. Its only job is to make resizing read as
+   the view pulling BACK rather than the drawing bursting its frame — without
+   something out there, a bigger building and a closer camera look identical. */
+.pl-ground{ fill:rgba(var(--ink-rgb),.02); }
+.pl-slab{ fill:var(--bg-1); stroke:none; }
+
+/* The customer's own drawing, underneath everything. */
+.pl-ref{ pointer-events:none; }
+
+/* A wall you can take hold of. The dash is the affordance: a solid line is
+   part of the drawing, a dashed one is asking to be moved. */
+.pl-wall.is-editable{ stroke-dasharray:.55 .3; }
+.pl-wall.is-editable.is-outer{ stroke:var(--accent); stroke-width:.2; stroke-dasharray:none; }
+
+/* The real drag target. A wall is 14cm wide in plan metres, which on a phone
+   is an impossible thing to hit; this is a thumb over the top of it, invisible
+   but grabbable. Its width is in metres like everything else in the viewBox,
+   so it stays thumb-sized as the plan zooms. */
+.pl-wallgrip{
+  stroke:transparent; stroke-width:.9; stroke-linecap:round;
+  pointer-events:stroke;
+}
+.planwrap.is-editing .pl-wallgrip:hover{ stroke:rgba(var(--accent-rgb),.16); }
+/* While editing, the cameras stop competing for the pointer. */
+.planwrap.is-editing .pl-cam{ pointer-events:none; }
+
+.editbar{
+  display:grid; gap:10px;
+  margin:0 0 clamp(14px,2vw,20px); padding:14px 16px;
+  border:1px solid var(--line); border-radius:14px; background:var(--bg-1);
+  box-shadow:var(--lift);
+}
+.editbar__row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.editbar__lab{ font-size:.8125rem; font-weight:600; color:var(--ink-2); }
+.editbar__num{
+  width:88px; padding:7px 10px; font-family:var(--latin); font-size:.875rem;
+  border:1px solid var(--line-2); border-radius:9px;
+  background:var(--bg-2); color:var(--ink);
+}
+.editbar__range{ flex:1 1 140px; max-width:220px; }
+.editbar__note{ margin:0; font-size:.75rem; color:var(--ink-3); line-height:1.6; }
+
+/* The cone. Screen blending keeps overlapping cameras readable instead of
+   stacking into an opaque blob. */
+.pl-cone{
+  fill:rgba(var(--accent-rgb),.20);
+  stroke:rgba(var(--accent-rgb),.55); stroke-width:.05;
+  transition:fill .25s, stroke .25s;
+}
+.pl-cone.is-on{ fill:rgba(var(--accent-rgb),.34); stroke:var(--accent); }
+
+.pl-zone circle{ fill:var(--ink-4); transition:fill .25s; }
+.pl-zone text{
+  fill:var(--ink-4); font-size:.5px; text-anchor:middle;
+  font-family:var(--sans); pointer-events:none; transition:fill .25s;
+}
+.pl-zone.is-seen circle{ fill:#2ecc71; }
+.pl-zone.is-seen text{ fill:var(--ink-2); }
+
+/* grab, not pointer: the marker can be taken hold of and turned, and the
+   cursor is the only thing that says so before you try it.
+   touch-action:none is what lets a finger drag turn the camera instead of
+   scrolling the page — a passive listener cannot preventDefault its way out
+   of a scroll, so the element has to opt out here. */
+.pl-cam{ cursor:grab; touch-action:none; }
+.pl-cam:active{ cursor:grabbing; }
+/* The camera dot is addressed by its own class rather than as `.pl-cam circle`.
+   The grip added below is also a circle inside .pl-cam, and a bare element
+   selector would style both — then `.pl-cam.is-on circle` further down would
+   beat any grip rule on specificity, which is worse, because the grip only
+   ever exists on the selected camera. Naming the dot ends the argument. */
+.pl-cam__dot{ fill:var(--accent); stroke:var(--bg-1); stroke-width:.1; transition:r .2s; }
+
+/* ---------- the turn grip, on the selected camera ---------- */
+.pl-grip{
+  fill:var(--bg-1); stroke:var(--accent); stroke-width:.12;
+  transition:r .15s;
+}
+.pl-cam:hover .pl-grip, .pl-cam:active .pl-grip{ r:.56; fill:var(--accent); }
+.pl-grip__arm{
+  stroke:var(--accent); stroke-width:.09; stroke-dasharray:.28 .22;
+  opacity:.75; pointer-events:none;
+}
+@media (prefers-reduced-motion: reduce){
+  .pl-cam__dot, .pl-grip{ transition:none; }
+}
+.pl-cam text{
+  fill:var(--accent-ink); font-size:.72px; font-weight:700; text-anchor:middle;
+  font-family:var(--latin); pointer-events:none;
+}
+.pl-cam.is-on .pl-cam__dot{ stroke:var(--ink); stroke-width:.14; }
+
+/* ---------- coverage panel ---------- */
+.cov{ display:grid; gap:10px; }
+.cov__big{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+.cov__big b{ font-family:var(--latin); font-size:2rem; font-weight:800; color:var(--accent); line-height:1; }
+.cov__big span{ font-size:.8125rem; color:var(--ink-3); font-weight:600; }
+.meter{ height:8px; border-radius:999px; background:rgba(var(--ink-rgb),.10); overflow:hidden; }
+.meter__fill{
+  display:block; height:100%; width:0; border-radius:999px;
+  background:#e0685e; transition:width .5s var(--e-out), background .4s;
+}
+.meter__fill.is-c{ background:#e0a95e; }
+.meter__fill.is-b{ background:#5ec4e0; }
+.meter__fill.is-a{ background:#2ecc71; }
+
+.zonecols{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:4px; }
+.zonecols__h{ font-size:.6875rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-4); margin-bottom:6px; }
+.zonelist{ display:grid; gap:4px; }
+.zone{ font-size:.75rem; padding:4px 9px; border-radius:999px; display:inline-block; width:fit-content; }
+.zone.is-ok{ background:rgba(46,204,113,.14); color:#1e8449; }
+.zone.is-bad{ background:rgba(224,104,94,.13); color:#c0392b; }
+.zone.is-none{ color:var(--ink-4); padding-inline:0; }
+:root[data-theme="dark"] .zone.is-ok{ color:#6fe3a3; }
+:root[data-theme="dark"] .zone.is-bad{ color:#f0a8a8; }
+
+/* ---------- camera rows ---------- */
+.camrow{
+  border:1px solid var(--line); border-radius:12px; padding:12px;
+  display:grid; gap:9px; margin-bottom:10px; transition:border-color .3s;
+}
+.camrow.is-on{ border-color:rgba(var(--accent-rgb),.55); }
+.camrow__head{ display:flex; align-items:center; gap:9px; }
+.camrow__n{
+  width:22px; height:22px; flex:none; border-radius:50%;
+  display:grid; place-items:center; background:var(--accent); color:var(--accent-ink);
+  font-family:var(--latin); font-size:.6875rem; font-weight:700;
+}
+.camrow__pick{ flex:1; min-width:0; font-size:.8125rem !important; padding:9px 12px !important; }
+.camrow__x{
+  width:26px; height:26px; flex:none; border-radius:50%; font-size:1.1rem; line-height:1;
+  color:var(--ink-4); border:1px solid var(--line); transition:color .3s, border-color .3s;
+}
+.camrow__x:hover{ color:#e0685e; border-color:rgba(224,104,94,.5); }
+.camrow__spec{ display:flex; flex-wrap:wrap; gap:6px; font-size:.6875rem; color:var(--ink-3); }
+.camrow__spec span{ padding:3px 8px; border-radius:999px; background:rgba(var(--ink-rgb),.06); font-family:var(--latin); }
+.camrow__tag{ font-family:var(--sans) !important; }
+.camrow__aim{ display:flex; align-items:center; gap:10px; font-size:.75rem; color:var(--ink-3); }
+.camrow__aim input{ flex:1; }
+
+/* ---------- system + CTA ---------- */
+.systotal{ margin-top:14px; font-size:.9375rem; text-align:end; }
+.systotal b{ font-family:var(--latin); font-size:1.25rem; font-weight:800; color:var(--accent); }
+.gcta{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+.gcta .btn:disabled{ opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
+
+@media (max-width:900px){
+  .glayout{ grid-template-columns:1fr; }
+  .planwrap{ aspect-ratio:4/3; }
+}
+@media (max-width:520px){
+  .zonecols{ grid-template-columns:1fr; }
+  .gtoolbar{ justify-content:stretch; }
+  .gtoolbar__acts{ width:100%; }
+  .gtoolbar__acts .btn{ flex:1; }
+}
+
+/* Printing the summary is a real deliverable — the sales team works from it.
+   Everything that is navigation or interaction goes; the plan, the numbers
+   and the parts list stay. */
+@media print{
+  .nav, .menu, .strip, .footer, .gtoolbar, .gcta, .promo, .cookiebar,
+  .vga, .skip, .grain, .gplan__hint, .camrow__x, .camrow__aim{ display:none !important; }
+  body{ background:#fff; color:#000; }
+  .gplan, .card{ border-color:#ccc; break-inside:avoid; }
+  .glayout{ grid-template-columns:1fr 1fr; }
+  .pl-cone{ fill:rgba(0,0,0,.12); stroke:#666; }
+}
+
+/* ---------- legal pages ---------- */
+.legal-shell{ max-width:760px; }
+.legal-card{
+  margin-top:26px; padding:clamp(18px,2.3vw,28px);
+  border:1px solid var(--line); background:var(--bg-1); border-radius:18px;
+  display:grid; gap:14px;
+}
+/* terms/refund/shipping have no footer of their own, so this is the only
+   route from them to the privacy policy and to the cookie choice. Being able
+   to withdraw consent has to be reachable from every page, not just the ones
+   that happen to have a footer column. */
+.legal-links{
+  margin-top:22px; display:flex; flex-wrap:wrap; gap:8px 22px;
+  font-size:.8125rem;
+}
+.legal-links a{
+  color:var(--accent); text-decoration:underline; text-underline-offset:3px;
+}
+
+/* ---------- quantity stepper ---------- */
+.step2{
+  display:inline-grid; grid-auto-flow:column; align-items:center;
+  border:1px solid var(--line-2); border-radius:999px; overflow:hidden;
+}
+.step2__btn{
+  width:34px; height:34px; display:grid; place-items:center;
+  font-size:1.05rem; line-height:1; color:var(--ink-2);
+  transition:background .25s, color .25s;
+}
+.step2__btn:hover:not(:disabled){ background:var(--accent-dim); color:var(--accent); }
+.step2__btn:disabled{ opacity:.3; cursor:not-allowed; }
+.step2__n{
+  min-width:34px; text-align:center;
+  font-family:var(--latin); font-size:.875rem; font-weight:700;
+}
+
+/* =========================================================================
+   FORM CONTROLS
+   ========================================================================= */
+.field{ display:grid; gap:7px; }
+.field > label{ font-size:.8125rem; color:var(--ink-3); font-weight:500; }
+.frow{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+/* SUBTRACTIVE, NOT ADDITIVE — and that is the whole point.
+
+   This used to be a list of the types it applied TO:
+     input[type="text"], input[type="email"], input[type="password"], ...
+
+   `type` is optional on <input>; leaving it off gives you a text field. So
+   any input written without one — and sixteen on this site were, including
+   the customer's NAME and PHONE on the checkout form — matched none of those
+   selectors and rendered as a raw browser default: wrong font, wrong height,
+   white box, square corners, sitting directly under a properly themed
+   <select> and <textarea>. That is why "not all input fields look the same".
+
+   Written this way the rule covers every text-like input automatically, and
+   the exclusions are the controls that genuinely must look different:
+   checkbox and radio are drawn by hand further down, file has its own button,
+   and the button-ish types are buttons. A new field added later is styled
+   whether or not whoever adds it remembers to write type="text".
+
+   date stays covered for the timesheet's day picker: the native control
+   themes itself from :root { color-scheme } in styles.css, so its calendar
+   popup and icon follow the light/dark switch without a filter hack. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]):not([type="color"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="hidden"]),
+select, textarea{
+  width:100%; padding:13px 15px;
+  font:inherit; font-size:.9375rem; color:var(--ink);
+  background:var(--bg-2); border:1px solid var(--line-2); border-radius:10px;
+  transition:border-color .3s, background .3s, box-shadow .3s;
+  -webkit-appearance:none; appearance:none;
+}
+textarea{ resize:vertical; min-height:82px; line-height:1.6; }
+select{
+  /* the caret has to be drawn by hand once appearance is stripped */
+  background-image:linear-gradient(45deg, transparent 50%, var(--ink-3) 50%),
+                   linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
+  background-position:calc(100% - 20px) calc(50% + 1px), calc(100% - 15px) calc(50% + 1px);
+  background-size:5px 5px, 5px 5px;
+  background-repeat:no-repeat;
+  padding-inline-end:42px;
+}
+[dir="rtl"] select{
+  background-position:20px calc(50% + 1px), 15px calc(50% + 1px);
+  padding-inline-end:15px; padding-inline-start:42px;
+}
+select option{ background:var(--bg-2); color:var(--ink); }
+
+input::placeholder, textarea::placeholder{ color:var(--ink-4); }
+input:focus, select:focus, textarea:focus{
+  outline:none; border-color:rgba(var(--accent-rgb),.65);
+  box-shadow:0 0 0 3px rgba(var(--accent-rgb),.13);
+}
+input:disabled, textarea:disabled, select:disabled{ opacity:.55; cursor:not-allowed; }
+
+/* ---------- autofilled fields ----------
+
+   THIS is why the checkout phone box looked wrong while the one above it
+   looked right. Nothing was missing from the rules above — Chrome simply
+   paints its own background straight over an autofilled input, and there is
+   no property that overrides it. Name, phone and email are exactly the fields
+   a browser fills, so the form ended up half themed and half pale yellow.
+
+   The fix is the long-standing one: an inset box-shadow big enough to cover
+   the field repaints it, because shadows draw above the autofill layer.
+   -webkit-text-fill-color does the same job for the text, which `color`
+   cannot reach either. The absurd transition-delay is deliberate — it parks
+   Chrome's fade-in animation so far in the future that it never runs, which
+   stops the field flashing the old colour for a moment on load. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+textarea:-webkit-autofill,
+select:-webkit-autofill{
+  -webkit-text-fill-color:var(--ink);
+  -webkit-box-shadow:0 0 0 1000px var(--bg-2) inset;
+  box-shadow:0 0 0 1000px var(--bg-2) inset;
+  caret-color:var(--ink);
+  border:1px solid var(--line-2);
+  transition:background-color 9999s ease-out 0s;
+}
+/* Focus needs BOTH shadows in one declaration: the fill that hides the
+   autofill background, and the focus ring. Listing only the ring would let
+   the yellow back through the moment the field is focused. */
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill:focus{
+  -webkit-box-shadow:0 0 0 1000px var(--bg-2) inset, 0 0 0 3px rgba(var(--accent-rgb),.13);
+  box-shadow:0 0 0 1000px var(--bg-2) inset, 0 0 0 3px rgba(var(--accent-rgb),.13);
+  border-color:rgba(var(--accent-rgb),.65);
+}
+
+/* ---------- file input ----------
+
+   Deliberately excluded from the rule above — a file input is a button plus a
+   filename, not a text box, so the shared padding and height do the wrong
+   thing to it. Excluded and then never styled, though, which is why the
+   catalogue's image picker was a grey OS-default "Choose File" sitting under
+   properly themed fields.
+
+   ::file-selector-button is the standard selector; the -webkit- alias covers
+   Safari before 16.4. Both carry the same declarations because a browser that
+   understands only one of them still has to get the whole button. */
+   The base rule still themes any file input that is used plainly, so a new
+   one added later is not naked. The catalogue's picker goes further and hides
+   the native control behind .filefield, because its BUTTON is drawn by the
+   browser and its "Choose File" label cannot be translated — see the note in
+   account.html. */
+input[type="file"]{
+  width:100%; font:inherit; font-size:.8125rem; color:var(--ink-3);
+  background:var(--bg-2); border:1px solid var(--line-2); border-radius:10px;
+  padding:8px; cursor:pointer;
+  transition:border-color .3s, background .3s, box-shadow .3s;
+}
+input[type="file"]:hover{ border-color:var(--ink-4); }
+input[type="file"]::file-selector-button{
+  font:inherit; font-size:.8125rem; font-weight:700;
+  margin-inline-end:12px; padding:9px 18px;
+  background:var(--accent); color:var(--accent-ink);
+  border:1px solid var(--accent); border-radius:999px;
+  cursor:pointer; transition:filter .3s;
+}
+input[type="file"]::file-selector-button:hover{ filter:brightness(1.08); }
+input[type="file"]::-webkit-file-upload-button{
+  font:inherit; font-size:.8125rem; font-weight:700;
+  margin-inline-end:12px; padding:9px 18px;
+  background:var(--accent); color:var(--accent-ink);
+  border:1px solid var(--accent); border-radius:999px;
+  cursor:pointer;
+}
+
+/* The translated picker: our own button, the browser's own input.
+
+   The input is NOT display:none — that would take it out of the tab order and
+   hide it from assistive tech, and the <label> would still work while the
+   control it names had become unreachable by keyboard. Clipping it to a
+   single pixel keeps it focusable and announced; the focus ring is drawn on
+   the label instead, via :focus-within. */
+.filefield{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.filefield__input{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+.filefield__btn{ cursor:pointer; flex:none; }
+.filefield:focus-within .filefield__btn{
+  outline:2px solid var(--accent); outline-offset:2px;
+}
+.filefield__name{
+  font-size:.8125rem; color:var(--ink-3); min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+.btn--wide{ width:100%; }
+.btn:disabled{ opacity:.6; cursor:progress; transform:none; box-shadow:none; }
+
+/* ---------- checkboxes and radios ---------- */
+.check{
+  display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start;
+  font-size:.875rem; color:var(--ink-2); line-height:1.55; cursor:pointer;
+}
+.check input[type="checkbox"]{
+  appearance:none; -webkit-appearance:none;
+  width:19px; height:19px; margin:2px 0 0; flex:none;
+  border:1px solid var(--line-2); border-radius:5px; background:var(--bg-2);
+  display:grid; place-content:center; cursor:pointer;
+  transition:background .25s, border-color .25s;
+}
+.check input[type="checkbox"]::after{
+  content:""; width:10px; height:6px;
+  border-inline-start:2px solid var(--accent-ink); border-bottom:2px solid var(--accent-ink);
+  transform:rotate(-45deg) scale(0); transition:transform .22s var(--e-out);
+}
+.check input[type="checkbox"]:checked{ background:var(--accent); border-color:var(--accent); }
+.check input[type="checkbox"]:checked::after{ transform:rotate(-45deg) scale(1); }
+.check input[type="checkbox"]:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+.consents{
+  display:grid; gap:16px; margin-block:26px;
+  padding:20px; border:1px solid var(--line); border-radius:12px; background:var(--bg-1);
+}
+
+.pay{ border:0; padding:0; margin:26px 0 0; display:grid; gap:10px; }
+.pay legend{ font-size:.8125rem; color:var(--ink-3); font-weight:500; padding:0; margin-bottom:4px; }
+.pay__opt{
+  display:grid; grid-template-columns:auto 1fr; gap:13px; align-items:start;
+  padding:15px 17px; border:1px solid var(--line-2); border-radius:12px;
+  background:var(--bg-1); cursor:pointer;
+  transition:border-color .3s, background .3s;
+}
+.pay__opt:hover{ border-color:var(--ink-4); }
+.pay__opt:has(input:checked){ border-color:rgba(var(--accent-rgb),.6); background:var(--accent-dim); }
+.pay__opt input[type="radio"]{
+  appearance:none; -webkit-appearance:none;
+  width:19px; height:19px; margin:2px 0 0; flex:none;
+  border:1px solid var(--line-2); border-radius:50%; background:var(--bg-2);
+  display:grid; place-content:center; cursor:pointer; transition:border-color .25s;
+}
+.pay__opt input[type="radio"]::after{
+  content:""; width:9px; height:9px; border-radius:50%; background:var(--accent);
+  transform:scale(0); transition:transform .22s var(--e-out);
+}
+.pay__opt input[type="radio"]:checked{ border-color:var(--accent); }
+.pay__opt input[type="radio"]:checked::after{ transform:scale(1); }
+.pay__opt input[type="radio"]:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.pay__opt b{ display:block; font-size:.9375rem; font-weight:600; }
+.pay__opt em{ display:block; font-style:normal; font-size:.8125rem; color:var(--ink-3); margin-top:3px; line-height:1.5; }
+
+/* There is one way to pay now, so this states it instead of offering a
+   choice. It keeps the boxed shape of an option so the checkout still reads
+   as a sequence of decisions rather than a paragraph dropped between the
+   address and the button. */
+.pay--single{
+  padding:15px 17px; border:1px solid var(--line-2); border-radius:12px;
+  background:var(--bg-1); gap:4px;
+}
+.pay--single b{ font-size:.9375rem; font-weight:600; }
+.pay--single p{ font-size:.8125rem; color:var(--ink-3); line-height:1.6; margin:0; }
+
+.formerr{
+  margin-block:18px 0; padding:13px 16px;
+  border:1px solid rgba(224,86,86,.4); border-radius:10px;
+  background:rgba(224,86,86,.08);
+  color:#F0A8A8; font-size:.875rem; line-height:1.55;
+}
+.formok{
+  margin-block:18px 0; padding:13px 16px;
+  border:1px solid rgba(var(--accent-rgb),.4); border-radius:10px;
+  background:var(--accent-dim); color:var(--ink-2); font-size:.875rem;
+}
+.fineprint{ margin-top:18px; font-size:.75rem; color:var(--ink-4); line-height:1.6; }
+
+/* =========================================================================
+   CART DRAWER
+   ========================================================================= */
+.scrim{
+  position:fixed; inset:0; z-index:104;
+  background:var(--scrim);
+  backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+  opacity:0; transition:opacity .35s var(--e-out);
+}
+.scrim.is-on{ opacity:1; }
+
+.cart{
+  position:fixed; z-index:105;
+  inset-block:0; inset-inline-end:0;
+  width:min(430px, 100%);
+  display:grid; grid-template-rows:auto 1fr auto;
+  background:var(--bg-1);
+  border-inline-start:1px solid var(--line-2);
+  transform:translateX(100%);
+  transition:transform .45s var(--e-out);
+  will-change:transform;
+}
+[dir="rtl"] .cart{ transform:translateX(-100%); }
+.cart.is-on{ transform:none; }
+
+.cart__head{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:20px 22px; border-bottom:1px solid var(--line);
+}
+.cart__title{ font-size:1.06rem; font-weight:700; letter-spacing:-.02em; }
+.cart__close{
+  width:36px; height:36px; display:grid; place-items:center;
+  border:1px solid var(--line); border-radius:50%; color:var(--ink-2);
+  transition:color .3s, border-color .3s;
+}
+.cart__close:hover{ color:var(--accent); border-color:rgba(var(--accent-rgb),.5); }
+
+.cart__body{ overflow-y:auto; overscroll-behavior:contain; padding:6px 22px; }
+.cart__empty{ display:grid; gap:8px; align-content:center; min-height:220px; text-align:center; }
+.cart__emptytitle{ font-size:.9375rem; color:var(--ink-2); }
+.cart__emptyhint{ font-size:.8125rem; color:var(--ink-4); }
+
+.cline{
+  display:grid; grid-template-columns:66px 1fr auto; gap:14px;
+  padding-block:18px; border-bottom:1px solid var(--line);
+}
+.cline__plate{
+  width:66px; height:66px; border-radius:9px; overflow:hidden;
+  background:var(--plate); display:grid; place-items:center; padding:7px;
+}
+.cline__plate img{ width:auto; height:auto; max-height:100%; object-fit:contain; mix-blend-mode:multiply; }
+.cline__meta{ display:grid; gap:7px; align-content:start; min-width:0; }
+.cline__name{ font-family:var(--latin); font-size:.8125rem; font-weight:600; line-height:1.35; }
+.cline__spec{ font-size:.75rem; color:var(--ink-4); }
+.cline__end{ display:grid; gap:8px; justify-items:end; align-content:start; text-align:end; }
+.cline__price{ font-family:var(--latin); font-size:.875rem; font-weight:700; color:var(--accent); white-space:nowrap; }
+.cline__price em{ font-style:normal; font-size:.6875rem; color:var(--ink-3); font-family:var(--sans); font-weight:400; }
+.cline__rm{ font-size:.75rem; color:var(--ink-4); transition:color .3s; padding:0; }
+.cline__rm:hover{ color:#F0A8A8; }
+
+.cart__foot{
+  display:grid; gap:11px; padding:20px 22px calc(20px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line); background:var(--bg-2);
+}
+.cart__foot:empty{ display:none; }
+.crow{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; font-size:.9375rem; }
+.crow b{ font-family:var(--latin); color:var(--accent); font-size:1.06rem; }
+.crow--muted{ font-size:.8125rem; color:var(--ink-4); }
+.cart__foot .btn{ margin-top:6px; }
+
+/* =========================================================================
+   CHECKOUT
+   ========================================================================= */
+.checkout{ padding-block:clamp(28px,4vw,52px) clamp(60px,8vw,110px); }
+.backlink{
+  display:inline-flex; align-items:center; gap:9px; padding:0;
+  font-size:.8125rem; color:var(--ink-3); margin-bottom:26px;
+  transition:color .3s;
+}
+.backlink:hover{ color:var(--accent); }
+.backlink i{ font-style:normal; transition:transform .4s var(--e-out); }
+.backlink:hover i{ transform:translateX(-4px); }
+[dir="ltr"] .backlink i{ transform:scaleX(-1); }
+[dir="ltr"] .backlink:hover i{ transform:scaleX(-1) translateX(-4px); }
+
+.checkout__grid{
+  display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);
+  gap:clamp(30px,4.5vw,70px); align-items:start;
+}
+.checkout__form form{ display:grid; gap:16px; }
+.checkout__summary{
+  position:sticky; top:96px;
+  display:grid; gap:16px;
+  padding:clamp(20px,2.4vw,28px);
+  border:1px solid var(--line); border-radius:14px; background:var(--bg-2);
+}
+.sumtitle{ font-size:.9375rem; font-weight:700; letter-spacing:-.015em; }
+.sline{
+  display:grid; grid-template-columns:1fr auto auto; gap:8px 14px;
+  padding-block:11px; border-bottom:1px solid var(--line);
+  font-size:.8125rem; align-items:baseline;
+}
+.sline__name{ font-family:var(--latin); color:var(--ink-2); min-width:0; overflow-wrap:anywhere; }
+.sline__qty{ color:var(--ink-4); font-family:var(--latin); }
+.sline__price{ font-family:var(--latin); font-weight:700; color:var(--ink); white-space:nowrap; }
+.sumtotals{ display:grid; gap:9px; }
+
+/* =========================================================================
+   ORDER CONFIRMED
+   ========================================================================= */
+.done{
+  display:grid; gap:16px; justify-items:center; text-align:center;
+  max-width:660px; margin-inline:auto;
+  padding-block:clamp(60px,9vw,130px) clamp(70px,10vw,140px);
+}
+.done__mark{ color:var(--accent); margin-bottom:6px; }
+.done__num{
+  font-family:var(--mono); font-size:1.5rem; font-weight:700; letter-spacing:.06em;
+  color:var(--accent); padding:11px 22px;
+  border:1px dashed rgba(var(--accent-rgb),.45); border-radius:10px;
+  background:var(--accent-dim);
+}
+.done__note{ color:var(--ink-2); max-width:48ch; }
+
+/* =========================================================================
+   THE FIRST-ORDER DISCOUNT
+   ========================================================================= */
+
+/* The saving, on the checkout summary. Green rather than the accent: this
+   is money coming OFF, and it should not look like another charge. */
+.crow--off{ color:#1f8a54; }
+.crow--off b{ font-family:var(--latin); }
+
+/* The line above the totals — "10% off your first order, applied below", or
+   the sign-in nudge for somebody entitled to it who is not signed in. */
+.conote{
+  margin:0 0 10px; padding:8px 11px; border-radius:10px;
+  font-size:.8125rem; line-height:1.6;
+  border:1px solid var(--line); background:var(--bg-1); color:var(--ink-2);
+}
+.conote.is-good{
+  border-color:rgba(31,138,84,.35); background:rgba(31,138,84,.08); color:#1f8a54;
+}
+/* A code that was refused. Red, because unlike the welcome offer's absence
+   this is an answer to something the customer just did. */
+.conote.is-bad{
+  border-color:rgba(214,69,69,.35); background:rgba(214,69,69,.07); color:#d64545;
+}
+
+/* =========================================================================
+   AD CREATIVES
+
+   A contact sheet, because the only way to pick the right creative is to
+   look at it. The cards are deliberately tall and narrow: six of the eight
+   are 9:16, and letterboxing those into a landscape thumbnail would show
+   almost nothing of the ad.
+   ========================================================================= */
+.adgrid{
+  display:grid; gap:16px;
+  grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+}
+.adcard{
+  margin:0; display:grid; gap:0;
+  border:1px solid var(--line); border-radius:12px; overflow:hidden;
+  background:var(--bg-1);
+}
+.adcard__img{
+  width:100%; aspect-ratio:9/16; object-fit:contain;
+  background:#000; display:block;
+}
+.adcard__body{ display:grid; gap:5px; padding:11px 12px 12px; }
+.adcard__name{ font-family:var(--mono); font-size:.75rem; color:var(--ink); word-break:break-all; }
+.adcard__title{ font-size:.75rem; color:var(--ink-2); line-height:1.45; }
+.adcard__meta{ font-size:.6875rem; color:var(--ink-4); font-family:var(--latin); }
+/* The URL is a button because copying it is the job. Wrapped rather than
+   truncated: a half-shown URL cannot be checked by eye before pasting. */
+.adcard__url{
+  font-family:var(--mono); font-size:.625rem; line-height:1.5;
+  color:var(--accent); text-align:start; word-break:break-all;
+  padding:6px 8px; border:1px dashed rgba(var(--accent-rgb),.35); border-radius:8px;
+  background:var(--accent-dim); cursor:copy;
+}
+.adcard__url:hover{ border-style:solid; }
+.adcard__acts{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:2px; }
+
+/* =========================================================================
+   THE WELCOME POPUP
+
+   Shown once, after an account is created. Fixed and centred, above
+   everything, and dismissible four ways — see account.js. The scrim is a
+   sibling rather than a background on the card so a click on it can be
+   caught without swallowing clicks inside the dialog.
+   ========================================================================= */
+.wpop{ position:fixed; inset:0; z-index:200; display:grid; place-items:center; padding:20px; }
+.wpop[hidden]{ display:none; }
+.wpop__scrim{
+  position:absolute; inset:0; background:var(--scrim);
+  backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+}
+.wpop__card{
+  position:relative; z-index:1; width:min(440px,100%);
+  display:grid; gap:12px; justify-items:center; text-align:center;
+  padding:34px 28px 28px;
+  background:var(--bg-1); border:1px solid var(--line-2); border-radius:18px;
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.45);
+  animation:wpopIn .38s var(--e-out) both;
+}
+@keyframes wpopIn{ from{ opacity:0; transform:translateY(14px) scale(.97); } to{ opacity:1; transform:none; } }
+@media (prefers-reduced-motion:reduce){ .wpop__card{ animation:none; } }
+.wpop__x{
+  position:absolute; inset-inline-end:12px; inset-block-start:12px;
+  padding:6px; color:var(--ink-4); border-radius:8px; line-height:0;
+}
+.wpop__x:hover{ color:var(--ink); background:rgba(var(--ink-rgb),.06); }
+/* The number, big, because it is the whole message. */
+.wpop__badge{
+  font-family:var(--latin); font-size:2.5rem; font-weight:800; line-height:1;
+  color:var(--accent);
+}
+.wpop__title{ font-size:1.25rem; font-weight:700; }
+.wpop__body{ color:var(--ink-2); line-height:1.65; max-width:34ch; }
+.wpop__fine{ font-size:.75rem; color:var(--ink-4); line-height:1.6; max-width:38ch; }
+.wpop__acts{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:6px; }
+
+/* The promo-code box on the checkout summary. Two controls on one line —
+   anything taller competes with the totals underneath it, which are what
+   the customer is actually reading.
+
+   NOT `.promo`: that class belongs to the planner bar in styles.css, which
+   is position:fixed and opacity:0 until it switches itself on. Reusing the
+   name put this form in the top corner of the screen at zero opacity — it
+   was in the DOM, it measured 281 by 46, and no customer would ever have
+   seen it. */
+.codebox{ display:flex; gap:8px; margin:0 0 10px; }
+.codebox input{
+  flex:1; min-width:0; padding:9px 12px; font-size:.8125rem;
+  letter-spacing:.04em; text-transform:uppercase;
+}
+.codebox .btn{ flex:none; }
+
+/* On the confirmation screen. */
+.done__saved{
+  font-weight:700; color:#1f8a54;
+}
+
+/* =========================================================================
+   PAYING, AFTER THE ORDER
+
+   The order is placed unpaid and settled on WhatsApp, so this block is the
+   most important thing on the confirmation screen — more than the order
+   number, which is why it is boxed and the number is not repeated inside it.
+   ========================================================================= */
+.done__pay{
+  display:grid; gap:12px; justify-items:center; width:100%;
+  max-width:460px; padding:22px 20px;
+  border:1px solid rgba(37,211,102,.35); border-radius:14px;
+  background:rgba(37,211,102,.07);
+}
+/* Amber, not red: nothing has gone wrong — the money simply has not arrived
+   yet, and this is a step rather than an error. */
+.done__paystate{
+  font-size:.8125rem; font-weight:700; letter-spacing:.02em;
+  padding:5px 13px; border-radius:999px;
+  border:1px solid rgba(214,158,46,.45); background:rgba(214,158,46,.12); color:#d69e2e;
+}
+/* What is owed. Big, because "pending" without a figure is half an answer. */
+.done__payamount{
+  font-family:var(--latin); font-size:1.375rem; font-weight:700; color:var(--ink);
+}
+/* WhatsApp's own green, because that is where the button goes. It is the one
+   place on the site a brand colour outranks the accent: the customer is
+   being told which app is about to open. */
+.btn--wa{
+  background:#25D366; border-color:#25D366; color:#04150b;
+}
+.btn--wa:hover{ box-shadow:0 12px 34px -10px rgba(37,211,102,.55); }
+.done__pay .fineprint{ margin-top:0; }
+.done__actions{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:10px; }
+.done__fine{ max-width:52ch; }
+
+/* =========================================================================
+   ACCOUNT — auth card
+   ========================================================================= */
+.auth{
+  max-width:520px; margin-inline:auto;
+  padding-block:clamp(44px,7vw,96px) clamp(70px,10vw,140px);
+}
+.auth__card{
+  border:1px solid var(--line); border-radius:16px;
+  background:var(--bg-1); overflow:hidden;
+}
+.auth__tabs{ display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--line); }
+.auth__tab{
+  padding:17px 12px; font-size:.9375rem; font-weight:600; color:var(--ink-3);
+  border-bottom:1px solid transparent; margin-bottom:-1px;
+  transition:color .3s, border-color .3s, background .3s;
+}
+.auth__tab:hover{ color:var(--ink-2); background:rgba(var(--ink-rgb),.03); }
+.auth__tab.is-on{ color:var(--ink); border-bottom-color:var(--accent); }
+.auth__body{ padding:clamp(24px,3.2vw,36px); }
+.auth__body form{ display:grid; gap:16px; }
+.auth__intro{ font-size:.875rem; color:var(--ink-3); line-height:1.6; margin-bottom:4px; }
+.auth__alt{ margin-top:20px; font-size:.8125rem; color:var(--ink-4); text-align:center; }
+.auth__alt button{ color:var(--accent); font-weight:600; padding:0; }
+.auth__alt button:hover{ text-decoration:underline; }
+
+/* ---------- Continue with Google ----------
+   The button itself is an iframe Google renders and owns; nothing in here
+   styles it, and nothing may — a hand-built look-alike that collects Google
+   credentials is a phishing pattern. This only positions it and draws the
+   divider between it and the email form.
+
+   The block starts hidden and account.js reveals it once Google's script has
+   actually loaded, so a blocked script leaves no empty gap. */
+.gauth{ display:grid; justify-items:center; gap:12px; margin-block:4px 20px; }
+.gauth[hidden]{ display:none; }
+
+/* The "Continue with Google" button.
+
+   Ours, not an iframe Google renders — the Google Identity Services widget
+   and its .gbtn-host container are gone along with the second sign-in stack;
+   see the note in public/account.js. So it takes the site's own .btn styling
+   and follows the theme like everything else, which is what the old rendered
+   widget could never quite be made to do.
+
+   That is allowed, and the distinction matters. Google's branding rules
+   govern how the button LOOKS — its own logo, its own wording — and the
+   markup below follows them. What must never be built is a form of ours that
+   collects a Google password; this only opens Google's real page in a popup,
+   and the password is typed there. */
+.gbtn{ max-width:320px; }
+.gbtn svg{ flex:none; }
+.gauth__btn{ min-height:48px; display:flex; justify-content:center; align-items:center; width:100%; }
+
+/* Safety net, and it earns its keep.
+
+   Google renders this button into our DOM and normally sizes its own logo.
+   When it cannot complete setup — an origin missing from the OAuth client's
+   authorised list is the usual reason — it falls back to plain unstyled
+   markup. Its logo is an <svg> carrying a viewBox and no width or height, so
+   the global `img,svg,canvas{ display:block; max-width:100% }` reset in
+   styles.css expanded it to fill the container: a 437px-tall Google "G"
+   where a 40px button belongs.
+
+   Capping rather than fixing the size means this never fights Google when
+   things work — their 18-20px logo is already under the cap — and bounds the
+   damage to a plain-looking button when they do not. A misconfiguration
+   should look unremarkable, not broken. */
+.gauth__btn svg{ display:inline-block; max-width:24px; max-height:24px; }
+.gauth__btn > div{ display:flex; justify-content:center; width:100%; max-width:320px; }
+.gauth__note{ font-size:.6875rem; color:var(--ink-4); line-height:1.55; text-align:center; max-width:36ch; }
+.gauth__err{
+  width:100%; padding:11px 14px;
+  border:1px solid rgba(224,86,86,.4); border-radius:10px;
+  background:rgba(224,86,86,.08); color:#F0A8A8; font-size:.8125rem; line-height:1.55;
+}
+.gauth__err[hidden]{ display:none; }
+/* hairline with the label sitting in a gap in the middle of it */
+.gauth__or{
+  width:100%; display:flex; align-items:center; gap:12px;
+  font-size:.75rem; color:var(--ink-4);
+}
+.gauth__or::before,
+.gauth__or::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+.pwhint{ font-size:.75rem; color:var(--ink-4); margin-top:-2px; }
+
+/* Staff hint: shown once the typed address is on the company domain, so an
+   employee knows before submitting that this is the right door. */
+.staffhint{
+  display:flex; align-items:center; gap:10px;
+  padding:11px 14px; border-radius:10px;
+  border:1px solid rgba(var(--accent-rgb),.35); background:var(--accent-dim);
+  font-size:.8125rem; color:var(--ink-2);
+}
+
+/* =========================================================================
+   ACCOUNT — dashboard
+   ========================================================================= */
+.dash{ padding-block:clamp(36px,5vw,64px) clamp(70px,9vw,120px); }
+.dash__head{
+  display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
+  gap:18px; margin-bottom:clamp(26px,3.4vw,42px);
+}
+.dash__hello{ display:grid; gap:8px; }
+.dash__name{ font-size:clamp(1.6rem,3.4vw,2.4rem); font-weight:700; letter-spacing:-.03em; line-height:1.15; }
+.dash__email{ font-family:var(--latin); font-size:.8125rem; color:var(--ink-4); }
+.dash__badge{
+  display:inline-flex; align-items:center; gap:7px;
+  padding:5px 12px; border-radius:999px;
+  border:1px solid rgba(var(--accent-rgb),.4); background:var(--accent-dim);
+  font-size:.6875rem; font-weight:700; color:var(--accent); letter-spacing:.04em;
+  width:fit-content;
+}
+
+/* =========================================================================
+   THREE LEVELS OF NAVIGATION
+
+   The dashboard used to be one flat row of thirteen buttons. It is now a
+   workspace switcher, a row of sections, and a row of pages — each drawn
+   from the ROUTES table in account.js.
+
+   They are deliberately three DIFFERENT shapes rather than three rows of the
+   same tab. A person has to be able to tell at a glance which level they are
+   looking at, and three identical strips stacked on top of each other is
+   worse than the single strip it replaced.
+   ========================================================================= */
+
+/* Level 1 — the workspace. Segmented, boxed, and the only one that looks
+   like a switch, because it is the only one that changes what job you are
+   doing rather than which page you are on. */
+.ws{
+  display:inline-flex; gap:2px; padding:3px; margin-bottom:18px;
+  border:1px solid var(--line); border-radius:11px; background:var(--bg-1);
+}
+.ws__btn{
+  padding:7px 15px; border-radius:8px;
+  font-size:.8125rem; font-weight:650; color:var(--ink-3);
+  transition:color .25s, background .25s;
+}
+.ws__btn:hover{ color:var(--ink-2); }
+.ws__btn.is-on{ color:var(--ink); background:var(--bg-3); }
+
+/* Level 3 — the page within a section. Quieter than the section row above
+   it: smaller, no underline, a filled pill for the current one. */
+.subtabs{
+  display:flex; flex-wrap:wrap; gap:6px;
+  margin:-14px 0 clamp(20px,2.4vw,30px);
+}
+.subtab{
+  padding:5px 12px; border-radius:999px;
+  font-size:.8125rem; font-weight:600; color:var(--ink-3);
+  border:1px solid transparent;
+  transition:color .25s, background .25s, border-color .25s;
+}
+.subtab:hover{ color:var(--ink-2); }
+.subtab.is-on{
+  color:var(--accent); background:var(--accent-dim);
+  border-color:rgba(var(--accent-rgb),.28);
+}
+
+/* Only shown where the nesting is real — two levels deep. One level needs no
+   trail to find your way back out of. */
+.crumbs{
+  display:flex; align-items:center; gap:7px; flex-wrap:wrap;
+  margin:-10px 0 22px; font-size:.75rem; color:var(--ink-3);
+}
+.crumbs b{ color:var(--ink-2); font-weight:600; }
+.crumb__sep{ color:var(--ink-4); }
+
+.tabs{ display:flex; flex-wrap:wrap; gap:4px; border-bottom:1px solid var(--line); margin-bottom:clamp(24px,3vw,38px); }
+.tab{
+  position:relative; padding:12px 17px;
+  font-size:.875rem; font-weight:600; color:var(--ink-3);
+  transition:color .3s;
+}
+.tab::before{
+  content:""; position:absolute; inset-inline:12px; inset-block-end:-1px; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:center;
+  transition:transform .4s var(--e-out);
+}
+.tab:hover{ color:var(--ink-2); }
+.tab.is-on{ color:var(--ink); }
+.tab.is-on::before{ transform:scaleX(1); }
+
+.panel{ display:grid; gap:clamp(20px,2.6vw,32px); }
+
+.card{
+  border:1px solid var(--line); border-radius:14px;
+  background:var(--bg-1); padding:clamp(20px,2.6vw,30px);
+  display:grid; gap:16px; align-content:start;
+}
+.card__title{ font-size:1rem; font-weight:700; letter-spacing:-.02em; }
+.card__note{ font-size:.8125rem; color:var(--ink-3); line-height:1.6; }
+.cards2{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px,1.8vw,22px); align-items:start; }
+
+/* ---------- orders list ---------- */
+.orow{
+  display:grid; grid-template-columns:auto 1fr auto; gap:8px 18px; align-items:baseline;
+  padding-block:16px; border-bottom:1px solid var(--line);
+}
+.orow:last-child{ border-bottom:0; }
+.orow__id{ font-family:var(--mono); font-size:.8125rem; color:var(--accent); letter-spacing:.04em; }
+.orow__meta{ font-size:.8125rem; color:var(--ink-4); }
+.orow__total{ font-family:var(--latin); font-weight:700; font-size:.9375rem; white-space:nowrap; }
+.orow__items{ grid-column:1 / -1; font-size:.75rem; color:var(--ink-3); line-height:1.6; }
+.pill{
+  display:inline-block; padding:3px 10px; border-radius:999px;
+  border:1px solid var(--line-2); font-size:.6875rem; color:var(--ink-3);
+}
+.pill--new{ border-color:rgba(var(--accent-rgb),.45); color:var(--accent); }
+
+/* Where the money is, on the customer's own order list and in the back
+   office. Amber for waiting rather than red: nothing is wrong, the payment
+   simply has not been made yet. Red is kept for the one that did fail. */
+.pill--pending{ border-color:rgba(214,158,46,.5); color:#d69e2e; }
+.pill--paid{ border-color:rgba(46,160,90,.5); color:#2ea05a; }
+.pill--failed{ border-color:rgba(214,69,69,.5); color:#d64545; }
+/* The pay button sits inside the meta line, which is baseline-aligned text —
+   without this it drags the row's baseline around. */
+.orow__pay{ --pad:6px 14px; font-size:.75rem; vertical-align:middle; margin-inline-start:4px; }
+
+/* The payment dropdowns, in the admin orders table and on the leads board.
+   Coloured by their own value because the question they answer — who has
+   not paid yet — is asked by scanning a column, not by reading it. The same
+   three colours as the pills above, so one meaning has one colour wherever
+   it appears. */
+.is-pay-pending{ color:#d69e2e; border-color:rgba(214,158,46,.45); }
+.is-pay-paid{ color:#2ea05a; border-color:rgba(46,160,90,.45); }
+.is-pay-failed{ color:#d64545; border-color:rgba(214,69,69,.45); }
+
+/* =========================================================================
+   ATTENDANCE
+   ========================================================================= */
+.clock{
+  display:grid; grid-template-columns:auto 1fr; gap:clamp(22px,3vw,40px);
+  align-items:center;
+}
+.dial{ position:relative; width:clamp(132px,17vw,176px); aspect-ratio:1; flex:none; }
+.dial svg{ width:100%; height:100%; transform:rotate(-90deg); }
+.dial__track{ stroke:var(--line-2); }
+.dial__fill{
+  stroke:var(--accent);
+  stroke-linecap:round;
+  transition:stroke-dashoffset .8s var(--e-out);
+}
+.dial__fill.is-over{ stroke:#5BD1A0; }
+.dial__mid{
+  position:absolute; inset:0; display:grid; place-content:center; justify-items:center; gap:3px;
+}
+.dial__big{ font-family:var(--latin); font-size:1.45rem; font-weight:700; letter-spacing:-.02em; line-height:1; }
+.dial__sub{ font-size:.6875rem; color:var(--ink-4); }
+
+.clock__side{ display:grid; gap:14px; justify-items:start; align-content:center; }
+.clock__state{ display:flex; align-items:center; gap:9px; font-size:.9375rem; color:var(--ink-2); }
+.clock__state .dot{ animation:none; }
+.clock__state.is-live .dot{ animation:pulse 2.6s var(--e-io) infinite; }
+.clock__state.is-off .dot{ background:var(--ink-4); }
+.clock__since{ font-size:.8125rem; color:var(--ink-4); }
+.clock__since b{ font-family:var(--latin); color:var(--ink-2); font-weight:600; }
+.btn--out{ background:transparent; color:var(--ink); border-color:var(--line-2); }
+.btn--out:hover{ border-color:#F0A8A8; color:#F0A8A8; box-shadow:none; background:rgba(240,168,168,.06); }
+
+.stats{ display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.stat{ background:var(--bg-1); padding:16px 18px; display:grid; gap:5px; }
+.stat__k{ font-size:.6875rem; color:var(--ink-4); }
+.stat__v{ font-family:var(--latin); font-size:1.25rem; font-weight:700; letter-spacing:-.025em; }
+.stat__v.is-pos{ color:#5BD1A0; }
+.stat__v.is-neg{ color:#F0A8A8; }
+
+/* =========================================================================
+   HORIZONTALLY SCROLLABLE TABLES
+
+   These always scrolled. The problem was that nobody could tell.
+
+   Mobile Safari and Chrome draw OVERLAY scrollbars: invisible until a scroll
+   is already under way. As an affordance that is circular — you have to know
+   you can scroll in order to discover that you can — and on the admin
+   catalogue the consequence was concrete: six columns in a 789px table inside
+   a 293px viewport, with Edit and Hide in the last column, 496px off-screen
+   and no indication they existed at all. In RTL that column is off the LEFT
+   edge, which is the direction people are least likely to try.
+
+   So two cues, both permanent:
+
+   1. A real scrollbar. Giving ::-webkit-scrollbar an explicit height opts out
+      of the overlay style and makes the bar always visible, on touch devices
+      as well as desktop. scrollbar-width/color do the same for Firefox.
+
+   2. Scroll shadows. The two `local` gradient layers scroll WITH the content
+      and the two `scroll` layers stay pinned to the edges, so a shadow shows
+      only on a side that has more content behind it — it appears when there
+      is something to reach and disappears at the end. Works unchanged in RTL,
+      because it follows the scroll position rather than a hard-coded side.
+   ========================================================================= */
+.tablewrap{
+  overflow-x:auto;
+  /* stops a horizontal swipe on the table from turning into a browser
+     back-navigation once it hits the end */
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  /* room for the bar, so it never sits on top of the last row */
+  padding-bottom:10px;
+
+  scrollbar-width:thin;
+  scrollbar-color:rgba(var(--ink-rgb),.38) rgba(var(--ink-rgb),.09);
+
+  background:
+    linear-gradient(to right, var(--bg-1) 40%, rgba(var(--bg-rgb),0)) left center,
+    linear-gradient(to left,  var(--bg-1) 40%, rgba(var(--bg-rgb),0)) right center,
+    radial-gradient(farthest-side at 0 50%,   rgba(var(--ink-rgb),.20), rgba(var(--ink-rgb),0)) left center,
+    radial-gradient(farthest-side at 100% 50%, rgba(var(--ink-rgb),.20), rgba(var(--ink-rgb),0)) right center;
+  background-repeat:no-repeat;
+  background-size:38px 100%, 38px 100%, 15px 100%, 15px 100%;
+  background-attachment:local, local, scroll, scroll;
+}
+.tablewrap::-webkit-scrollbar{ height:9px; -webkit-appearance:none; }
+.tablewrap::-webkit-scrollbar-track{
+  background:rgba(var(--ink-rgb),.09); border-radius:999px;
+}
+.tablewrap::-webkit-scrollbar-thumb{
+  background:rgba(var(--ink-rgb),.38); border-radius:999px;
+  border:2px solid transparent; background-clip:padding-box;
+}
+.tablewrap::-webkit-scrollbar-thumb:hover,
+.tablewrap::-webkit-scrollbar-thumb:active{
+  background:rgba(var(--ink-rgb),.55); background-clip:padding-box;
+}
+
+/* The drawn scroll bar, built by initScrollBars() in site.js and inserted as
+   a sibling immediately after each .tablewrap. It exists because iOS Safari
+   will not render a styled ::-webkit-scrollbar, so on an iPhone the rules
+   above produce no visible bar at all — see the note in site.js.
+
+   Purely a readout: pointer-events are off, so a touch here scrolls the page
+   as it would anywhere else rather than being swallowed by a fake control
+   that does not drag. */
+.hscroll{
+  position:relative; height:5px; border-radius:999px;
+  background:rgba(var(--ink-rgb),.10);
+  margin-block:2px 0;
+  pointer-events:none;
+}
+.hscroll[hidden]{ display:none; }
+.hscroll i{
+  position:absolute; inset-block:0; inset-inline-start:0;
+  border-radius:999px; background:rgba(var(--ink-rgb),.42);
+}
+
+table.att{ width:100%; border-collapse:collapse; min-width:520px; }
+table.att th, table.att td{
+  text-align:start; padding:12px 14px; font-size:.8125rem;
+  border-bottom:1px solid var(--line); white-space:nowrap;
+}
+table.att th{ color:var(--ink-4); font-weight:500; font-size:.75rem; }
+table.att td{ color:var(--ink-2); }
+table.att td.num{ font-family:var(--latin); }
+table.att tr:last-child td{ border-bottom:0; }
+table.att tr.is-today td{ background:rgba(var(--accent-rgb),.05); }
+.tag{
+  display:inline-block; padding:2px 9px; border-radius:999px;
+  font-size:.6875rem; border:1px solid var(--line-2); color:var(--ink-3);
+}
+.tag--complete{ border-color:rgba(91,209,160,.45); color:#5BD1A0; }
+.tag--short{ border-color:rgba(240,168,168,.45); color:#F0A8A8; }
+.tag--overtime{ border-color:rgba(var(--accent-rgb),.5); color:var(--accent); }
+.tag--open{ border-color:rgba(var(--accent-rgb),.5); color:var(--accent); }
+/* Absent had no tag of its own and fell back to the neutral border, which put
+   the one row a manager most needs to see in the quietest style on the page. */
+.tag--absent{ border-color:rgba(240,168,168,.35); color:#F0A8A8; opacity:.85; }
+.att__note{ font-size:.6875rem; color:var(--ink-4); white-space:normal; }
+table.att td b{ color:var(--ink); font-weight:600; }
+table.att td.num.is-pos{ color:#5BD1A0; }
+table.att td.num.is-neg{ color:#F0A8A8; }
+
+/* =========================================================================
+   PERFORMANCE — the orders-per-day bars
+
+   Divs, not a charting library. Twelve to ninety bars with a tooltip is not
+   worth 80KB of JavaScript on a page that already loads a payment SDK, and a
+   bar whose height is a percentage needs no layout maths at all.
+   ========================================================================= */
+.spark{
+  display:flex; align-items:flex-end; gap:3px;
+  height:130px; margin-block:6px 14px;
+  padding-block-start:14px;              /* room for the count above a full bar */
+  overflow-x:auto; overscroll-behavior-x:contain;
+}
+.spark__bar{
+  position:relative; flex:1 1 6px; min-width:6px;
+  background:linear-gradient(to top, rgba(var(--accent-rgb),.85), rgba(var(--accent-rgb),.35));
+  border-radius:3px 3px 0 0;
+  transition:background .2s ease;
+}
+.spark__bar:hover{ background:var(--accent); }
+/* The count sits above the bar, and only when there is room for it — below
+   about 18px per bar the numbers collide into an unreadable smear. */
+.spark__bar span{
+  position:absolute; inset-block-end:100%; inset-inline:0;
+  text-align:center; font-family:var(--latin); font-size:.625rem;
+  color:var(--ink-4); line-height:1.4;
+}
+@media (max-width:720px){ .spark__bar span{ display:none; } }
+
+/* =========================================================================
+   TEAM — the administrator's timesheet controls
+   ========================================================================= */
+.teambar{
+  display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px;
+  margin-block:4px 18px;
+}
+.teambar .field{ margin:0; min-width:150px; }
+.teambar .btn{ flex:none; }
+
+/* The one-line answer, above the table rather than inside it: a manager
+   opening this tab wants "yes" or "look at these" before any numbers. */
+.verdict{
+  display:flex; align-items:center; gap:9px;
+  margin-block:0 16px; padding:11px 15px; border-radius:12px;
+  font-size:.875rem; color:var(--ink-2);
+  background:var(--bg-1); border:1px solid var(--line-2);
+}
+.verdict::before{
+  content:""; width:7px; height:7px; border-radius:50%;
+  background:var(--ink-4); flex:none;
+}
+.verdict.is-good{ border-color:rgba(91,209,160,.45); color:#5BD1A0; }
+.verdict.is-good::before{ background:#5BD1A0; }
+.verdict.is-bad{ border-color:rgba(240,168,168,.45); color:#F0A8A8; }
+.verdict.is-bad::before{ background:#F0A8A8; }
+
+.c-thumb-cell{ width:64px; }
+.c-thumb{
+  display:block; width:56px; height:56px; object-fit:cover;
+  border-radius:10px; border:1px solid var(--line-2); background:var(--bg-1);
+}
+.c-thumb--empty{
+  display:grid; place-items:center; width:56px; height:56px; padding:4px;
+  border-radius:10px; border:1px dashed var(--line-2); color:var(--ink-4);
+  font-size:.6875rem; text-align:center; line-height:1.15;
+}
+
+/* =========================================================================
+   CHECKOUT BAR
+
+   Sits below the drawer and the scrim (104/105) so opening the cart covers
+   it, and above the WhatsApp fab's own stacking. While it is up it publishes
+   its own height as --cobar-h on <body>, and the two other things pinned to
+   the bottom of the screen — the fab and the toast — offset by that instead
+   of guessing a gap. Off, --cobar-h is 0 and they sit where they always did.
+   ========================================================================= */
+.cobar{
+  position:fixed; z-index:96;
+  inset-inline:0;
+  /* physical `bottom`, for the reason given on .toast below: the cookie bar
+     publishes --cookiebar-h while it is up, and this has to re-resolve when
+     it goes down. */
+  bottom:var(--cookiebar-h, 0px);
+  padding-inline:clamp(12px,3vw,24px);
+  padding-block-end:calc(clamp(14px,2.4vw,22px) + env(safe-area-inset-bottom));
+  pointer-events:none;
+  opacity:0; transform:translateY(130%);
+  transition:opacity .3s var(--e-out), transform .5s var(--e-out), bottom .45s var(--e-out);
+}
+.cobar.is-on{ opacity:1; transform:none; }
+.cobar.is-on .cobar__in{ pointer-events:auto; }
+/* the burger overlay (z-index 99) paints over it; do not peek through */
+.is-menu .cobar{ opacity:0; transform:translateY(130%); }
+
+.cobar__in{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  inline-size:min(100%, 560px); margin-inline:auto;
+  padding:11px 11px 11px 20px; border-radius:999px;
+  background:var(--bg-3); border:1px solid var(--line-2);
+  box-shadow:0 20px 46px -18px rgba(0,0,0,.65);
+}
+[dir="rtl"] .cobar__in{ padding:11px 20px 11px 11px; }
+
+.cobar__meta{ display:grid; gap:2px; min-width:0; }
+.cobar__count{ font-size:.8125rem; font-weight:600; color:var(--ink-2); }
+.cobar__total{ font-family:var(--latin); font-size:1rem; font-weight:700; color:var(--accent); white-space:nowrap; }
+.cobar__go{ flex:none; }
+
+/* =========================================================================
+   TOAST
+   ========================================================================= */
+.toast{
+  position:fixed; z-index:130;
+  /* physical `bottom`, not `inset-block-end`: a var() inside calc() on the
+     logical property does not re-resolve when --cobar-h changes. Same value
+     either way — the page is horizontal-tb in both languages. */
+  bottom:calc(clamp(84px,11vw,100px) + var(--cobar-h, 0px) + var(--cookiebar-h, 0px));
+  left:50%; right:auto;
+  transform:translate(-50%, 14px);
+  max-width:min(92vw, 420px);
+  padding:12px 20px; border-radius:999px;
+  background:var(--bg-3); border:1px solid var(--line-2); color:var(--ink);
+  font-size:.875rem; text-align:center;
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.5);
+  opacity:0; pointer-events:none;
+  transition:opacity .3s var(--e-out), transform .3s var(--e-out);
+}
+.toast.is-on{ opacity:1; transform:translate(-50%, 0); }
+.toast.is-good{ border-color:rgba(var(--accent-rgb),.5); }
+.toast.is-bad{ border-color:rgba(224,86,86,.5); color:#F0A8A8; }
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+@media (max-width:900px){
+  .checkout__grid{ grid-template-columns:1fr; }
+  /* The summary moves above the form on narrow screens: you should see what
+     you are paying for before you start typing an address. */
+  .checkout__summary{ position:static; order:-1; }
+  .cards2{ grid-template-columns:1fr; }
+  .clock{ grid-template-columns:1fr; justify-items:center; text-align:center; }
+  .clock__side{ justify-items:center; }
+}
+
+@media (max-width:640px){
+  .frow{ grid-template-columns:1fr; }
+  .grid{ grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:12px; }
+  .pcard__body{ padding:14px; }
+  .pcard__foot{ flex-direction:column; align-items:stretch; gap:10px; }
+  .pcard__buy .btn, .pcard__buy .step2{ width:100%; }
+  .product-card{ grid-template-columns:1fr; }
+  .product-card__meta{ grid-template-columns:1fr; }
+  .step2{ display:grid; grid-template-columns:1fr auto 1fr; }
+  .toolbar .field--sort{ min-width:0; flex:1 1 100%; }
+  .cart{ width:100%; }
+  .auth__body{ padding:22px 18px; }
+  /* physical `bottom` for the same reason as the base rule, and it has to
+     keep BOTH offset terms: this declaration wins over the one above it, so
+     dropping either one puts the toast back under the bar it was clearing. */
+  .toast{ bottom:calc(76px + var(--cobar-h, 0px) + var(--cookiebar-h, 0px)); }
+
+  /* Matches the trimmed nav controls in styles.css — five of these plus the
+     logo have to fit a 320px bar without pushing the burger off screen. */
+  .iconbtn{ width:34px; height:34px; }
+  .iconbtn__count{ inset-block-start:-4px; inset-inline-end:-4px; min-width:17px; height:17px; font-size:.625rem; }
+
+  /* Make the wide admin tables narrower before asking anyone to scroll them.
+
+     Measured on a 375px phone, the catalogue table was 789px against a 293px
+     window — 496px hidden, with Edit and Hide in the last column. Most of that
+     width was avoidable rather than necessary: `white-space:nowrap` on every
+     cell forced "كاميرات HD (Analog)" to hold a 167px column open, and the
+     desktop cell padding cost another ~70px across six columns.
+
+     Letting the text-bearing cells wrap and tightening the padding takes the
+     table down by roughly a third. What is left still scrolls — and now says
+     so, via the permanent scrollbar and the edge shadows on .tablewrap. */
+  table.att{ min-width:0; }
+  table.att th, table.att td{ padding:10px 8px; }
+  /* Numbers, buttons and the on/off pill still must not break mid-token. */
+  table.att td:not(.num):not(.c-thumb-cell), table.att th{ white-space:normal; }
+  table.att td .att__note{ white-space:normal; word-break:break-word; }
+}
+
+/* =========================================================================
+   REDUCED MOTION
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce){
+  .cart, .scrim, .toast, .dial__fill{ transition:none !important; }
+}
+
+/* =========================================================================
+   NOTIFICATIONS, MESSAGES AND LEAVE
+   ========================================================================= */
+
+/* ---------- the bell ---------- */
+.bell{
+  position:relative; display:grid; place-items:center;
+  width:38px; height:38px; border-radius:12px;
+  border:1px solid var(--line); background:var(--bg-1); color:var(--ink-2);
+  cursor:pointer; transition:border-color .3s, color .3s;
+}
+.bell:hover{ border-color:var(--line-2); color:var(--ink); }
+.bell.has-unread{ color:var(--accent); border-color:var(--accent); }
+.bell__count{
+  position:absolute; top:-6px; inset-inline-end:-6px; min-width:19px; height:19px;
+  display:grid; place-items:center; padding:0 5px;
+  border-radius:999px; background:var(--accent); color:var(--accent-ink);
+  font-family:var(--latin); font-size:.6875rem; font-weight:800; line-height:1;
+}
+
+/* FIXED, NOT ABSOLUTE, and this is the whole bug it fixes.
+
+   Absolute put the panel in the PAGE. The bell is in the dashboard header
+   and the dashboard is long, so opening it from halfway down dropped a
+   60vh panel at the top of the document, out of view — you had to scroll up
+   to read your own notifications.
+
+   Fixed puts it on the SCREEN. account-staff.js measures the bell each time
+   it opens and on scroll, and writes the three properties below; the
+   fallbacks are a sane top-corner position for the case where the
+   measurement never runs.
+
+   --bell-max is the room actually below the bell, not a guess. The 60vh cap
+   stays as the upper bound, but on a short window there is less than that
+   available and a panel taller than its room is how the bottom of the list
+   became unreachable. min() takes whichever is smaller. */
+.bellpop{
+  position:fixed; z-index:130;
+  top:var(--bell-top, 76px);
+  left:var(--bell-left, auto);
+  inset-inline-end:var(--bell-left, 16px);
+  width:min(360px,92vw);
+  max-height:min(60vh, var(--bell-max, 60vh));
+  overflow-y:auto; overscroll-behavior:contain;
+  border:1px solid var(--line); border-radius:16px; background:var(--bg-1);
+  box-shadow:0 18px 50px rgba(0,0,0,.18);
+}
+/* Once JS has measured, `left` is authoritative in both directions — the
+   value is already a physical x, so the logical property must not also
+   apply or the two fight in RTL. */
+.bellpop[style*="--bell-left"]{ inset-inline-end:auto; }
+.bellpop__head{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px 14px; border-bottom:1px solid var(--line);
+  position:sticky; top:0; background:var(--bg-1);
+}
+.bellpop__list{ padding:6px; display:grid; gap:2px; }
+
+.notif{
+  display:flex; gap:10px; align-items:flex-start; width:100%; text-align:start;
+  padding:10px 12px; border:0; border-radius:12px; background:transparent;
+  cursor:pointer; transition:background .2s;
+}
+.notif:hover{ background:rgba(var(--ink-rgb),.05); }
+/* Unread is carried by a bar rather than a background tint, so it survives
+   the hover state instead of disappearing under it. */
+.notif.is-new{ box-shadow:inset 3px 0 0 var(--accent); }
+.notif__icon{ flex:0 0 auto; font-size:1rem; line-height:1.3; }
+.notif__body{ display:grid; gap:2px; min-width:0; }
+.notif__title{ font-weight:700; font-size:.875rem; color:var(--ink); }
+.notif__note{ font-size:.8125rem; color:var(--ink-2); overflow-wrap:anywhere; }
+.notif__when{ font-family:var(--latin); font-size:.6875rem; color:var(--ink-3); }
+
+/* An unread marker on the tab itself, for the two tabs that can have one. */
+.tab__dot{
+  display:inline-block; width:7px; height:7px; margin-inline-start:6px;
+  border-radius:999px; background:var(--accent); vertical-align:middle;
+}
+
+/* ---------- messages ---------- */
+.msg{
+  padding:12px 14px; border:1px solid var(--line); border-radius:14px;
+  background:var(--bg-1); margin-top:10px;
+}
+.msg.is-new{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(var(--accent-rgb),.10); }
+.msg__head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+.msg__when{ font-family:var(--latin); font-size:.75rem; color:var(--ink-3); }
+.msg__subject{ margin:6px 0 0; font-weight:700; font-size:.9375rem; }
+.msg__body{ margin:4px 0 0; font-size:.875rem; color:var(--ink-2); white-space:pre-wrap; overflow-wrap:anywhere; }
+
+/* ---------- leave ---------- */
+.lrow{
+  padding:12px 14px; border:1px solid var(--line); border-radius:14px;
+  background:var(--bg-1); margin-top:10px; display:grid; gap:6px;
+}
+.lrow__main{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.lrow__days{ font-family:var(--latin); font-weight:700; color:var(--ink-2); }
+.lrow__note{ margin:0; font-size:.8125rem; color:var(--ink-3); overflow-wrap:anywhere; }
+.lrow__act{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:4px; }
+.lrow__reason{
+  flex:1 1 200px; min-width:0; padding:8px 10px;
+  border:1px solid var(--line); border-radius:10px; background:var(--bg-2); color:var(--ink);
+  font:inherit; font-size:.8125rem;
+}
+.tag--pending{ background:rgba(var(--ink-rgb),.10); color:var(--ink-2); }
+.tag--approved{ background:rgba(46,160,90,.16); color:#2ea05a; }
+.tag--declined{ background:rgba(214,69,69,.16); color:#d64545; }
+.tag--cancelled{ background:rgba(var(--ink-rgb),.08); color:var(--ink-3); }
+
+.field__hint{ margin:4px 0 0; font-size:.75rem; color:var(--ink-3); }
+
+@media (prefers-reduced-motion: reduce){
+  .bell, .notif{ transition:none; }
+}
+
+/* =========================================================================
+   LEADS CENTRE + THE NOTIFICATION ASK
+   ========================================================================= */
+
+/* ---------- the permission banner ---------- */
+.notifask{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  flex-wrap:wrap; margin-bottom:16px; padding:12px 16px;
+  border:1px solid var(--line); border-radius:14px; background:var(--bg-1);
+}
+/* An employee cannot dismiss it, so it is coloured as something outstanding
+   rather than as a neutral notice they can learn to ignore. */
+.notifask.is-required{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(var(--accent-rgb),.12);
+}
+.notifask__text{ display:grid; gap:2px; min-width:0; }
+.notifask__text b{ font-size:.9375rem; }
+.notifask__text span{ font-size:.8125rem; color:var(--ink-2); }
+.notifask__act{ display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ---------- the board ---------- */
+.leadbar{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+.leadbar input[type="search"]{
+  flex:1 1 180px; min-width:0; padding:9px 12px;
+  border:1px solid var(--line); border-radius:10px; background:var(--bg-2); color:var(--ink);
+  font:inherit; font-size:.875rem;
+}
+/* The count beside a stage name. */
+.seg__b i{ font-style:normal; font-family:var(--latin); opacity:.65; font-size:.75rem; }
+
+.lead{
+  display:grid; gap:4px; width:100%; text-align:start;
+  padding:12px 14px; margin-top:8px;
+  border:1px solid var(--line); border-radius:14px; background:var(--bg-1);
+  cursor:pointer; transition:border-color .25s, transform .3s var(--e-out);
+}
+.lead:hover{ border-color:var(--line-2); transform:translateY(-1px); }
+.lead__main{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.lead__meta{ font-size:.75rem; color:var(--ink-3); }
+
+/* Stage colours. `won` and `lost` are the two worth telling apart at a
+   glance; the live stages stay quiet so the finished ones stand out. */
+.tag--new{ background:rgba(var(--accent-rgb),.16); color:var(--accent); }
+.tag--contacted, .tag--quoted{ background:rgba(var(--ink-rgb),.10); color:var(--ink-2); }
+.tag--won{ background:rgba(46,160,90,.16); color:#2ea05a; }
+.tag--lost{ background:rgba(var(--ink-rgb),.08); color:var(--ink-3); }
+
+/* ---------- the timeline ---------- */
+.note{
+  padding:10px 12px; margin-top:8px;
+  border-inline-start:3px solid var(--line); background:var(--bg-2); border-radius:0 10px 10px 0;
+}
+/* Written by a person, versus recorded by the system. The distinction is the
+   reason `kind` is stored at all. */
+.note--note{ border-inline-start-color:var(--accent); }
+.note--status, .note--order, .note--created{ opacity:.85; }
+.note__body{ margin:0; font-size:.875rem; white-space:pre-wrap; overflow-wrap:anywhere; }
+.note__meta{ margin:4px 0 0; font-size:.6875rem; color:var(--ink-3); font-family:var(--latin); }
+
+#ldOrderId{
+  flex:1 1 160px; min-width:0; padding:8px 10px;
+  border:1px solid var(--line); border-radius:10px; background:var(--bg-2); color:var(--ink);
+  font:inherit; font-size:.8125rem;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .lead{ transition:none; }
+  .lead:hover{ transform:none; }
+}
+
+/* Who on the team has notifications on. Quiet when everyone does. */
+.notifroster{
+  margin:0 0 14px; font-size:.8125rem; color:var(--ink-3);
+}
+.notifroster.is-warn{ color:#d64545; font-weight:600; }
+
+/* =========================================================================
+   PROFILE PICTURE
+   ========================================================================= */
+.avatarrow{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.avatarrow__acts{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.avatarrow__acts .card__note{ flex-basis:100%; margin:0; }
+
+.avatar{
+  display:grid; place-items:center; flex:none;
+  width:44px; height:44px; border-radius:50%; overflow:hidden;
+  background:var(--accent-dim); color:var(--accent);
+  font-weight:700; font-size:.9375rem; letter-spacing:.02em;
+  border:1px solid var(--line);
+}
+.avatar--lg{ width:76px; height:76px; font-size:1.5rem; }
+.avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+/* Initials rather than a placeholder image: every account has a name, and it
+   means the page never requests a URL that does not exist. */
+.avatar.is-empty{ background:var(--accent-dim); }
+
+/* =========================================================================
+   LIVE CHAT — the employee's side
+   ========================================================================= */
+
+/* A chat in one of the three lists. The whole row opens it, so it is a
+   button; .orow assumes a container, hence the reset. */
+.orow--btn{
+  width:100%; text-align:inherit; font:inherit; color:inherit;
+  background:none; border:0; border-bottom:1px solid var(--line);
+  cursor:pointer;
+}
+.orow--btn:hover{ background:var(--bg-1); }
+.orow--btn:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+.orow__note{
+  grid-column:1 / -1; font-size:.8125rem; color:var(--ink-3); line-height:1.6;
+  display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* The five-minute countdown. Monospaced so the digits do not jitter as they
+   tick, and it turns red for the last minute — the point at which it is
+   about to be somebody else's problem. */
+.sup__clock{
+  font-family:var(--mono); font-size:.75rem; font-weight:700;
+  color:var(--ink-3); margin-inline-start:6px;
+}
+.sup__clock.is-urgent{ color:#d64545; }
+
+/* The conversation. Scrolls inside its own box so the reply field stays put
+   while the history moves. */
+.dmwrap{
+  max-height:52vh; overflow-y:auto; overscroll-behavior:contain;
+  display:grid; gap:10px; padding:4px 2px; margin-bottom:12px;
+}
+.dm{ max-width:78%; display:grid; gap:3px; }
+/* Logical properties, not left/right: this page is Arabic by default. */
+.dm--in{ justify-self:start; }
+.dm--out{ justify-self:end; text-align:end; }
+.dm__body{
+  padding:9px 13px; border-radius:14px; font-size:.875rem; line-height:1.65;
+  border:1px solid var(--line); background:var(--bg-1);
+  white-space:pre-wrap; word-break:break-word;
+}
+.dm--out .dm__body{
+  background:rgba(var(--accent-rgb),.10); border-color:rgba(var(--accent-rgb),.30);
+}
+/* "Mona joined the chat" — the system narrating, not a person speaking. */
+.dm--sys{ justify-self:center; max-width:100%; }
+.dm--sys .dm__body{
+  background:none; border:0; color:var(--ink-4);
+  font-size:.75rem; padding:2px 6px; text-align:center;
+}
+.dm__at{ font-size:.6875rem; color:var(--ink-4); }
+
+.dmreply{ display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap; }
+.dmreply textarea{ flex:1 1 240px; min-height:44px; max-height:140px; resize:vertical; }
+.dmhead{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+.dmhead__name{ font-weight:700; font-size:.9375rem; }
+
+

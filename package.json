@@ -1,0 +1,44 @@
+{
+  "name": "visionguard-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vision Guard — bilingual AR/EN site, on-site shop and staff attendance. Static front end, Cloudflare Pages Functions + D1 behind it. No build step.",
+  "homepage": "https://github.com/Mahmoudnabil03/worldwidewebvisionai#readme",
+  "bugs": {
+    "url": "https://github.com/Mahmoudnabil03/worldwidewebvisionai/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mahmoudnabil03/worldwidewebvisionai.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "wrangler pages dev --port 5173",
+    "deploy": "wrangler pages deploy",
+    "deploy:preview": "wrangler pages deploy --branch=preview",
+    "db:init": "wrangler d1 execute visionguardegdata --remote --file=./schema.sql",
+    "db:init:local": "wrangler d1 execute visionguardegdata --local --file=./schema.sql",
+    "db:orders": "wrangler d1 execute visionguardegdata --remote --command \"SELECT id, created_at, name, phone, governorate, total, status, notified, notify_error FROM orders ORDER BY created_at DESC LIMIT 20\"",
+    "db:order": "wrangler d1 execute visionguardegdata --remote --command \"SELECT * FROM orders ORDER BY created_at DESC LIMIT 1\"",
+    "db:attendance": "wrangler d1 execute visionguardegdata --remote --command \"SELECT u.name, a.work_date, a.clock_in, a.clock_out, a.seconds FROM attendance a JOIN users u ON u.id = a.user_id ORDER BY a.clock_in DESC LIMIT 50\"",
+    "db:newsletter": "wrangler d1 execute visionguardegdata --remote --command \"SELECT email, name, marketing, source, created_at, unsub_at FROM newsletter ORDER BY created_at DESC\"",
+    "db:staff": "wrangler d1 execute visionguardegdata --remote --command \"SELECT name, email, role FROM users WHERE lower(email) LIKE '%@visionguardeg.com' ORDER BY role, name\"",
+    "admin:create": "node scripts/create-admin.mjs"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.62.1",
+    "facebook-nodejs-business-sdk": "^24.0.1",
+    "firebase": "^12.17.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.123.0"
+  },
+  "//type": "Every .js in this repo is already an ES module — the front end, lib/ and functions/ all use import/export. Saying so lets plain `node` run scripts/ against lib/ instead of guessing the module kind from the file's contents, which older Node versions do not do."
+}

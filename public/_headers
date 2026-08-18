@@ -1,0 +1,316 @@
+# Cloudflare Pages — response headers
+# Order matters: later matching rules add to earlier ones.
+#
+# These rules apply to STATIC assets. Pages Functions (/api/*) set their own
+# headers in code — lib/util.js sends `Cache-Control: no-store` on every JSON
+# response, which is what you want for a cart, a session or an attendance
+# record.
+
+/*
+  # --- security ---
+  # Every page carries the SAME one-line inline <script> in <head> (the
+  # no-js -> js class swap, and the theme choice). It must run before paint, so
+  # it cannot move to an external file without a flash of the wrong theme — it
+  # is allow-listed by hash instead. All EIGHT pages share one hash because the
+  # script is byte for byte identical; keep it that way. If you edit it
+  # anywhere, recompute and update this value, or the reveal animations and the
+  # pre-paint theme silently stop working:
+  #
+  # terms.html used to have its </script> on the next line, which put a
+  # trailing newline in the script BODY and therefore gave it a different
+  # hash — so that one page had been running with its inline script blocked,
+  # no js class and no theme applied before paint, silently. All eight are now
+  # written identically on one line. That is the failure mode this note warns
+  # about, and it had already happened.
+  #   node -e "const c=require('crypto');console.log('sha256-'+c.createHash('sha256').update(process.argv[1]).digest('base64'))" "<script body>"
+  # accounts.google.com is where the sign-in popup goes and where the token
+  # exchange is called. lh3.googleusercontent.com is where profile pictures
+  # are served from. `frame-ancestors 'none'` is untouched: other sites still
+  # cannot frame us.
+  #
+  # Google Identity Services is NO LONGER USED — the site has one sign-in
+  # stack, Firebase, and the button is our own markup rather than a widget
+  # Google renders (see public/account.js). The style-src-attr relaxation and
+  # the style-src sha256 below both date from that widget: it sized itself
+  # with inline style attributes and injected a <style> block, and without
+  # those two the button rendered as a 437px-tall Google logo. They are kept
+  # because Firebase's own hidden auth iframe styles itself the same way, and
+  # because style-src-attr is narrow by construction — it permits ATTRIBUTES
+  # only, so injected <style> ELEMENTS other than the pinned hash stay blocked.
+  # Meta Pixel needs three of these widened. It is worth knowing exactly which,
+  # because a missing one fails silently — the pixel simply never fires and
+  # nothing in the page says so:
+  #   script-src   connect.facebook.net, which serves fbevents.js. The loader
+  #                itself is public/pixel.js, an ordinary same-origin file, so
+  #                it needs no hash — that is the whole reason it is not inline.
+  #   img-src      www.facebook.com, for the <noscript> tracking pixel and for
+  #                the 1x1 GIFs fbevents.js uses to deliver events.
+  #   connect-src  facebook.com, which newer fbevents builds use in place of
+  #                image beacons.
+  #   frame-src +  form-action, both facebook.com. These two are the pixel's
+  #                fallback transport: when an event payload is too big for a
+  #                GET image beacon — Purchase, which carries value, currency
+  #                and content data, is exactly that case — fbevents posts a
+  #                form into a hidden iframe instead. Blocking either half
+  #                makes the fallback fail silently, so the events that matter
+  #                most for ad attribution are the ones most likely to go
+  #                missing. Verified: with these blocked, checkout logged
+  #                form-action and frame-src violations on every order.
+  #
+  # form-action is the one worth a second thought, since it governs where ANY
+  # form on the site may submit. It is acceptable here because script-src has
+  # no 'unsafe-inline' and the site renders no user-supplied HTML, so there is
+  # no practical way to inject a form to abuse it. If you would rather keep
+  # form-action locked to 'self', you can: the server-side Conversions API in
+  # functions/api/orders.js already reports Purchase independently of the
+  # browser, and Meta deduplicates the two.
+  # Firebase Auth needs three of these widened, and each one fails in its own
+  # confusing way if you leave it out:
+  #   script-src   www.gstatic.com, which serves the Firebase ES modules.
+  #                public/firebase-auth.js imports them by URL because there
+  #                is no bundler here. Blocked, the import rejects and the
+  #                Google button simply never appears.
+  #   connect-src  identitytoolkit.googleapis.com (sign-in, sign-up, password
+  #                reset) and securetoken.googleapis.com (token refresh).
+  #                Blocked, every credential call fails as a network error and
+  #                looks like the customer's connection.
+  #   frame-src    the project's authDomain. signInWithPopup opens a real
+  #                popup window, which CSP does not govern — but the SDK also
+  #                mounts a hidden iframe at <authDomain>/__/auth/iframe to
+  #                track auth state, and that one is a frame.
+  #   script-src + frame-src apis.google.com. THIS ONE WAS MISSING and it is
+  #                why "Continue with Google" failed at click time. The hidden
+  #                auth iframe above bootstraps itself by loading
+  #                https://apis.google.com/js/api.js — the gapi loader, the
+  #                same library the old auth2 flow used. Blocked, the iframe
+  #                never initialises and the popup handshake has nothing to
+  #                report back to, so the sign-in dies partway with a
+  #                version/compatibility-shaped error rather than a network
+  #                one. Verified in the browser console: three
+  #                "Loading the script 'https://apis.google.com/js/api.js'
+  #                violates ... script-src" entries per sign-in attempt.
+  #                gstatic serves the SDK; apis.google.com serves the loader;
+  #                both are required and neither substitutes for the other.
+  # Note that googleapis.com is NOT widened wholesale: the two subdomains
+  # named are the only ones the auth flow talks to, and the key set this
+  # server verifies tokens against is fetched by the Worker, not the browser.
+  # img-src carries `blob:` for one reason: the catalogue editor in
+  # public/account.js previews a chosen image before it is uploaded, via
+  # URL.createObjectURL(file). Without it that preview is blocked and the
+  # admin picks a file, sees nothing, and has to save to find out what they
+  # chose. A blob: URL can only be minted by this page's own JavaScript and
+  # only points at memory this page already holds, so it grants no reach
+  # anything else on this list does not already have.
+  # Cloudflare Web Analytics.
+  #
+  # Cloudflare INJECTS static.cloudflareinsights.com/beacon.min.js into every
+  # HTML response when Web Analytics is switched on for the zone. It is not
+  # referenced anywhere in this repo, which is why it is easy to miss: without
+  # the two entries below the CSP blocked it, so the analytics silently
+  # collected nothing AND every page logged a console error on every visit.
+  #
+  # It is listed rather than the injection being turned off because this is
+  # the one measurement on the site that is cookieless — no identifiers, no
+  # cross-site profile, nothing the cookie bar is making promises about — so
+  # it sits outside the consent gate that public/consent.js applies to the
+  # Meta pixel, and it is the only traffic figure the shop has that does not
+  # depend on an ad platform.
+  #
+  # To go the other way instead, turn Web Analytics off under the zone's
+  # Analytics settings and delete both entries; leaving one without the other
+  # is what produced the silent failure in the first place.
+  #   script-src   serves beacon.min.js
+  #   connect-src  the beacon POSTs its measurements back to the same host
+  #
+  # frame-src 'self' — REQUIRED SINCE THE AUTH DOMAIN BECAME OUR OWN.
+  #
+  # Firebase Auth keeps a hidden iframe at <authDomain>/__/auth/iframe. While
+  # authDomain was visionguard-7425d.firebaseapp.com that was a cross-origin
+  # frame and the entry below covered it. It is now visionguardeg.com — see
+  # public/firebase-auth.js and functions/__/[[path]].js — so the frame is
+  # SAME-ORIGIN, and a frame-src list without 'self' blocks it. default-src
+  # does not cover this: frame-src is present, so it wins for frames and
+  # nothing falls back.
+  #
+  # Getting this wrong is not a visible error. The iframe is silently
+  # refused, the popup never gets its answer back, and the page sits on the
+  # sign-in form exactly as it did before — which is the bug this whole
+  # change set out to fix.
+  #
+  # The firebaseapp.com entries stay: they cost nothing and they are what the
+  # one-line revert in firebase-auth.js needs in order to work.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-adVl2YTBrrigbtHMrTyF6Y2PuY7OVnFMe+eyESsr1i0=' https://static.cloudflareinsights.com https://accounts.google.com https://apis.google.com https://connect.facebook.net https://www.gstatic.com; style-src 'self' 'sha256-zCDkH4cegmsyd2gRjIf7/EYDNSYpG9GSUO+/bEavxmc=' https://fonts.googleapis.com https://accounts.google.com; style-src-attr 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://lh3.googleusercontent.com https://www.facebook.com; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com https://accounts.google.com https://www.facebook.com https://connect.facebook.net https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://visionguard-7425d.firebaseapp.com; frame-src 'self' https://accounts.google.com https://apis.google.com https://www.facebook.com https://visionguard-7425d.firebaseapp.com; object-src 'none'; base-uri 'self'; form-action 'self' https://www.facebook.com; frame-ancestors 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  # Cross-Origin-Opener-Policy: THE VALUE HERE DECIDES WHETHER GOOGLE SIGN-IN
+  # WORKS AT ALL. It was `same-origin`, and that is why it did not.
+  #
+  # `same-origin` puts this document in its own browsing context group and
+  # severs the link to any CROSS-ORIGIN popup it opens. signInWithPopup opens
+  # accounts.google.com, so under `same-origin`:
+  #   - the popup's window.opener is null, so it cannot post the result back;
+  #   - our handle on the popup reads .closed === true straight away.
+  # The Firebase SDK polls exactly that property, sees a popup that appears to
+  # have been closed, and rejects with auth/popup-closed-by-user — which
+  # firebase-auth.js maps to `cancelled`, and account.js deliberately says
+  # NOTHING for a cancel because that is what closing the window means.
+  #
+  # So the customer clicked "Continue with Google", chose their account, and
+  # landed back on a page still showing the sign-in form with no error
+  # anywhere. Nothing was written to D1, because the token exchange never
+  # happened — which is why the users table has no Google-created customer in
+  # it at all.
+  #
+  # This is the SAME CLASS OF BUG as the three CSP entries documented above:
+  # a header tightened for good reasons, breaking one flow, silently. It is
+  # the fourth one, and it is the one that was left.
+  #
+  # `same-origin-allow-popups` keeps the protection that is actually load
+  # bearing here — a cross-origin document that opens US still gets no handle
+  # on this window, which is what COOP is for — while letting popups WE open
+  # report back. It is the value Firebase, and every other OAuth-popup
+  # vendor, requires. Do not "harden" it back without reading this.
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# --- caching ---
+# HTML must revalidate so a redeploy is picked up immediately. Both the
+# extensionless and the .html form are listed: Pages serves /shop and
+# /shop.html, and a rule matches the requested path, not the file behind it.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/shop
+  Cache-Control: public, max-age=0, must-revalidate
+
+/shop.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/account
+  Cache-Control: no-store
+
+/account.html
+  Cache-Control: no-store
+
+/game
+  Cache-Control: public, max-age=0, must-revalidate
+
+/game.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/privacy
+  Cache-Control: public, max-age=0, must-revalidate
+
+/privacy.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/terms
+  Cache-Control: public, max-age=0, must-revalidate
+
+/terms.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/refund
+  Cache-Control: public, max-age=0, must-revalidate
+
+/refund.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/shipping
+  Cache-Control: public, max-age=0, must-revalidate
+
+/shipping.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/product
+  Cache-Control: public, max-age=0, must-revalidate
+
+/product.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# CSS and JS are unhashed filenames, so they cannot be cached immutably.
+# One hour, then revalidate — cheap because 304s are tiny.
+/styles.css
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/app.css
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/main.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/site.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/shop.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/account.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# The other two thirds of the account page. account-shared.js is imported by
+# account.js on every load; account-admin.js is imported only when an
+# administrator opens one of the four admin tabs, so most visitors never
+# request it at all. Same hour as their sibling — the ?v= query is still what
+# forces an update on deploy, and all three have to expire together or a
+# deploy could pair a new account.js with a cached old shared module.
+/account-shared.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/account-admin.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/page.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/assistant.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/home.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/firebase-auth.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# consent.js gates pixel.js, so a stale copy of it is a stale consent policy.
+# Same hour as everything else — the ?v= query is what actually forces the
+# update on deploy — but it is worth knowing which file this one is.
+/consent.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# The coverage planner. game-data.js holds the optics, the floor plans and the
+# system-building rules, so it is the one the shop owner is most likely to edit
+# — same hour as the rest, and the ?v= bump is what makes an edit land.
+/game.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/game-data.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/promo.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# The staff "Work" link. Same hour as its siblings — the ?v= bump is what
+# makes an edit land — and the same classic-script reason for existing on
+# every page: the landing page's chrome is main.js, which cannot import.
+/worklink.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/pixel.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/track.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# The catalogue changes whenever a price does, and a stale copy would show a
+# customer a price the server will not honour. Five minutes, then revalidate.
+/catalog.js
+  Cache-Control: public, max-age=300, must-revalidate
+
+# Images are content-stable; if one changes, change its filename.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

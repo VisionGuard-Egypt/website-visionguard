@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="DC power connector">
+  <g fill="none" stroke="#12202A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- male barrel plug -->
+    <path d="M188 176h132v98H188z"/>
+    <path d="M320 196h58v58h-58z"/>
+    <path stroke="#1B9DD9" d="M378 225h40"/>
+    <circle cx="349" cy="225" r="13"/>
+    <!-- screw terminals on the back -->
+    <path d="M188 200h-46M188 250h-46"/>
+    <path d="M142 186h-42v34h42zM142 236h-42v34h42z"/>
+    <!-- polarity marks -->
+    <path d="M74 197h20M74 253h20M84 243v20" opacity=".55"/>
+  </g>
+  <text x="300" y="372" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="36" font-weight="700" letter-spacing="3" fill="#12202A">DC 12V</text>
+</svg>

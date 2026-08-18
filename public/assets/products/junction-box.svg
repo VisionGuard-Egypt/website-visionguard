@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="Junction box 10 by 10 cm">
+  <g fill="none" stroke="#12202A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- lid, slightly lifted so it reads as a box and not a square -->
+    <path d="M176 158h248v190H176z"/>
+    <path d="M176 158l40-40h248l-40 40M424 158l40-40v190l-40 40"/>
+    <!-- corner screws -->
+    <circle cx="206" cy="188" r="10"/><circle cx="394" cy="188" r="10"/>
+    <circle cx="206" cy="318" r="10"/><circle cx="394" cy="318" r="10"/>
+    <!-- cable knockouts -->
+    <path stroke="#1B9DD9" d="M300 348v42"/>
+    <ellipse cx="300" cy="253" rx="46" ry="34" opacity=".45"/>
+  </g>
+  <text x="300" y="424" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="32" font-weight="600" letter-spacing="2" fill="#12202A">10 × 10</text>
+</svg>

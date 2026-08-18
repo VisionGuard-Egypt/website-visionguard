@@ -1,0 +1,333 @@
+# Copy to .dev.vars for local development (.dev.vars is gitignored).
+# In production set these under
+#   Workers & Pages -> visionguard -> Settings -> Variables and Secrets
+# as ENCRYPTED secrets, not plaintext variables.
+
+# ---------------------------------------------------------------------------
+# REQUIRED. Signs session cookies and peppers password hashes.
+# 32+ random characters. Generate one:
+#   node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+#
+# Changing it signs everyone out AND invalidates every stored password hash,
+# so existing users would have to reset. Set it once and leave it alone.
+# ---------------------------------------------------------------------------
+SESSION_SECRET=""
+
+# Raise on the Workers PAID plan; the 25,000 default exists to stay inside the
+# Free plan's 10 ms CPU budget. Existing hashes keep working either way.
+# PBKDF2_ITERATIONS="210000"
+
+# ---------------------------------------------------------------------------
+# Google sign-in — NOTHING TO SET HERE. Deliberately.
+#
+# There is no GOOGLE_CLIENT_SECRET in this project and there should never be
+# one. "Sign in with Google" is wired up with the ID-token flow: the browser
+# gets an assertion signed by Google, and functions/api/auth/google.js verifies
+# that signature against Google's published public keys. A client secret is
+# only needed for the authorization-code flow, which this does not use.
+#
+# The client ID is public — it ships in the page on every site that offers
+# Google sign-in — and lives in public/google-auth.js so the browser and the
+# server read the same value. The server compares it against each token's
+# `aud` claim, which is what stops a token minted for someone else's app from
+# working here. If you ever change the client ID, change it there, once.
+#
+# What DOES need doing, in the Google Cloud console for this client:
+#   Authorised JavaScript origins -> https://visionguardeg.com
+#                                    (and http://localhost:5173 for local dev)
+# No redirect URI is required for this flow.
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Administrators — OPTIONAL.
+#
+# An admin account is a staff account that can additionally read EVERY
+# employee's attendance (the Team tab on /account, and /api/attendance/team).
+# It grants nothing else.
+#
+# Two ways to be one: role='admin' on the users row, or the address listed
+# here. The default, with this unset, is the single address
+# admin@visionguardeg.com. Comma-separated for more than one.
+#
+# Addresses on this list CANNOT be registered through the public signup form —
+# an admin account is created out of band:
+#
+#   bash/zsh:    SESSION_SECRET="secret" npm run admin:create -- --password "..."
+#   PowerShell:  $env:SESSION_SECRET = "secret"
+#                npm run admin:create -- --password "..."
+#
+# It must be the deployment's own SESSION_SECRET: passwords are peppered with
+# it, so a hash built with a different one can never be signed into.
+# ADMIN_EMAILS="admin@visionguardeg.com"
+
+# ---------------------------------------------------------------------------
+# Order notifications - ALL OPTIONAL.
+#
+# With none of this set, orders are still saved and the customer still gets a
+# one-tap "send this order on WhatsApp" link on the confirmation screen. These
+# variables only add the automatic push to your phone.
+#
+# Pick ONE provider. Telegram is the recommended one and wins automatically
+# when TELEGRAM_BOT_TOKEN is set. See lib/whatsapp.js for the trade-offs.
+# ---------------------------------------------------------------------------
+
+# -- Option 0 (recommended): Telegram bot ------------------------------------
+# Free, official, no template approval and no 24-hour sending window: the full
+# multi-line Arabic summary arrives exactly as composed.
+#
+#   1. Message @BotFather on Telegram, /newbot, copy the token it gives you.
+#   2. Open your new bot and send it any message (a bot cannot message you
+#      first). For a group, add the bot to the group instead.
+#   3. Find the chat id:
+#        curl "https://api.telegram.org/bot<TOKEN>/getUpdates"
+#      and read result[].message.chat.id — your own user id for a direct
+#      message, or a negative id like -1001234567890 for a group.
+#
+# The token is a secret: anyone holding it controls the bot. Store it as an
+# encrypted secret, never in wrangler.toml or a committed file, and /revoke it
+# in @BotFather if it is ever pasted somewhere it should not have been.
+# TELEGRAM_BOT_TOKEN=""        # e.g. 8961198092:AA...
+# TELEGRAM_CHAT_ID=""          # e.g. 123456789 or -1001234567890
+#
+# Leaving TELEGRAM_CHAT_ID empty still works: the code falls back to reading
+# the most recent chat from getUpdates. That only sees the last 24 hours and
+# returns nothing once a webhook is set on the bot, so set it once you know it.
+
+# --- WhatsApp options -------------------------------------------------------
+# Where the WhatsApp notification goes (ignored by Telegram, which uses
+# TELEGRAM_CHAT_ID). Defaults to the number published on the site.
+#
+# THIS IS THE BACK OFFICE'S NUMBER, NOT THE CUSTOMER'S. It is routinely set to
+# whichever phone is on the desk. Customers are never sent here — the
+# pending-order screen and the order list use PUBLIC_WHATSAPP below.
+WHATSAPP_TO="201105006854"
+
+# The number CUSTOMERS are sent to: the "contact us on WhatsApp to pay" button
+# on the pending-order screen, and the same button in their order history.
+# Defaults to 201105006854, the number published in the strip, the menu, both
+# footers and the assistant's answers. Only set this to a number the shop is
+# happy to publish — and if you change it, change the site's copy with it.
+# PUBLIC_WHATSAPP="201105006854"
+
+# -- Option 1: Meta WhatsApp Cloud API (official, free tier) -----------------
+# WHATSAPP_TOKEN=""            # permanent access token from a System User
+# WHATSAPP_PHONE_ID=""         # Phone number ID, NOT the phone number
+# WHATSAPP_TEMPLATE=""         # approved template name with a single {{1}} body param
+# WHATSAPP_TEMPLATE_LANG="ar"
+# WHATSAPP_ALLOW_TEXT="1"      # send plain text instead of a template (only valid
+#                              # inside a 24h window - see lib/whatsapp.js)
+
+# -- Option 2: UltraMsg (unofficial bridge, no template approval) ------------
+# ULTRAMSG_INSTANCE=""         # e.g. instance12345
+# ULTRAMSG_TOKEN=""
+
+# -- Option 3: Twilio WhatsApp ----------------------------------------------
+# TWILIO_SID=""
+# TWILIO_TOKEN=""
+# TWILIO_FROM="14155238886"    # your Twilio WhatsApp sender, digits only
+
+# -- Option 4: CallMeBot (free, one recipient, plain text) -------------------
+# CALLMEBOT_KEY=""
+
+# ---------------------------------------------------------------------------
+# Meta Conversion API (server-side, no secret in source code)
+# ---------------------------------------------------------------------------
+# META_PIXEL_ID=""           # your Meta Pixel ID, e.g. 123456789012345
+# META_DATASET_ID=""         # optional Meta dataset ID, e.g. 37444427775716864
+# META_ACCESS_TOKEN=""       # secret access token for CAPI requests
+# META_CURRENCY="EGP"        # optional currency code for purchase events
+# META_TEST_EVENT_CODE=""    # optional debugging code from Events Manager
+# META_ATTRIBUTION_SHARE="0.3"  # optional attribution share for the event
+
+# ---------------------------------------------------------------------------
+# Marketing tab — READING from Meta. ALL OPTIONAL.
+#
+# The opposite direction to everything above. Those variables let the site
+# SEND conversions; these let it READ Page, Instagram and Ads insights for the
+# Marketing tab on /account. With none of them set the tab still appears for
+# staff and says which of these is missing — it never shows a zero it cannot
+# stand behind.
+#
+# EVERY VARIABLE IN THIS FILE NEEDS A REDEPLOY AFTER YOU SET IT IN THE
+# DASHBOARD. Pages binds variables to a DEPLOYMENT, not to the project, so a
+# secret added today is invisible to a deployment made yesterday — the
+# dashboard shows it set and the site behaves as though it is missing.
+# Cloudflare's own wording is that secrets must be set "before a deployment
+# that uses those secrets". After adding anything here:
+#
+#   npx wrangler pages deploy --branch=main
+#
+# (--branch=main matters: this repo sits on `master` and the Pages production
+# branch is `main`, so the plain command publishes a preview and the live
+# site keeps serving the old build.)
+#
+# WHY A SEPARATE TOKEN. META_ACCESS_TOKEN above is a Conversions API token.
+# It can send events and it CANNOT read insights — Graph answers those calls
+# with an OAuth scope error. Reading needs five permissions the CAPI token
+# does not carry:
+#
+#   pages_read_engagement, read_insights          Facebook Page
+#   instagram_basic, instagram_manage_insights    Instagram
+#   ads_read                                      Ad account
+#
+# Use a SYSTEM USER token, not a personal one. A personal token expires in
+# about 60 days, and a dashboard wired to one works for two months and then
+# goes blank on an ordinary morning with nothing in the logs to explain it. A
+# System User token with the Page, the Instagram account and the ad account
+# assigned to it does not expire. It also usually avoids App Review entirely:
+# review governs asking OTHER people for these permissions, and this is your
+# business reading its own assets.
+#
+#   Business Settings -> Users -> System Users -> Add
+#     -> assign the Page, the Instagram account and the ad account
+#     -> Generate Token with the five scopes above
+#
+# PREREQUISITE NO TOKEN CAN FIX: the Instagram account must be a Business or
+# Creator account linked to the Page. A personal account has no insights over
+# the API at all. Confirm the link with:
+#   GET /{page-id}?fields=instagram_business_account
+# ---------------------------------------------------------------------------
+# FOUR VARIABLES, NOT SIX. Older notes in this repository asked for
+# META_PAGE_TOKEN and META_APP_SECRET as well. Both were for the Meta social
+# inbox, which was REMOVED at the owner's request — no code reads either name
+# any more (grep for META_ across lib/ and functions/ if you want to check).
+# Setting them does nothing. Only the four below matter.
+#
+# META_INSIGHTS_TOKEN=""     # System User token with the five read scopes
+# META_PAGE_ID=""            # defaults to 843967908810641 — see below
+# META_IG_USER_ID=""         # the id from instagram_business_account above
+# META_AD_ACCOUNT_ID=""      # defaults to act_2067738330681838 — see below
+#
+# AND REALLY TWO NOW: THE TOKEN, AND INSTAGRAM.
+#
+# Two of those four ids no longer need setting at all. They were read off the
+# Vision Guard Eg business through the Meta developer tooling and are
+# defaulted in lib/insights.js, for the same reason META_PIXEL_ID is
+# defaulted in lib/meta.js: this project's wrangler.toml [vars] have not
+# reliably reached the runtime, and an unset id there does not fail loudly —
+# it renders "not configured" about a Page whose id has been known all along.
+#
+#   Page              843967908810641        "Vision Guard"
+#   Ad account        act_2067738330681838   "vision guard", EGP, active
+#   Business          843979858809446        "Vision Guard Eg"
+#
+# Set the variables anyway to point at something else; an explicit value
+# always wins.
+#
+# INSTAGRAM IS THE ONE ID THAT COULD NOT BE RESOLVED. The ad account has no
+# Instagram account linked for advertising, so it appears in no listing, and
+# a guess here would point the tab at a stranger's profile. Get it from the
+# Page and set it:
+#
+#   GET /843967908810641?fields=instagram_business_account
+#
+# If that returns nothing, the Instagram account is not a Business or Creator
+# account linked to the Page, and no token can fix that — convert and link it
+# in the Instagram app first. Until it is set, the Instagram panel says it is
+# missing, which is true.
+#
+# THE TOKEN IS THE REAL WORK, and insightsConfig() falls back to
+# META_ACCESS_TOKEN, which production already has for the Conversions API. So
+# the tab ANSWERS today and will very likely return empty ads and page
+# sections, because the CAPI token is a WRITE token and carries none of the
+# read scopes. That is the failure the `dedicatedToken` flag in
+# insightsStatus() exists to name: configured, answering, and empty. Generate
+# the System User read token and set META_INSIGHTS_TOKEN to fix it properly.
+
+# ---------------------------------------------------------------------------
+# Catalogue API — PUSHING products into the Meta catalogue
+# ---------------------------------------------------------------------------
+# A third direction, and a third credential. lib/meta.js writes conversions,
+# lib/insights.js reads Page and Ads numbers, lib/metacatalog.js writes
+# PRODUCTS — and Meta scopes all three separately:
+#
+#   lib/meta.js       POST /{dataset}/events       a Conversions API token
+#   lib/insights.js   GET  /{page}/insights        the five read scopes
+#   lib/metacatalog.js POST /{catalog}/items_batch  catalog_management
+#
+# This drives POST /api/admin/meta-catalog. Without it the admin panel says
+# so and /api/admin/export?kind=catalog still produces the .xlsx to upload by
+# hand — that path is unchanged and is the fallback that always works.
+#
+# META_CATALOG_TOKEN=""      # System User token carrying catalog_management
+# META_CATALOG_ID=""         # defaults to 1385708380173785 — see below
+#
+# THERE ARE TWO CATALOGUES ON THIS BUSINESS AND ONLY ONE IS RIGHT. Picking
+# the wrong one is silent: products upload cleanly into a catalogue no ad
+# reads.
+#
+#   1385708380173785   "VisonGuardEg-Cataogue"   <- the shop's, the default
+#   1411420710903781   "CCTV"                     an older separate catalogue
+#
+# ONE TOKEN CAN SERVE BOTH THIS AND THE MARKETING TAB. metacatalog.js reads
+# META_CATALOG_TOKEN and falls back to META_INSIGHTS_TOKEN, so a single
+# System User token generated with catalog_management AND the five read
+# scopes covers everything — one thing to rotate rather than two. It does NOT
+# fall back to META_ACCESS_TOKEN: a Conversions API token authenticates and
+# then cannot write a product, and that error reads like a broken integration
+# rather than like missing configuration.
+
+# ---------------------------------------------------------------------------
+# The Meta app behind all of this: 1620559926365637 "Catalogue & Marketing"
+# ---------------------------------------------------------------------------
+# Owner: mahmoudnabil03@gmail.com. Currently in Development mode, which is
+# the correct state for everything above and is deliberately being left that
+# way — see the checklist below for what publishing would and would not
+# change.
+#
+# WHY DEVELOPMENT MODE IS ENOUGH. App Review governs asking OTHER PEOPLE for
+# permissions. Everything this project does is one business reading and
+# writing its OWN assets, through a System User token issued by that
+# business. That path does not require Advanced Access and does not require
+# the app to be Live.
+#
+# WHAT THE OWNER STILL HAS TO DO BY HAND — none of it is possible from code:
+#
+#   1. Business Settings -> Accounts -> Apps -> Add
+#        add app 1620559926365637 to business 843979858809446, or a System
+#        User cannot generate a token for it at all.
+#   2. Business Settings -> Users -> System Users -> Add
+#        assign: the Page (843967908810641), the ad account
+#        (2067738330681838) and the catalogue (1385708380173785).
+#   3. Generate Token, against app 1620559926365637, with:
+#        pages_read_engagement, read_insights      Page
+#        instagram_basic, instagram_manage_insights Instagram
+#        ads_read                                   Ads
+#        catalog_management                         Catalogue
+#   4. Put it in the Pages dashboard as META_INSIGHTS_TOKEN (and, if you
+#      prefer a separate one for writes, META_CATALOG_TOKEN).
+#   5. Redeploy. Pages binds variables to a DEPLOYMENT, not to a project:
+#        npx wrangler pages deploy --branch=main
+#
+# USE A SYSTEM USER TOKEN, NOT A PERSONAL ONE. A personal token expires in
+# about 60 days, and a dashboard wired to one works for two months and then
+# goes blank on an ordinary morning with nothing in the logs to explain it.
+#
+# PUBLISHING THE APP IS THE OWNER'S CALL AND IS NOT NEEDED FOR ANY OF THIS.
+# Switching it Live is what would let people OUTSIDE the business grant it
+# permissions, and it first requires a privacy policy URL, a data deletion
+# callback and business verification — none of which are set today. Nothing
+# in this repository asks for it.
+
+
+# Force a provider instead of auto-detecting from whichever keys are present.
+# One of: telegram, meta, ultramsg, twilio, callmebot.
+# NOTIFY_PROVIDER="telegram"
+
+
+# ---------------------------------------------------------------------------
+# SITE_ORIGIN — the canonical origin the catalogue feed builds its URLs on
+# ---------------------------------------------------------------------------
+# Optional. /api/admin/export?kind=catalog writes an image_link and a link for
+# every product, and it defaults to whatever host the administrator was on
+# when they pressed the button.
+#
+# That default is right locally and usually right in production, but the live
+# site answers on BOTH visionguardeg.com and www.visionguardeg.com and neither
+# redirects to the other. Meta stores the feed's `link` as the product's URL
+# and matches it against what the pixel reports, so exporting from one host
+# one week and the other the next quietly creates two of every product.
+#
+# Set this to whichever one is canonical for the shop and the question stops
+# depending on how somebody navigated. No trailing slash.
+# SITE_ORIGIN="https://visionguardeg.com"

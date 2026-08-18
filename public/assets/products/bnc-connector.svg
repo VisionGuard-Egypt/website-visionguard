@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="BNC Connector">
+  <rect width="800" height="800" fill="#ffffff"/>
+  <rect x="140" y="190" width="520" height="420" rx="30" fill="#f8fafe" stroke="#2a3d5e" stroke-width="10"/>
+  <rect x="290" y="235" width="220" height="140" rx="18" fill="#e8eef8" stroke="#2a3d5e" stroke-width="8"/>
+  <rect x="300" y="375" width="200" height="68" rx="12" fill="#dce7f5" stroke="#2a3d5e" stroke-width="8"/>
+  <rect x="345" y="415" width="110" height="58" rx="10" fill="#ffffff" stroke="#2a3d5e" stroke-width="8"/>
+  <circle cx="400" cy="350" r="62" fill="#ffffff" stroke="#2a3d5e" stroke-width="8"/>
+  <circle cx="400" cy="350" r="22" fill="#2a3d5e"/>
+  <text x="400" y="125" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" fill="#182b47">BNC Connector</text>
+  <text x="400" y="650" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#182b47">Jack · CCTV / Video</text>
+</svg>

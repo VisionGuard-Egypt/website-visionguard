@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="12U wall-mounted rack cabinet">
+  <g fill="none" stroke="#12202A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- cabinet body -->
+    <path d="M162 74h276v302H162z"/>
+    <!-- glass door inset -->
+    <path d="M192 104h216v242H192z" opacity=".55"/>
+    <!-- mounted units -->
+    <path d="M216 136h168M216 176h168M216 216h168" opacity=".4" stroke-width="6"/>
+    <!-- vents -->
+    <path stroke="#1B9DD9" d="M228 300h60"/>
+    <path d="M228 322h60" opacity=".4"/>
+    <!-- wall brackets -->
+    <path d="M162 128h-34M162 300h-34"/>
+    <!-- handle -->
+    <path d="M408 210v40"/>
+  </g>
+  <text x="300" y="424" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="34" font-weight="700" letter-spacing="2" fill="#12202A">12U</text>
+</svg>

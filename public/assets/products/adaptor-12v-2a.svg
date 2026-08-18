@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="12V 2A plug-in adaptor">
+  <g fill="none" stroke="#12202A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- adaptor brick -->
+    <rect x="150" y="130" width="180" height="176" rx="18"/>
+    <!-- mains pins -->
+    <path d="M196 130V92M284 130V92"/>
+    <!-- lead out to the barrel plug -->
+    <path d="M330 240c56 0 74 14 88 44"/>
+    <path d="M418 284h44v34h-44z"/>
+    <path stroke="#1B9DD9" d="M462 301h34"/>
+  </g>
+  <text x="240" y="205" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="46" font-weight="700" fill="#12202A">12V</text>
+  <text x="240" y="256" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="34" font-weight="600" fill="#12202A" opacity=".65">2A</text>
+</svg>

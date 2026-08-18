@@ -1,0 +1,1241 @@
+/* =========================================================================
+   Vision Guard — styles.css
+   Dark, editorial, one accent. Bilingual AR (RTL, default) / EN (LTR).
+   Depth comes from lighting, hairlines and type — never from extra colour.
+   ========================================================================= */
+
+/* ---------- tokens ---------- */
+/* Dark is the default and the designed-for case. Light is a full second
+   palette, not an inversion filter: the accent is identical in both, and
+   every translucent overlay is expressed against --bg-rgb / --ink-rgb so it
+   flips with the theme instead of being hard-coded to one of them. Adding a
+   colour here means adding it to BOTH blocks. */
+:root{
+  --bg:        #08090B;
+  --bg-1:      #0B0D10;
+  --bg-2:      #101318;
+  --bg-3:      #151A20;
+  --bg-rgb:    8, 9, 11;
+
+  --ink:       #F2F5F7;
+  --ink-rgb:   242, 245, 247;
+  --ink-2:     rgba(242,245,247,.64);
+  --ink-3:     rgba(242,245,247,.40);
+  --ink-4:     rgba(242,245,247,.22);
+
+  --line:      rgba(255,255,255,.085);
+  --line-2:    rgba(255,255,255,.16);
+
+  /* The hero canvas paints with this; it reads the value out of CSS so the
+     dot field stays visible when the theme flips. */
+  --canvas-ink-rgb: 242, 245, 247;
+  --scrim:     rgba(4,5,7,.72);
+
+  /* HOW A CARD SEPARATES FROM THE PAGE, and it is not the same trick in both
+     themes.
+
+     In the dark theme --bg-1 (#0B0D10) is LIGHTER than the page (#08090B),
+     so a card reads as raised through contrast alone and needs no shadow.
+     Invert that and it stops working: in the light theme --bg-1 is #FFFFFF
+     on a #F6F7F9 page — three values apart — with an 11%-opacity hairline
+     around it. The coverage planner's option cards were the visible symptom:
+     white boxes on a white page that read as floating text rather than as
+     something you tap.
+
+     So light gets elevation instead of contrast, and dark keeps contrast and
+     no shadow. Anything card-shaped uses this rather than inventing its own. */
+  --lift:      none;
+  --lift-hover:none;
+  --grain-op:  .032;
+
+  /* THE accent — the azure from the Vision Guard logo.
+     Change --accent-rgb alone and every hairline, glow, button and the
+     canvas hero follows. Nothing else on the page is chromatic. */
+  --accent-rgb: 27, 157, 217;              /* #1B9DD9 */
+  --accent:     rgb(var(--accent-rgb));
+  --accent-ink: #04121B;
+  --accent-dim: rgba(var(--accent-rgb), .14);
+
+  /* the logo's secondary grey, kept for de-emphasis */
+  --steel: #58595B;
+
+  /* catalogue photography is shot on a white studio ground, so it sits on a
+     light plate rather than fighting the dark page. The logo does not —
+     it has a proper dark-mode variant instead. */
+  --plate: #F4F6F8;
+
+  --latin: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --arabic: "Cairo", "Segoe UI", Tahoma, sans-serif;
+  --sans: var(--arabic);
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --gut:  clamp(20px, 4.4vw, 56px);
+  --maxw: 1320px;
+  --sect: clamp(88px, 12vw, 180px);
+
+  --e-out: cubic-bezier(.16, 1, .3, 1);
+  --e-io:  cubic-bezier(.65, 0, .35, 1);
+}
+
+/* ---------- light theme ----------
+   Selected explicitly by the toggle; the choice is written to
+   localStorage and re-applied in the inline <head> script before first
+   paint, so switching themes never costs a flash of the other one.
+
+   The logo swaps back to assets/logo-trim.png here — the ORIGINAL artwork,
+   where GUARD is the brand's own #58595B grey. That grey is why the dark
+   variant exists at all (1.9:1 on near-black, unreadable); on this near-white
+   ground it lands at about 6.4:1 and is exactly right. The swap is done in
+   JS because it is an <img src>, not a background. */
+:root[data-theme="light"]{
+  --bg:        #F6F7F9;
+  --bg-1:      #FFFFFF;
+  --bg-2:      #F0F2F5;
+  --bg-3:      #E7EAEF;
+  --bg-rgb:    246, 247, 249;
+
+  --ink:       #0B1015;
+  --ink-rgb:   11, 16, 21;
+  --ink-2:     rgba(11,16,21,.70);
+  --ink-3:     rgba(11,16,21,.55);
+  --ink-4:     rgba(11,16,21,.36);
+
+  --line:      rgba(11,16,21,.11);
+  --line-2:    rgba(11,16,21,.19);
+
+  --canvas-ink-rgb: 24, 33, 43;
+  --scrim:     rgba(11,16,21,.45);
+
+  /* See the note in the dark block. Light separates by elevation because it
+     cannot separate by contrast — white on near-white is not a card. Two
+     layers: a tight one for the edge and a soft one for the drop, which is
+     what stops it looking like a sticker. */
+  --lift:      0 1px 2px rgba(11,16,21,.05), 0 6px 16px -8px rgba(11,16,21,.14);
+  --lift-hover:0 2px 4px rgba(11,16,21,.07), 0 14px 26px -10px rgba(11,16,21,.20);
+  /* Film grain reads as dirt on white. */
+  --grain-op:  0;
+
+  /* A tinted azure, not a darker one: the accent hex is untouched so the
+     brand colour is literally the same in both themes. Only the wash behind
+     it is lightened, because .14 alpha over white is nearly invisible. */
+  --accent-dim: rgba(var(--accent-rgb), .10);
+
+  /* Catalogue shots are on white, so on a light page the plate is the page.
+     The card border does the separating. */
+  --plate: #FFFFFF;
+}
+/* Dark UI controls sit on light chrome, so the browser paints native widgets
+   (scrollbars, form controls, the tap highlight) to match. */
+:root{ color-scheme: dark; }
+:root[data-theme="light"]{ color-scheme: light; }
+
+/* Everything the browser draws for itself — the text caret, the tick in a
+   native checkbox, a range thumb, the focus ring on controls we have not
+   restyled — defaults to the browser's own blue, which is not this brand's
+   blue and is visibly a different colour sitting next to it. One declaration
+   points all of it at the accent instead. It costs nothing where a control is
+   already custom-drawn (the checkboxes and radios in app.css are), and fixes
+   every native one we have not thought about. */
+:root{ accent-color: var(--accent); }
+
+html[lang="en"]{ --sans: var(--latin); }
+html[lang="ar"]{ --sans: var(--arabic); }
+
+/* ---------- reset ---------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; overflow-x:clip; }
+html,body{ margin:0; padding:0; }
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:clamp(1rem, .96rem + .2vw, 1.0625rem);
+  line-height:1.65;
+  font-weight:400;
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+img,svg,canvas{ display:block; max-width:100%; }
+h1,h2,h3,h4,p,figure,dl,dd{ margin:0; }
+ul,ol{ margin:0; padding:0; list-style:none; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; }
+::selection{ background:var(--accent); color:var(--accent-ink); }
+
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:2px; }
+
+.skip{
+  position:fixed; inset-block-start:12px; inset-inline-start:12px; z-index:200;
+  padding:10px 16px; background:var(--accent); color:var(--accent-ink);
+  font-size:.8125rem; font-weight:700; border-radius:6px;
+  transform:translateY(-160%);
+}
+.skip:focus{ transform:none; }
+
+/* ---------- Latin runs inside Arabic copy ---------- */
+html[lang="ar"] .prod__name,
+html[lang="ar"] .pgroup__title i,
+html[lang="ar"] [dir="ltr"]{ font-family:var(--latin); }
+
+/* Arabic must never be letter-spaced, and needs more leading */
+html[lang="ar"] .display,
+html[lang="ar"] .h2,
+html[lang="ar"] .lede,
+html[lang="ar"] .eyebrow,
+html[lang="ar"] .step__title,
+html[lang="ar"] .statement__text,
+html[lang="ar"] .cat__name,
+html[lang="ar"] .brand__word,
+html[lang="ar"] .menu__inner > a{ letter-spacing:normal; }
+html[lang="ar"] .display{ line-height:1.18; }
+html[lang="ar"] .h2{ line-height:1.24; }
+html[lang="ar"] .statement__text{ line-height:1.26; }
+html[lang="ar"] .step__title{ line-height:1.2; }
+html[lang="ar"] .hero__title{ max-width:16ch; }
+
+/* ---------- primitives ---------- */
+.shell{ width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut); }
+.section{ padding-block:var(--sect); position:relative; }
+
+.display{
+  font-size:clamp(2.7rem, 7.6vw, 6.6rem);
+  line-height:.96; letter-spacing:-.042em; font-weight:700;
+  text-wrap:balance;
+}
+.h2{
+  font-size:clamp(1.9rem, 4.4vw, 3.7rem);
+  line-height:1.05; letter-spacing:-.035em; font-weight:700;
+  text-wrap:balance;
+}
+.lede{
+  font-size:clamp(1.02rem, .94rem + .5vw, 1.26rem);
+  line-height:1.62; color:var(--ink-2); letter-spacing:-.012em;
+  text-wrap:pretty;
+}
+.eyebrow{
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-3);
+  display:flex; align-items:center; gap:.6em; font-weight:500;
+}
+html[lang="ar"] .eyebrow{ font-family:var(--arabic); font-size:.8125rem; text-transform:none; font-weight:600; }
+
+.dot{
+  width:5px; height:5px; border-radius:50%; background:var(--accent);
+  animation:pulse 2.6s var(--e-io) infinite; flex:none;
+}
+@keyframes pulse{
+  0%,100%{ box-shadow:0 0 0 0 rgba(var(--accent-rgb),.45); }
+  60%    { box-shadow:0 0 0 7px rgba(var(--accent-rgb),0); }
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  --pad: 15px 26px;
+  position:relative; display:inline-flex; align-items:center; justify-content:center; gap:.5em;
+  padding:var(--pad);
+  background:var(--accent); color:var(--accent-ink);
+  font-size:.9rem; font-weight:700;
+  border:1px solid var(--accent); border-radius:999px;
+  isolation:isolate; overflow:hidden; text-align:center;
+  transition:transform .45s var(--e-out), box-shadow .45s var(--e-out);
+  will-change:transform;
+}
+.btn::after{
+  content:""; position:absolute; inset:0; z-index:-1;
+  background:#fff; opacity:0; transition:opacity .3s ease;
+}
+.btn:hover{ transform:translateY(-2px); box-shadow:0 12px 34px -10px rgba(var(--accent-rgb),.55); }
+.btn:hover::after{ opacity:.14; }
+.btn:active{ transform:translateY(0); }
+.btn--ghost{ background:transparent; color:var(--ink); border-color:var(--line-2); }
+.btn--ghost:hover{ border-color:var(--ink-3); box-shadow:none; background:rgba(var(--ink-rgb),.05); }
+.btn--sm{ --pad:10px 18px; font-size:.8125rem; }
+
+.link{
+  display:inline-flex; align-items:center; gap:.55em;
+  font-size:.95rem; font-weight:600; color:var(--accent); padding-bottom:2px;
+  box-shadow:inset 0 -1px 0 0 rgba(var(--accent-rgb),.32);
+  transition:box-shadow .35s var(--e-out);
+}
+.link i{ font-style:normal; transition:transform .45s var(--e-out); }
+.link:hover{ box-shadow:inset 0 -1px 0 0 var(--accent); }
+.link:hover i{ transform:translateX(-5px); }
+[dir="ltr"] .link:hover i{ transform:translateX(5px); }
+
+/* ---------- boot curtain (pure CSS, JS-independent) ---------- */
+.boot{
+  position:fixed; inset:0; z-index:150; background:var(--bg);
+  display:grid; place-content:center; justify-items:center; gap:24px;
+  animation:bootOut .42s var(--e-out) .52s forwards;
+}
+.boot__mark{ opacity:0; animation:bootIn .3s var(--e-out) .04s forwards; }
+.boot__mark img{ width:150px; height:auto; }
+.boot__bar{ width:132px; height:1px; background:var(--line-2); overflow:hidden; }
+.boot__bar i{
+  display:block; height:100%; width:100%; background:var(--accent);
+  transform:scaleX(0); transform-origin:left;
+  animation:bootLoad .5s var(--e-io) .04s forwards;
+}
+[dir="rtl"] .boot__bar i{ transform-origin:right; }
+@keyframes bootIn  { to{ opacity:1; } }
+@keyframes bootLoad{ to{ transform:scaleX(1); } }
+@keyframes bootOut { to{ opacity:0; visibility:hidden; } }
+
+/* ---------- grain + progress ---------- */
+.grain{
+  position:fixed; inset:0; z-index:90; pointer-events:none; opacity:var(--grain-op);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:140px 140px;
+}
+.progress{ position:fixed; inset-block-start:0; inset-inline:0; height:1px; z-index:120; pointer-events:none; }
+.progress i{
+  display:block; height:100%; width:100%; background:var(--accent);
+  transform:scaleX(0); transform-origin:left;
+  box-shadow:0 0 12px rgba(var(--accent-rgb),.7);
+}
+[dir="rtl"] .progress i{ transform-origin:right; }
+
+/* =========================================================================
+   TOP CONTACT STRIP
+   ========================================================================= */
+.strip{
+  position:relative; z-index:101;
+  background:var(--bg-2); border-bottom:1px solid var(--line);
+  font-size:.75rem;
+}
+.strip__in{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px 26px;
+  padding-block:9px;
+}
+.strip__item{ display:inline-flex; align-items:center; gap:8px; color:var(--ink-3); }
+.strip a.strip__item{ transition:color .3s ease; }
+.strip a.strip__item:hover{ color:var(--accent); }
+.strip__wa{ color:var(--ink-2); }
+.strip__hours{ margin-inline-start:auto; }
+
+/* =========================================================================
+   NAV
+   ========================================================================= */
+.nav{
+  position:sticky; inset-block-start:0; z-index:100;
+  transition:background .5s var(--e-out), border-color .5s var(--e-out);
+  border-bottom:1px solid transparent;
+}
+.nav.is-stuck{
+  background:rgba(var(--bg-rgb),.80);
+  backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border-bottom-color:var(--line);
+}
+.nav__inner{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:24px; height:74px; min-width:0;
+}
+
+/* Dark-mode logo: VISION keeps its azure, GUARD and the swoosh are white.
+   Sits directly on the page — no plate. See assets/logo-dark.png.
+
+   The logo is the one thing in this bar allowed to shrink, and the controls
+   are the one thing that never may. The bar was `flex:none` on both sides:
+   below about 340px the row was wider than the screen, space-between pushed
+   the overflow off the leading edge, and since <html> is overflow-x:clip the
+   burger ended up at left:-30px — rendered, but off the screen and
+   impossible to tap. Giving the brand the shrink and pinning .nav__end makes
+   that arrangement unreachable at any width. */
+.brand{ display:inline-flex; align-items:center; flex:0 1 auto; min-width:0; }
+.brand__logo{
+  width:auto; height:44px; max-width:100%; object-fit:contain;
+  transition:filter .4s var(--e-out), opacity .4s var(--e-out);
+}
+.brand:hover .brand__logo{ filter:drop-shadow(0 4px 18px rgba(var(--accent-rgb),.45)); }
+
+.nav__links{ display:flex; gap:2px; }
+.nav__links a{
+  position:relative; padding:8px 14px;
+  font-size:.875rem; font-weight:500; color:var(--ink-2);
+  transition:color .3s ease; white-space:nowrap;
+}
+.nav__links a::before{
+  content:""; position:absolute; inset-inline:14px; inset-block-end:2px; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:left;
+  transition:transform .45s var(--e-out);
+}
+[dir="rtl"] .nav__links a::before{ transform-origin:right; }
+.nav__links a:hover,.nav__links a.is-active{ color:var(--ink); }
+.nav__links a.is-active::before{ transform:scaleX(1); }
+
+.nav__end{ display:flex; align-items:center; gap:12px; flex:none; }
+.navlink-account{
+  font-size:.875rem; font-weight:500; color:var(--ink-2);
+  white-space:nowrap; transition:color .3s ease;
+}
+.navlink-account:hover{ color:var(--accent); }
+.lang{
+  width:44px; height:36px; border:1px solid var(--line-2); border-radius:999px;
+  font-family:var(--latin); font-size:.75rem; font-weight:700; letter-spacing:.06em;
+  color:var(--ink-2);
+  transition:color .3s, border-color .3s, background .3s;
+}
+.lang:hover{ color:var(--accent); border-color:rgba(var(--accent-rgb),.6); background:var(--accent-dim); }
+
+/* Theme toggle. One button, two icons stacked in the same box — the sun is
+   shown in dark mode (what you would switch TO), the moon in light mode. */
+.theme{
+  position:relative; width:38px; height:36px; flex:none;
+  border:1px solid var(--line-2); border-radius:999px;
+  display:grid; place-items:center; color:var(--ink-2);
+  transition:color .3s, border-color .3s, background .3s;
+}
+.theme:hover{ color:var(--accent); border-color:rgba(var(--accent-rgb),.6); background:var(--accent-dim); }
+.theme svg{ grid-area:1 / 1; transition:opacity .3s var(--e-out), transform .45s var(--e-out); }
+.theme .theme__moon{ opacity:0; transform:rotate(-45deg) scale(.7); }
+.theme .theme__sun { opacity:1; transform:none; }
+:root[data-theme="light"] .theme .theme__moon{ opacity:1; transform:none; }
+:root[data-theme="light"] .theme .theme__sun { opacity:0; transform:rotate(45deg) scale(.7); }
+
+/* The burger: three bars, centred by layout rather than by arithmetic.
+
+   The bars used to be absolutely positioned against hard-coded offsets
+   (top:17px / bottom:17px), which meant every size change needed a matching
+   pair of overrides — and the 640px breakpoint duly carried them. Two bars
+   with two magic numbers is survivable; three is not, and any size the
+   overrides did not anticipate (a 44px tap target, a zoomed page, a browser
+   with a different default border) put the bars off centre.
+
+   Centring them with flex removes the arithmetic entirely: whatever the
+   button's size, the stack sits in the middle of its content box, and
+   border-box sizing keeps the 1px border symmetric on all four sides. Only
+   the button's own width and height change per breakpoint now.
+
+   The X on open is the one place a number is still needed, and it is derived
+   rather than guessed: moving a bar by exactly one gap plus one bar height
+   lands it on the middle bar's centre line. */
+.burger{
+  --bar-w:16px;
+  --bar-h:2px;
+  --bar-gap:4px;
+  display:none;                       /* -> inline-flex at <=900px */
+  flex-direction:column; align-items:center; justify-content:center;
+  gap:var(--bar-gap);
+  width:38px; height:38px; padding:0; flex:none;
+  color:var(--ink);
+  border:1px solid var(--line-2); border-radius:999px;
+  transition:color .3s, border-color .3s, background .3s;
+}
+.burger:hover{ border-color:rgba(var(--accent-rgb),.6); background:var(--accent-dim); }
+.burger span{
+  display:block; width:var(--bar-w); height:var(--bar-h);
+  background:currentColor; border-radius:2px;
+  transition:transform .4s var(--e-out), opacity .25s var(--e-out);
+}
+.is-menu .burger span:nth-child(1){ transform:translateY(calc(var(--bar-gap) + var(--bar-h))) rotate(45deg); }
+.is-menu .burger span:nth-child(2){ opacity:0; transform:scaleX(.1); }
+.is-menu .burger span:nth-child(3){ transform:translateY(calc(-1 * (var(--bar-gap) + var(--bar-h)))) rotate(-45deg); }
+
+/* The nav bar sits ABOVE this (z-index 100) so the burger stays reachable to
+   close it, which means the panel has to keep its own content out from under
+   it — hence the top padding rather than pure centring. It scrolls if the
+   five items plus the footer do not fit, which they do not on a short
+   landscape phone. */
+.menu{
+  position:fixed; inset:0; z-index:99;
+  background:rgba(var(--bg-rgb),.97);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  display:grid; align-content:center;
+  padding:96px var(--gut) calc(32px + env(safe-area-inset-bottom));
+  overflow-y:auto; overscroll-behavior:contain;
+  opacity:0; visibility:hidden;
+  transition:opacity .45s var(--e-out), visibility .45s;
+}
+.menu[hidden]{ display:grid; }
+.is-menu .menu{ opacity:1; visibility:visible; }
+.menu__inner{ display:grid; gap:4px; max-width:var(--maxw); margin-inline:auto; width:100%; }
+.menu__inner > a{
+  display:flex; align-items:baseline; gap:18px; padding:13px 0;
+  font-size:clamp(1.8rem,8vw,2.7rem); font-weight:700; letter-spacing:-.04em;
+  border-bottom:1px solid var(--line);
+  opacity:0; transform:translateY(18px);
+  transition:opacity .5s var(--e-out), transform .5s var(--e-out);
+}
+.is-menu .menu__inner > a{ opacity:1; transform:none; }
+.is-menu .menu__inner > a:nth-child(1){ transition-delay:.06s; }
+.is-menu .menu__inner > a:nth-child(2){ transition-delay:.12s; }
+.is-menu .menu__inner > a:nth-child(3){ transition-delay:.18s; }
+.is-menu .menu__inner > a:nth-child(4){ transition-delay:.24s; }
+.is-menu .menu__inner > a:nth-child(5){ transition-delay:.30s; }
+.menu__inner > a i{
+  font-family:var(--mono); font-style:normal; font-size:.75rem;
+  color:var(--accent); letter-spacing:.1em;
+}
+.menu__foot{
+  display:flex; flex-wrap:wrap; gap:8px 26px; margin-top:32px;
+  font-family:var(--latin); font-size:.8125rem; color:var(--ink-3);
+  opacity:0; transition:opacity .5s var(--e-out) .34s;
+}
+.is-menu .menu__foot{ opacity:1; }
+.menu__foot a:hover{ color:var(--accent); }
+
+/* =========================================================================
+   HERO — one screen, still
+
+   This used to be a 185vh scrub track with a sticky stage and a canvas that
+   animated a sensor sweep, detection reticles and a focus frame against
+   scroll position. It is now a plain single-screen hero: the backdrop is a
+   static CSS ground plane and nothing on it reacts to the scroll wheel.
+   ========================================================================= */
+.hero{ position:relative; }
+.hero__stage{
+  position:relative;
+  min-height:100vh; min-height:100svh;
+  overflow:hidden; display:grid; isolation:isolate;
+}
+
+/* The ground plane the canvas used to draw, as one static layer: an accent
+   bloom on the horizon, and a dot grid laid flat by a perspective tilt so it
+   recedes the way the painted field did. No animation, no JS. */
+.hero__field{
+  position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none;
+  background:radial-gradient(120% 46% at 50% 62%, rgba(var(--accent-rgb),.13), transparent 72%);
+}
+.hero__field::after{
+  content:''; position:absolute;
+  inset-block-start:50%; inset-block-end:-34%; inset-inline:-50%;
+  background-image:radial-gradient(rgba(var(--canvas-ink-rgb),.5) 1px, transparent 1.6px);
+  background-size:30px 30px;
+  transform:perspective(340px) rotateX(62deg);
+  transform-origin:top center;
+  -webkit-mask-image:linear-gradient(to bottom, transparent 2%, #000 30%, #000 70%, transparent 100%);
+  mask-image:linear-gradient(to bottom, transparent 2%, #000 30%, #000 70%, transparent 100%);
+}
+.hero__vignette{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(120% 75% at 50% 42%, transparent 30%, rgba(var(--bg-rgb),.72) 78%, var(--bg) 100%),
+    linear-gradient(to bottom, rgba(var(--bg-rgb),.92) 0%, transparent 26%, transparent 62%, var(--bg) 97%);
+}
+.hero__content{
+  position:relative; z-index:3; align-self:center; padding-top:40px;
+  max-width:min(100%,1180px);
+}
+.hero__eyebrow{ margin-bottom:clamp(16px,2.2vw,28px); }
+.hero__title{ max-width:14ch; margin-bottom:clamp(20px,2.6vw,32px); }
+.hero__lede{ max-width:50ch; }
+.hero__actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:clamp(28px,3.4vw,42px); }
+
+.hud{
+  position:absolute; z-index:3;
+  inset-inline-end:var(--gut); inset-block-start:50%; transform:translateY(-50%);
+  width:215px;
+  border-inline-start:1px solid var(--line);
+  padding-inline-start:18px;
+}
+.hud__title{
+  font-family:var(--mono); font-size:.625rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-4); margin-bottom:14px;
+}
+html[lang="ar"] .hud__title{ font-family:var(--arabic); font-size:.75rem; letter-spacing:normal; text-transform:none; }
+/* Every layer reads at once. These used to light up one by one as the scrub
+   advanced; with no scrub there is nothing to reveal them in sequence, and a
+   list that is three-quarters greyed out for no reason just looks broken. */
+.hud__list{ display:grid; gap:11px; }
+.hud__list li{
+  display:flex; align-items:baseline; gap:10px;
+  font-size:.75rem; color:var(--ink-2);
+}
+.hud__list li i{ font-family:var(--mono); font-style:normal; color:var(--ink-4); }
+
+.hero__cue{
+  position:absolute; z-index:3; inset-inline-start:50%; inset-block-end:24px;
+  transform:translateX(-50%);
+  display:grid; justify-items:center; gap:9px;
+  font-family:var(--mono); font-size:.625rem; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--ink-4);
+  transition:opacity .5s var(--e-out);
+}
+html[lang="ar"] .hero__cue{ font-family:var(--arabic); letter-spacing:normal; font-size:.75rem; }
+.hero__cue i{
+  display:block; width:1px; height:34px;
+  background:linear-gradient(to bottom, var(--accent), transparent);
+  animation:cue 2.2s var(--e-io) infinite; transform-origin:top;
+}
+@keyframes cue{
+  0%   { transform:scaleY(0); opacity:0; }
+  35%  { transform:scaleY(1); opacity:1; }
+  100% { transform:scaleY(1) translateY(34px); opacity:0; }
+}
+
+/* =========================================================================
+   TICKER
+   ========================================================================= */
+.ticker{
+  border-block:1px solid var(--line); background:var(--bg-1);
+  overflow:hidden; padding-block:13px; position:relative; z-index:2;
+}
+.ticker__row{ display:flex; width:max-content; animation:marq 46s linear infinite; }
+.ticker__set{ display:flex; flex:none; }
+.ticker__set > span{
+  display:inline-flex; align-items:center; gap:9px; padding-inline:24px;
+  font-size:.75rem; color:var(--ink-3); white-space:nowrap;
+}
+.ticker__set b{ width:4px; height:4px; border-radius:50%; background:var(--accent); flex:none; }
+@keyframes marq{ to{ transform:translateX(-50%); } }
+[dir="rtl"] .ticker__row{ animation-name:marqRtl; }
+@keyframes marqRtl{ to{ transform:translateX(50%); } }
+
+/* =========================================================================
+   SECTION HEADS
+   ========================================================================= */
+.sechead{ display:grid; gap:20px; margin-bottom:clamp(48px,6.5vw,88px); max-width:1000px; }
+.sechead .h2{ max-width:19ch; }
+.sechead__note{ color:var(--ink-2); max-width:56ch; font-size:1.02rem; }
+
+/* =========================================================================
+   CATEGORIES
+   ========================================================================= */
+.cats{
+  display:grid; grid-template-columns:repeat(6,1fr);
+  gap:clamp(14px,1.6vw,22px);
+}
+.cat{
+  grid-column:span 2;
+  display:grid; gap:0;
+  border:1px solid var(--line); border-radius:14px;
+  background:var(--bg-1); overflow:hidden;
+  transition:border-color .5s var(--e-out), transform .6s var(--e-out);
+}
+.cat--wide{ grid-column:span 3; }
+.cat:hover{ border-color:rgba(var(--accent-rgb),.45); transform:translateY(-3px); }
+
+/* catalogue photography is shot on white, so it gets a light plate too */
+.cat__plate{
+  position:relative;
+  background:var(--plate);
+  aspect-ratio:16/10;
+  overflow:hidden;
+}
+/* The image is positioned, not laid out in flow, and that is load-bearing.
+   The plate's height comes from aspect-ratio, and a percentage max-height on
+   an in-flow child does not resolve against a height derived that way — the
+   img kept its intrinsic size, outgrew the plate and got cropped top and
+   bottom, which is how a 500×500 camera shot lost its lens. An absolutely
+   positioned box resolves its percentages against the containing block's
+   *used* size, which is always definite, so the inset here is the padding
+   the plate used to carry and the artwork always fits inside it. */
+.cat__plate img{
+  position:absolute;
+  inset-block-start:22px; inset-inline-start:22px;
+  inline-size:calc(100% - 44px); block-size:calc(100% - 44px);
+  object-fit:contain;
+  mix-blend-mode:multiply;
+  transition:transform .8s var(--e-out);
+}
+.cat:hover .cat__plate img{ transform:scale(1.045); }
+
+.cat__meta{ display:grid; gap:9px; padding:clamp(20px,2.4vw,30px); }
+.cat__idx{ font-family:var(--mono); font-size:.6875rem; letter-spacing:.16em; color:var(--ink-4); }
+.cat__name{ font-size:1.18rem; font-weight:700; letter-spacing:-.025em; line-height:1.3; }
+.cat__desc{ font-size:.875rem; color:var(--ink-3); line-height:1.6; }
+
+/* =========================================================================
+   PRODUCT PRICE LIST
+   ========================================================================= */
+.products{ background:linear-gradient(to bottom, var(--bg), var(--bg-1) 40%, var(--bg)); }
+.plist{ display:grid; gap:clamp(38px,4.6vw,64px); }
+.pgroup__title{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:12px;
+  font-size:1.06rem; font-weight:700; letter-spacing:-.02em;
+  padding-bottom:14px; margin-bottom:4px;
+  border-bottom:1px solid var(--line-2);
+}
+.pgroup__title i{
+  font-family:var(--latin); font-style:normal; font-size:.75rem; font-weight:500;
+  letter-spacing:.08em; color:var(--ink-4); text-transform:uppercase;
+}
+.prods{ display:grid; }
+.prod{
+  display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) auto;
+  align-items:baseline; gap:14px 24px;
+  padding-block:17px;
+  border-bottom:1px solid var(--line);
+  transition:background .35s ease;
+}
+.prod:hover{ background:rgba(var(--ink-rgb),.03); }
+.prod__name{ font-size:.98rem; font-weight:600; letter-spacing:-.015em; }
+.prod__spec{ font-size:.8125rem; color:var(--ink-3); }
+.prod__price{
+  display:inline-flex; align-items:baseline; gap:8px;
+  font-family:var(--latin); justify-self:end; white-space:nowrap;
+}
+.prod__price b{ font-size:1.06rem; font-weight:700; letter-spacing:-.02em; color:var(--accent); }
+.prod__price s{ font-size:.8125rem; color:var(--ink-4); text-decoration-thickness:1px; }
+.prod__price em{ font-style:normal; font-size:.75rem; color:var(--ink-3); font-family:var(--sans); }
+
+.plist__cta{
+  display:flex; flex-wrap:wrap; align-items:center; gap:18px 26px;
+  margin-top:clamp(40px,5vw,64px);
+  padding-top:clamp(28px,3vw,40px);
+  border-top:1px solid var(--line-2);
+}
+.plist__note{ font-size:.8125rem; color:var(--ink-4); }
+
+/* =========================================================================
+   HOW TO ORDER — sticky viz + scrolling steps
+   ========================================================================= */
+.process{
+  padding-block:var(--sect);
+  background:linear-gradient(to bottom, var(--bg), var(--bg-1) 18%, var(--bg-1) 82%, var(--bg));
+  border-block:1px solid var(--line);
+}
+.process__grid{
+  display:grid; grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);
+  gap:clamp(40px,7vw,120px); align-items:start;
+}
+.process__sticky{ position:sticky; top:clamp(96px,16vh,168px); display:grid; gap:24px; }
+.stepviz{ position:relative; width:min(100%,300px); aspect-ratio:1; }
+.stepviz__num{
+  position:absolute; inset-inline-start:0; top:-6px; z-index:2;
+  font-family:var(--mono); font-size:.75rem; letter-spacing:.2em; color:var(--accent);
+}
+.stepviz__art{ width:100%; height:100%; color:var(--ink-4); }
+.sv{ opacity:0; transition:opacity .6s var(--e-out); }
+.sv.is-on{ opacity:1; }
+.sv__lock,.sv__sweep,.sv__pulse{ stroke:var(--accent); }
+.sv__lock{ stroke-width:1.4; }
+.sv.is-on .sv__sweep{ animation:sweep 4.5s linear infinite; transform-origin:100px 100px; }
+@keyframes sweep{ to{ transform:rotate(360deg); } }
+.sv.is-on .sv__pulse{ animation:pulseline 2.4s var(--e-io) infinite; }
+@keyframes pulseline{ 0%,100%{ opacity:.25; } 50%{ opacity:1; } }
+.process__stickynote{ font-size:.9375rem; color:var(--ink-2); max-width:36ch; transition:opacity .4s var(--e-out); }
+
+.steps{ display:grid; gap:clamp(60px,9vw,140px); }
+.step{ border-top:1px solid var(--line); padding-top:26px; opacity:.34; transition:opacity .6s var(--e-out); }
+.step.is-cur{ opacity:1; }
+.step__kicker{
+  font-family:var(--mono); font-size:.6875rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:16px;
+}
+html[lang="ar"] .step__kicker{ font-family:var(--arabic); letter-spacing:normal; font-size:.8125rem; text-transform:none; }
+.step__title{
+  font-size:clamp(2rem,5vw,3.6rem); font-weight:700;
+  letter-spacing:-.042em; line-height:1; margin-bottom:18px;
+}
+.step__body{ color:var(--ink-2); max-width:48ch; font-size:1.02rem; }
+.step__list{ display:grid; gap:11px; margin-top:24px; }
+.step__list li{ position:relative; padding-inline-start:22px; font-size:.875rem; color:var(--ink-3); }
+.step__list li::before{
+  content:""; position:absolute; inset-inline-start:0; top:.68em;
+  width:9px; height:1px; background:var(--accent); opacity:.7;
+}
+
+/* =========================================================================
+   STATEMENT
+   ========================================================================= */
+.statement{ position:relative; overflow:hidden; padding-block:clamp(110px,18vw,240px); text-align:center; }
+.statement__bg{
+  position:absolute; inset:-20% 0;
+  background:
+    radial-gradient(58% 46% at 50% 50%, rgba(var(--accent-rgb),.11), transparent 68%),
+    repeating-linear-gradient(to bottom, rgba(var(--ink-rgb),.045) 0 1px, transparent 1px 4px);
+  will-change:transform;
+}
+.statement__text{
+  position:relative; font-size:clamp(2.1rem,5.8vw,4.9rem);
+  max-width:21ch; margin-inline:auto; font-weight:700; line-height:1.06;
+}
+.statement__by{ position:relative; margin-top:30px; font-size:.8125rem; color:var(--ink-4); }
+
+/* =========================================================================
+   WHY US
+   ========================================================================= */
+.trust{ border-top:1px solid var(--line); }
+.trust__grid{
+  display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(44px,6.5vw,100px); align-items:start;
+}
+.trust__lead{ display:grid; gap:22px; justify-items:start; }
+.trust__lead .h2{ max-width:14ch; }
+.trust__copy{ color:var(--ink-2); max-width:50ch; }
+
+.pillars{ display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line); border-inline-start:1px solid var(--line); }
+.pillar{
+  padding:clamp(22px,2.5vw,32px);
+  border-inline-end:1px solid var(--line); border-bottom:1px solid var(--line);
+  position:relative;
+}
+.pillar::before{
+  content:""; position:absolute; inset-inline-start:-1px; inset-block:0; width:1px;
+  background:var(--accent); transform:scaleY(0); transform-origin:top;
+  transition:transform .6s var(--e-out);
+}
+.pillar:hover::before{ transform:scaleY(1); }
+.pillar h3{ font-size:1.0625rem; font-weight:700; letter-spacing:-.022em; margin-bottom:9px; }
+.pillar p{ font-size:.875rem; color:var(--ink-3); line-height:1.62; }
+
+/* =========================================================================
+   CONTACT
+   ========================================================================= */
+.contact{ border-top:1px solid var(--line); background:linear-gradient(to bottom, var(--bg), var(--bg-1)); }
+.contact__grid{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.85fr);
+  gap:clamp(44px,6.5vw,100px); align-items:start;
+}
+.contact__lead{ display:grid; gap:22px; justify-items:start; }
+.contact__lead .h2{ max-width:15ch; }
+.contact__copy{ color:var(--ink-2); max-width:46ch; }
+.contact__actions{ display:flex; flex-wrap:wrap; gap:12px; }
+
+.contact__meta{
+  display:grid; grid-template-columns:1fr 1fr; gap:28px 32px;
+  padding:clamp(26px,3vw,38px);
+  border:1px solid var(--line); border-radius:14px; background:var(--bg-2);
+}
+.contact__meta dt{ font-size:.75rem; color:var(--ink-4); margin-bottom:7px; }
+.contact__meta dd{ font-size:.9375rem; color:var(--ink-2); line-height:1.55; }
+.contact__meta a{ color:var(--ink); box-shadow:inset 0 -1px 0 0 var(--line-2); transition:box-shadow .3s, color .3s; }
+.contact__meta a:hover{ color:var(--accent); box-shadow:inset 0 -1px 0 0 var(--accent); }
+
+/* =========================================================================
+   FOOTER
+   ========================================================================= */
+.footer{ border-top:1px solid var(--line); padding-top:clamp(60px,7.5vw,100px); background:var(--bg); overflow:hidden; }
+.footer__grid{
+  display:grid; grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));
+  gap:clamp(34px,4vw,60px);
+}
+.footer__brand{ display:grid; gap:16px; align-content:start; justify-items:start; }
+.footer__tag{ font-size:.875rem; color:var(--ink-3); max-width:36ch; line-height:1.65; }
+.footer__status{ display:flex; align-items:center; gap:8px; font-size:.75rem; color:var(--ink-3); }
+.footer__col{ display:grid; gap:11px; align-content:start; }
+.footer__col h4{ font-size:.75rem; color:var(--ink-4); font-weight:600; margin-bottom:5px; }
+.footer__col a,.footer__col p{ font-size:.875rem; color:var(--ink-2); line-height:1.55; }
+.footer__col a{ width:fit-content; transition:color .3s ease; }
+.footer__col a:hover{ color:var(--accent); }
+
+.footer__word{
+  margin-top:clamp(56px,8vw,110px);
+  font-family:var(--latin);
+  font-size:clamp(3.2rem,15.2vw,14.6rem);
+  font-weight:700; letter-spacing:-.055em; line-height:.8;
+  color:transparent; -webkit-text-stroke:1px rgba(var(--ink-rgb),.14);
+  text-align:center; user-select:none; white-space:nowrap; direction:ltr;
+}
+.footer__word span{ -webkit-text-stroke:1px rgba(var(--accent-rgb),.34); }
+
+.footer__bar{
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px 26px;
+  border-top:1px solid var(--line);
+  margin-top:clamp(32px,4vw,52px); padding-block:24px 28px;
+  font-size:.8125rem; color:var(--ink-4);
+}
+.totop{ display:inline-flex; gap:8px; align-items:center; transition:color .3s; }
+.totop:hover{ color:var(--ink-2); }
+.totop i{ font-style:normal; transition:transform .45s var(--e-out); }
+.totop:hover i{ transform:translateY(-3px); }
+
+/* =========================================================================
+   FLOATING ASSISTANT
+
+   Replaced the WhatsApp fab that used to sit here. WhatsApp did not go away
+   — it is in the top strip, the contact section, the footer and inside this
+   panel — but the corner of the screen now answers the question instead of
+   forwarding it.
+
+   --cobar-h is how much room the shop's checkout bar is taking at the bottom
+   of the screen right now (0 when it is down, and always 0 on the landing
+   page, which has no such bar), and --cookiebar-h the same for the cookie
+   bar, which is up on a first visit on every page. Physical `bottom` rather
+   than inset-block-end: a var() inside calc() on the logical property does
+   not re-resolve when the variable changes, and the two are identical in a
+   horizontal writing mode anyway.
+   ========================================================================= */
+.vga{
+  position:fixed; z-index:97;
+  inset-inline-end:clamp(16px,3vw,30px);
+  bottom:calc(clamp(16px,3vw,30px) + var(--cobar-h, 0px) + var(--cookiebar-h, 0px));
+  transition:bottom .45s var(--e-out);
+}
+
+.vga__fab{
+  width:56px; height:56px; border-radius:50%;
+  display:grid; place-items:center;
+  background:var(--accent); color:var(--accent-ink);
+  box-shadow:0 12px 32px -10px rgba(var(--accent-rgb),.7);
+  transition:box-shadow .4s, transform .4s var(--e-out);
+}
+.vga__fab:hover{ box-shadow:0 16px 40px -10px rgba(var(--accent-rgb),.9); transform:translateY(-2px); }
+.vga__i{ grid-area:1 / 1; transition:opacity .25s var(--e-out), transform .35s var(--e-out); }
+.vga__i--close{ opacity:0; transform:rotate(-90deg); }
+.vga.is-open .vga__i--open{ opacity:0; transform:rotate(90deg); }
+.vga.is-open .vga__i--close{ opacity:1; transform:none; }
+
+.vga__panel{
+  position:absolute;
+  inset-block-end:calc(100% + 14px);
+  inset-inline-end:0;
+  inline-size:min(370px, calc(100vw - 2 * clamp(16px,3vw,30px)));
+  block-size:min(74vh, 560px);
+  display:grid; grid-template-rows:auto 1fr auto auto auto;
+  background:var(--bg-1);
+  border:1px solid var(--line-2); border-radius:16px;
+  box-shadow:0 30px 70px -24px rgba(0,0,0,.7);
+  overflow:hidden;
+  opacity:0; transform:translateY(14px) scale(.97); transform-origin:100% 100%;
+  pointer-events:none;
+  transition:opacity .26s var(--e-out), transform .4s var(--e-out);
+}
+[dir="ltr"] .vga__panel{ transform-origin:0 100%; }
+.vga.is-open .vga__panel{ opacity:1; transform:none; pointer-events:auto; }
+
+.vga__head{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:15px 17px; border-bottom:1px solid var(--line); background:var(--bg-2);
+}
+.vga__titles{ display:grid; gap:3px; min-width:0; }
+.vga__title{ font-size:.9375rem; font-weight:700; letter-spacing:-.02em; }
+.vga__sub{ font-size:.6875rem; color:var(--ink-4); line-height:1.45; }
+.vga__new{
+  flex:none; font-size:.6875rem; color:var(--ink-3);
+  border:1px solid var(--line); border-radius:999px; padding:5px 11px;
+  transition:color .3s, border-color .3s;
+}
+.vga__new:hover{ color:var(--accent); border-color:rgba(var(--accent-rgb),.5); }
+
+.vga__log{
+  overflow-y:auto; overscroll-behavior:contain;
+  display:grid; align-content:start; gap:10px;
+  padding:16px 17px;
+}
+.vga__msg{
+  max-inline-size:88%;
+  padding:10px 13px; border-radius:13px;
+  font-size:.8125rem; line-height:1.65;
+  white-space:pre-wrap; overflow-wrap:anywhere;
+}
+.vga__msg--bot{ justify-self:start; background:var(--bg-2); border:1px solid var(--line); color:var(--ink-2); }
+.vga__msg--me{ justify-self:end; background:var(--accent-dim); border:1px solid rgba(var(--accent-rgb),.32); color:var(--ink); }
+.vga__msg.is-pending{ color:var(--ink-4); font-style:italic; }
+.vga__msg.is-err{ border-color:rgba(224,86,86,.45); color:#F0A8A8; }
+
+.vga__chips{ display:flex; flex-wrap:wrap; gap:7px; padding:0 17px 12px; }
+.vga__chips[hidden]{ display:none; }
+.vga__chip{
+  font-size:.75rem; color:var(--ink-3);
+  border:1px solid var(--line-2); border-radius:999px; padding:6px 12px;
+  transition:color .3s, border-color .3s, background .3s;
+}
+.vga__chip:hover{ color:var(--accent); border-color:rgba(var(--accent-rgb),.5); background:var(--accent-dim); }
+
+.vga__form{
+  display:flex; align-items:center; gap:9px;
+  padding:12px 13px; border-top:1px solid var(--line); background:var(--bg-2);
+}
+.vga__input{
+  flex:1 1 auto; min-width:0;
+  background:var(--bg); color:var(--ink);
+  border:1px solid var(--line-2); border-radius:999px;
+  padding:10px 15px; font-family:var(--sans); font-size:.8125rem;
+}
+.vga__input:focus{ outline:none; border-color:rgba(var(--accent-rgb),.6); }
+.vga__input:disabled{ opacity:.6; }
+.vga__send{
+  flex:none; width:38px; height:38px; border-radius:50%;
+  display:grid; place-items:center;
+  background:var(--accent); color:var(--accent-ink);
+  transition:opacity .3s, transform .3s var(--e-out);
+}
+.vga__send:hover{ transform:scale(1.06); }
+.vga__send:disabled{ opacity:.45; transform:none; }
+[dir="rtl"] .vga__send svg{ transform:scaleX(-1); }
+
+.vga__foot{
+  padding:0 17px 13px; font-size:.6875rem;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.vga__foot a{ color:var(--ink-4); transition:color .3s; }
+.vga__foot a:hover{ color:var(--accent); }
+
+/* "Talk to a person". The primary way through to a human now — WhatsApp
+   beside it is the way out when nobody is free, not the only route. */
+.vga__human{
+  font:inherit; font-weight:600; cursor:pointer;
+  color:var(--accent); background:none;
+  border:1px solid rgba(var(--accent-rgb),.35); border-radius:999px;
+  padding:4px 11px; transition:background .3s, border-color .3s;
+}
+.vga__human:hover{ background:rgba(var(--accent-rgb),.10); border-color:var(--accent); }
+.vga__human:disabled{ opacity:.55; cursor:default; }
+
+/* "Mona joined the chat", "this chat has ended" — the widget narrating a
+   change of who is on the other end. Centred and quiet so it reads as a
+   stage direction rather than as something a person said. */
+.vga__msg--sys{
+  justify-self:center; text-align:center;
+  background:none; border:0; color:var(--ink-4);
+  font-size:.6875rem; padding:2px 6px; max-width:100%;
+}
+
+/* =========================================================================
+   REVEALS (only when JS is present)
+   ========================================================================= */
+.js .reveal{
+  opacity:0; transform:translateY(26px);
+  transition:opacity .85s var(--e-out) var(--d,0ms), transform .85s var(--e-out) var(--d,0ms);
+}
+.js .reveal.is-in{ opacity:1; transform:none; }
+
+.js [data-split] .w{
+  display:inline-block; overflow:hidden; vertical-align:top;
+  padding-bottom:.12em; margin-bottom:-.12em;
+}
+html[lang="ar"].js [data-split] .w{ padding-bottom:.26em; margin-bottom:-.26em; }
+.js [data-split] .wi{
+  display:inline-block; transform:translateY(108%);
+  transition:transform .72s var(--e-out) var(--d,0ms);
+}
+.js [data-split].is-in .wi{ transform:none; }
+
+/* rescued content (the viewport jumped past it) simply appears */
+.js .no-anim,
+.js .no-anim .wi{ transition:none !important; }
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+@media (max-width:1080px){
+  .cats{ grid-template-columns:repeat(4,1fr); }
+  .cat,.cat--wide{ grid-column:span 2; }
+  .hud{ display:none; }
+  .footer__grid{ grid-template-columns:1fr 1fr; gap:40px; }
+  .footer__brand{ grid-column:1 / -1; }
+}
+
+@media (max-width:900px){
+  .nav__links{ display:none; }
+  .nav__end .btn{ display:none; }
+  .navlink-account{ display:none; }
+  .burger{ display:inline-flex; }
+  .process__grid{ grid-template-columns:1fr; gap:48px; }
+  .process__sticky{ position:static; }
+  .stepviz{ width:min(100%,200px); }
+  .trust__grid,.contact__grid{ grid-template-columns:1fr; }
+  .strip__hours{ display:none; }
+}
+
+@media (max-width:640px){
+  .cats{ grid-template-columns:1fr; }
+  .cat,.cat--wide{ grid-column:span 1; }
+  .pillars{ grid-template-columns:1fr; }
+  .contact__meta{ grid-template-columns:1fr; }
+  .footer__grid{ grid-template-columns:1fr; }
+  .footer__bar{ justify-content:flex-start; }
+  .grain{ display:none; }
+  .brand__logo{ height:30px; padding:5px 10px; }
+
+  /* The shop and account bars carry five controls here — language, theme,
+     account, cart, burger — and at 320px the old 42px targets plus 12px gaps
+     did not fit beside the logo. Trimmed so the row fits a 320px screen with
+     room to spare, and still comfortably above the 24px minimum tap size. */
+  .nav__inner{ height:64px; gap:10px; }
+  .nav__end{ gap:7px; }
+  /* keeps the contact strip on one line down to 320px instead of wrapping
+     to two and eating a whole row of the screen */
+  .strip{ font-size:.6875rem; }
+  .strip__in{ gap:6px 16px; }
+  .lang{ width:38px; height:34px; }
+  .theme{ width:34px; height:34px; }
+  /* Only the box shrinks. The bars stay centred on their own — that is the
+     point of the flex layout above. */
+  .burger{ width:34px; height:34px; --bar-w:15px; }
+  .menu{ padding-top:84px; }
+
+  /* price rows stack: name over spec, price on its own line */
+  .prod{ grid-template-columns:1fr auto; gap:4px 16px; }
+  .prod__name{ grid-column:1; }
+  .prod__price{ grid-column:2; grid-row:1 / span 2; align-self:center; }
+  .prod__spec{ grid-column:1; }
+}
+
+/* =========================================================================
+   COOKIE BAR
+
+   Built by public/consent.js, on every page — which is why it lives here and
+   not in app.css: the landing page and the policy pages load styles.css only.
+
+   It is the fourth thing pinned to the bottom of the screen, after the
+   checkout bar, the assistant fab and the toast, and it outranks all three:
+   a consent choice that is hidden behind a shop widget is not a choice. So
+   it publishes --cookiebar-h the way .cobar publishes --cobar-h, and the
+   other three add it to their own offset rather than guess a gap. Down, the
+   variable is 0px and nothing moves.
+
+   Deliberately NOT a modal. No scrim, no focus trap, no blocked scrolling.
+   Under the notice regime there is nothing to decide before browsing, and
+   under the opt-in one a wall would be pressure rather than a question — and
+   a consent obtained under pressure is not consent. The page stays usable
+   with the bar up and with it ignored.
+   ========================================================================= */
+/* =========================================================================
+   PROMO BAR (promo.js) — "try the coverage planner"
+
+   IT LIVES HERE, NOT IN app.css, AND THAT WAS A REAL BUG. promo.js runs on
+   every page; app.css is loaded by shop, account, game and the legal pages
+   but NOT by index.html. So on the homepage — the page most visitors land on
+   and the one most worth advertising the planner from — the promo rendered
+   with no styling at all: position:static, in normal document flow, roughly
+   sixteen thousand pixels down the page. It was invisible to everybody, on
+   the page it mattered most.
+
+   The cookie bar is in this file for exactly the same reason. Anything
+   promo.js or consent.js can put on any page has to be styled by the one
+   stylesheet every page loads.
+
+   IT POINTS AT THE PLANNER LINK. The card hangs off the "المخطّط" / "Planner"
+   item in the nav and grows out of it, so the promotion and the thing it is
+   advertising are visibly one object rather than a banner in a far corner.
+   Below 900px that link is inside the closed burger menu, so promo.js points
+   at the burger instead — still the way to the planner, one step removed.
+
+   FOUR CUSTOM PROPERTIES, ALL MEASURED IN promo.js. A hard-coded offset is
+   wrong somewhere: the nav is sticky, some pages carry a contact strip above
+   it, and the link's position moves with the width of the other nav items,
+   which changes with the language.
+
+     --promo-top     below the whole header bar, not just the link
+     --promo-end     the card's inline-end edge, clamped to stay on screen
+     --promo-tail    the button's centre, from the card's inline-end edge
+     --promo-origin  the same point as a physical x, for transform-origin,
+                     which has no logical keyword for this
+
+   Each has a fallback here, so a measurement that never runs still leaves a
+   sensible card in the top inline-end corner.
+   ========================================================================= */
+.promo{
+  position:fixed; z-index:126;
+  inset-block-start:var(--promo-top, 76px);
+  inset-inline-end:var(--promo-end, 16px);
+  width:min(86vw, 320px);
+  /* Grows out of the tail — the point sitting under the planner button —
+     rather than fading in from nowhere. */
+  transform-origin:var(--promo-origin, calc(100% - 26px)) top;
+  opacity:0; transform:translateY(-6px) scale(.88); pointer-events:none;
+  transition:opacity .32s var(--e-out), transform .42s var(--e-out);
+}
+.promo.is-on{ opacity:1; transform:none; }
+.promo.is-on .promo__in{ pointer-events:auto; }
+/* The menu covers the screen and contains the planner link itself; a promo
+   for it floating on top would be pointing at something already open. */
+.is-menu .promo{ opacity:0; transform:translateY(-10px); pointer-events:none; }
+
+.promo__in{
+  --promo-border:1px;
+  position:relative;
+  display:flex; align-items:center; gap:11px;
+  padding:12px 14px; border-radius:14px;
+  background:var(--bg-3); border:var(--promo-border) solid var(--line-2);
+  box-shadow:0 18px 40px -16px rgba(0,0,0,.55);
+}
+/* The tail, aimed up at the planner link. --promo-tail is the distance from
+   the card's inline-end edge to the BUTTON'S CENTRE, so two things come back
+   off it:
+
+     5.5px  half the diamond's own width, to centre it on the button rather
+            than hang it off to one side;
+     the border, because an absolutely positioned child is laid out against
+            its container's PADDING box — so an offset measured from the
+            border box lands one border-width short. It is only a pixel, but
+            it is a pixel that moves whenever the border does, which is why
+            the width is a variable here rather than typed twice.
+
+   Measured in the inline axis, so Arabic and English need no separate rule. */
+.promo__in::before{
+  content:""; position:absolute;
+  inset-block-start:-6px;
+  inset-inline-end:calc(var(--promo-tail, 26px) - 5.5px - var(--promo-border, 1px));
+  width:11px; height:11px; rotate:45deg;
+  background:var(--bg-3);
+  border-inline-start:1px solid var(--line-2);
+  border-block-start:1px solid var(--line-2);
+  border-start-start-radius:3px;
+}
+.promo__icon{ font-size:1.3rem; line-height:1; flex:none; }
+.promo__text{ min-width:0; display:grid; gap:2px; }
+.promo__title{ font-size:.8125rem; font-weight:700; color:var(--ink); }
+.promo__body{ font-size:.75rem; color:var(--ink-3); line-height:1.5; }
+.promo__cta{ flex:none; }
+.promo__x{
+  position:absolute; inset-block-start:4px; inset-inline-start:6px;
+  width:22px; height:22px; border-radius:50%;
+  font-size:1.05rem; line-height:1; color:var(--ink-4);
+  transition:color .3s;
+}
+.promo__x:hover{ color:var(--ink-2); }
+
+@media (max-width:420px){
+  .promo{ width:min(92vw, 300px); }
+  .promo__body{ display:none; }   /* the title and the button carry it */
+}
+
+.cookiebar{
+  position:fixed; z-index:128;
+  inset-inline:0;
+  /* physical `bottom`, matching .cobar/.toast/.vga: a var() inside calc() on
+     the logical property does not re-resolve when the variable changes. */
+  bottom:0;
+  padding:clamp(12px,3vw,20px);
+  padding-bottom:calc(clamp(12px,3vw,20px) + env(safe-area-inset-bottom));
+  pointer-events:none;
+  opacity:0; transform:translateY(120%);
+  transition:opacity .35s var(--e-out), transform .5s var(--e-out);
+}
+.cookiebar.is-on{ opacity:1; transform:none; }
+.cookiebar.is-on .cookiebar__in{ pointer-events:auto; }
+/* the burger overlay (z-index 99) is a full-screen takeover; do not float
+   over it, the same way .cobar does not */
+.is-menu .cookiebar{ opacity:0; transform:translateY(120%); }
+
+.cookiebar__in{
+  display:flex; align-items:center; gap:clamp(14px,2.5vw,26px);
+  inline-size:min(100%, 780px); margin-inline:auto;
+  padding:clamp(14px,2vw,18px) clamp(16px,2.4vw,22px);
+  border-radius:16px;
+  background:var(--bg-3); border:1px solid var(--line-2);
+  box-shadow:0 22px 50px -18px rgba(0,0,0,.7);
+}
+
+.cookiebar__text{ min-width:0; display:grid; gap:4px; }
+.cookiebar__title{ font-size:.875rem; font-weight:700; color:var(--ink); }
+.cookiebar__body{ font-size:.8125rem; line-height:1.7; color:var(--ink-2); }
+.cookiebar__link{
+  color:var(--accent); text-decoration:underline; text-underline-offset:3px;
+  white-space:nowrap;
+}
+
+/* Both buttons keep the same size and weight. The visual difference between
+   .btn and .btn--ghost is the only one there is, and it is the minimum the
+   design language allows — nudging someone toward Accept by making Reject
+   small or grey would defeat the point of asking. */
+.cookiebar__actions{ flex:none; display:flex; gap:9px; }
+.cookiebar__actions .btn{ white-space:nowrap; }
+
+@media (max-width:720px){
+  .cookiebar__in{ flex-direction:column; align-items:stretch; gap:14px; }
+  .cookiebar__actions{ display:grid; grid-template-columns:1fr 1fr; }
+  .cookiebar__actions .btn{ width:100%; }
+}
+
+/* =========================================================================
+   REDUCED MOTION
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+  .boot{ display:none; }
+  .js .reveal{ opacity:1; transform:none; }
+  .js [data-split] .wi{ transform:none; }
+  .hero__cue{ display:none; }
+  .step{ opacity:1; }
+}

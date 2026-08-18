@@ -1,0 +1,203 @@
+{
+  "_comment": "The ad creatives that SHIP WITH THE SITE, listed for the admin dashboard. A Worker cannot enumerate the static bundle, so this file is how Work > Ads knows what is in this directory. A file added here without an entry still serves at its URL; it just will not be listed. Uploads made from the dashboard are not in here at all — they live in KV. See lib/ads.js. variant \"1080\" marks the copies resampled to the size Meta recommends; the ones with no variant are the masters as delivered.",
+  "creatives": [
+    {
+      "file": "vg-10off-ar-9x16-1080.png",
+      "concept": "10off",
+      "title": "خصم ١٠٪ على أول طلب",
+      "lang": "ar",
+      "ratio": "9:16",
+      "variant": "1080",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 3077512
+    },
+    {
+      "file": "vg-10off-en-9x16-1080.png",
+      "concept": "10off",
+      "title": "10% off your first order",
+      "lang": "en",
+      "ratio": "9:16",
+      "variant": "1080",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 3106944
+    },
+    {
+      "file": "vg-all-in-one-ar-9x16-1080.png",
+      "concept": "all-in-one",
+      "title": "كل اللي تحتاجه في مكان واحد",
+      "lang": "ar",
+      "ratio": "9:16",
+      "variant": "1080",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 2799659
+    },
+    {
+      "file": "vg-all-in-one-en-9x16-1080.png",
+      "concept": "all-in-one",
+      "title": "Everything you need, all in one place",
+      "lang": "en",
+      "ratio": "9:16",
+      "variant": "1080",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 2776376
+    },
+    {
+      "file": "vg-shop-anytime-ar-16x9-1080.png",
+      "concept": "shop-anytime",
+      "title": "اطلبها بنفسك في أي وقت",
+      "lang": "ar",
+      "ratio": "16:9",
+      "variant": "1080",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2622808
+    },
+    {
+      "file": "vg-shop-anytime-ar-9x16-1080.png",
+      "concept": "shop-anytime",
+      "title": "اطلبها بنفسك في أي وقت",
+      "lang": "ar",
+      "ratio": "9:16",
+      "variant": "1080",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 2479617
+    },
+    {
+      "file": "vg-shop-anytime-en-16x9-1080.png",
+      "concept": "shop-anytime",
+      "title": "Shop yourself, anytime",
+      "lang": "en",
+      "ratio": "16:9",
+      "variant": "1080",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 2394754
+    },
+    {
+      "file": "vg-shop-anytime-en-9x16-1080.png",
+      "concept": "shop-anytime",
+      "title": "Shop yourself, anytime",
+      "lang": "en",
+      "ratio": "9:16",
+      "variant": "1080",
+      "width": 1080,
+      "height": 1920,
+      "bytes": 2446805
+    },
+    {
+      "file": "vg-10off-ar-1x1.jpg",
+      "concept": "10off",
+      "title": "خصم ١٠٪ على أول طلب",
+      "lang": "ar",
+      "ratio": "1:1",
+      "variant": "",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 148528
+    },
+    {
+      "file": "vg-10off-ar-9x16.png",
+      "concept": "10off",
+      "title": "خصم ١٠٪ على أول طلب",
+      "lang": "ar",
+      "ratio": "9:16",
+      "variant": "",
+      "width": 941,
+      "height": 1672,
+      "bytes": 1796434
+    },
+    {
+      "file": "vg-10off-en-9x16.png",
+      "concept": "10off",
+      "title": "10% off your first order",
+      "lang": "en",
+      "ratio": "9:16",
+      "variant": "",
+      "width": 941,
+      "height": 1672,
+      "bytes": 1833390
+    },
+    {
+      "file": "vg-all-in-one-ar-1x1.jpg",
+      "concept": "all-in-one",
+      "title": "كل اللي تحتاجه في مكان واحد",
+      "lang": "ar",
+      "ratio": "1:1",
+      "variant": "",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 123227
+    },
+    {
+      "file": "vg-all-in-one-ar-9x16.png",
+      "concept": "all-in-one",
+      "title": "كل اللي تحتاجه في مكان واحد",
+      "lang": "ar",
+      "ratio": "9:16",
+      "variant": "",
+      "width": 941,
+      "height": 1672,
+      "bytes": 1683224
+    },
+    {
+      "file": "vg-all-in-one-en-9x16.png",
+      "concept": "all-in-one",
+      "title": "Everything you need, all in one place",
+      "lang": "en",
+      "ratio": "9:16",
+      "variant": "",
+      "width": 941,
+      "height": 1672,
+      "bytes": 1779679
+    },
+    {
+      "file": "vg-shop-anytime-ar-16x9.png",
+      "concept": "shop-anytime",
+      "title": "اطلبها بنفسك في أي وقت",
+      "lang": "ar",
+      "ratio": "16:9",
+      "variant": "",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1684489
+    },
+    {
+      "file": "vg-shop-anytime-ar-9x16.png",
+      "concept": "shop-anytime",
+      "title": "اطلبها بنفسك في أي وقت",
+      "lang": "ar",
+      "ratio": "9:16",
+      "variant": "",
+      "width": 941,
+      "height": 1672,
+      "bytes": 1662465
+    },
+    {
+      "file": "vg-shop-anytime-en-16x9.png",
+      "concept": "shop-anytime",
+      "title": "Shop yourself, anytime",
+      "lang": "en",
+      "ratio": "16:9",
+      "variant": "",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1595747
+    },
+    {
+      "file": "vg-shop-anytime-en-9x16.png",
+      "concept": "shop-anytime",
+      "title": "Shop yourself, anytime",
+      "lang": "en",
+      "ratio": "9:16",
+      "variant": "",
+      "width": 941,
+      "height": 1672,
+      "bytes": 1633925
+    }
+  ]
+}

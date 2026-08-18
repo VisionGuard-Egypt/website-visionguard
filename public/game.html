@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مخطّط التغطية | Vision Guard</title>
+<meta name="description" content="صمّم نظام المراقبة بتاعك على رسمة المكان، شوف كل كاميرا هتغطي إيه فعلًا، واطلب النظام كامل بطلب واحد.">
+<link rel="canonical" href="https://visionguardeg.com/game">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vision Guard">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:url" content="https://visionguardeg.com/game">
+<meta property="og:image" content="https://visionguardeg.com/assets/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Vision Guard — كاميرات مراقبة وأنظمة أمان في مصر">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F6F7F9">
+
+<meta property="og:title" content="مخطّط التغطية | Vision Guard">
+<meta property="og:description" content="حط الكاميرات على رسمة المكان وشوف التغطية الحقيقية قبل ما تشتري.">
+
+<link rel="icon" href="assets/logo-trim.png">
+<link rel="apple-touch-icon" href="assets/logo-trim.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap">
+<!-- ?v= is a cache buster — see the note in index.html. -->
+<link rel="stylesheet" href="styles.css?v=66">
+<link rel="stylesheet" href="app.css?v=66">
+
+<script>(function(d){var c=d.documentElement;c.className=c.className.replace('no-js','js');var t='light';try{var s=localStorage.getItem('vg-theme');if(s==='dark'||s==='light'){t=s;}}catch(e){}c.setAttribute('data-theme',t);})(document);</script>
+<!-- consent.js MUST stay ahead of pixel.js — see the longer note in index.html.
+     The planner fires AddToCart when a system is ordered, so it carries the
+     pixel like the shop does. promo.js is loaded on every OTHER page and
+     deliberately not here: advertising the planner to someone already using
+     it is noise, and it hides itself on this path anyway. -->
+<script src="consent.js?v=66" defer></script>
+<script src="worklink.js?v=66" defer></script>
+<script src="pixel.js?v=66" defer></script>
+<script src="track.js?v=66" defer></script>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<a class="skip" href="#planner" data-en="Skip to the planner">تخطَّ إلى المخطّط</a>
+
+<!-- ============ TOP CONTACT STRIP ============ -->
+<div class="strip">
+  <div class="shell strip__in">
+    <p class="strip__item"><span class="dot"></span><span data-en="Fast contact">تواصل سريع</span></p>
+    <a class="strip__item" href="tel:+201260087815" dir="ltr">01260087815</a>
+    <a class="strip__item strip__wa" href="https://wa.me/201105006854" target="_blank" rel="noopener">
+      <span data-en="WhatsApp">واتساب</span> <span dir="ltr">01105006854</span>
+    </a>
+    <p class="strip__item strip__hours" data-en="10 AM – 8 PM · Closed Friday">١٠ص – ٨م · الجمعة إجازة</p>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav__inner shell">
+    <a class="brand" href="index.html" aria-label="Vision Guard">
+      <img class="brand__logo" src="assets/logo-trim.png" alt="Vision Guard" width="322" height="190">
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a href="index.html" data-en="Home">الرئيسية</a>
+      <a href="shop.html" data-en="Shop">المتجر</a>
+      <a href="game.html" class="is-active" aria-current="page" data-en="Planner">المخطّط</a>
+      <a href="account.html" data-en="Account">حسابي</a>
+      <a href="index.html#contact" data-en="Contact">تواصل</a>
+    </nav>
+
+    <div class="nav__end">
+      <button class="lang" id="lang" type="button" aria-label="Switch language">EN</button>
+      <button class="theme" id="theme" type="button" aria-label="Switch theme" aria-pressed="false" title="الوضع الفاتح / الداكن">
+        <svg class="theme__sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2"/>
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>
+        </svg>
+        <svg class="theme__moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.2 14.6A8.4 8.4 0 0 1 9.4 3.8a8.4 8.4 0 1 0 10.8 10.8Z"/>
+        </svg>
+      </button>
+      <a class="iconbtn" href="shop.html" aria-label="Shop" title="المتجر">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M3.5 4h2.2l2 11.2a1.6 1.6 0 0 0 1.6 1.3h8.1a1.6 1.6 0 0 0 1.6-1.2L20.5 8H6.4"/>
+          <circle cx="10" cy="20" r="1.2" fill="currentColor" stroke="none"/>
+          <circle cx="17.5" cy="20" r="1.2" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <div class="menu__inner">
+    <a href="index.html"><i>01</i><span data-en="Home">الرئيسية</span></a>
+    <a href="shop.html"><i>02</i><span data-en="Shop">المتجر</span></a>
+    <a href="game.html"><i>03</i><span data-en="Planner">المخطّط</span></a>
+    <a href="account.html"><i>04</i><span data-en="Account">حسابي</span></a>
+    <a href="index.html#contact"><i>05</i><span data-en="Contact">تواصل</span></a>
+    <div class="menu__foot">
+      <a href="tel:+201260087815" dir="ltr">01260087815</a>
+      <a href="https://wa.me/201105006854" target="_blank" rel="noopener" dir="ltr">WhatsApp 01105006854</a>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+  <section class="view">
+    <div class="shell">
+
+      <header class="pagehead">
+        <p class="eyebrow"><span class="dot"></span><span data-en="Coverage planner">مخطّط التغطية</span></p>
+        <h1 class="h2" data-en="Build your system. See what it covers.">صمّم نظامك. وشوف بيغطي إيه.</h1>
+        <p class="pagehead__note" data-en="Drop cameras on a plan of your place, switch between real models from our catalogue, and watch the covered area change. When it looks right, order the whole system — cameras, recorder, drive, power and cable — in one go.">
+          حط الكاميرات على رسمة مكانك، بدّل بين موديلات حقيقية من الكتالوج بتاعنا، وشوف المساحة المغطاة بتتغير. ولما يعجبك، اطلب النظام كامل — كاميرات وجهاز تسجيل وهارد وبور وكابل — بطلب واحد.
+        </p>
+      </header>
+
+      <!-- ============ STEP 1 ============
+           Three questions, answered one at a time, that draw a plan to match.
+
+           The ready-made plans below them are kept: some people want to poke
+           at something immediately rather than answer anything, and a wizard
+           that is the ONLY way in turns a thirty-second look into a form.
+           Either route ends at the same step 2. -->
+      <section class="gstep">
+        <h2 class="gstep__title"><span class="gstep__n">1</span><span data-i18n="step1">اختار نوع المكان</span></h2>
+
+        <div class="quiz" id="quiz">
+          <ol class="quiz__steps" id="quizSteps">
+            <li class="quiz__step is-on" data-q="0">
+              <!-- A FRACTION, NOT A NUMBER. This used to be a bare "1" in a
+                   badge, sitting directly under the step badge which is also
+                   a "1" — so the screen showed two blue discs both reading 1,
+                   one meaning "step 1 of 3" and the other "question 1 of 3".
+                   Nobody can be expected to know that. A fraction says which
+                   of three questions you are on and cannot be mistaken for a
+                   step number. -->
+              <p class="quiz__q"><span class="quiz__n">1/3</span><span data-i18n="q1">المكان ده إيه؟</span></p>
+              <div class="quiz__opts" id="qType"></div>
+            </li>
+            <li class="quiz__step" data-q="1">
+              <p class="quiz__q"><span class="quiz__n">2/3</span><span data-i18n="q2">مساحته قد إيه؟</span></p>
+              <div class="quiz__opts" id="qSize"></div>
+            </li>
+            <li class="quiz__step" data-q="2">
+              <p class="quiz__q"><span class="quiz__n">3/3</span><span data-i18n="q3">كام مكان جوّه محتاج تغطية؟</span></p>
+              <div class="quiz__opts" id="qAreas"></div>
+            </li>
+          </ol>
+
+          <div class="quiz__foot">
+            <button class="btn btn--ghost btn--sm" id="quizBack" type="button" hidden data-i18n="back">رجوع</button>
+            <p class="quiz__sum" id="quizSum" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <details class="quiz__ready" id="readyMade">
+          <summary data-i18n="orPreset">أو ابدأ من مخطط جاهز</summary>
+          <div class="propgrid" id="propGrid"></div>
+        </details>
+      </section>
+
+      <!-- ============ STEP 2 ============ -->
+      <section class="gstep" id="planner" hidden>
+        <h2 class="gstep__title"><span class="gstep__n">2</span><span data-i18n="step2">حط الكاميرات</span></h2>
+
+        <div class="gtoolbar">
+          <div class="seg" role="group" aria-label="Indoor / Outdoor">
+            <button class="seg__b is-on" type="button" data-mode="indoor" data-i18n="indoor">داخلي</button>
+            <button class="seg__b" type="button" data-mode="outdoor" data-i18n="outdoor">خارجي</button>
+          </div>
+          <div class="gtoolbar__acts">
+            <button class="btn btn--sm" id="addCam" type="button" data-i18n="addCam">ضيف كاميرا</button>
+            <button class="btn btn--ghost btn--sm" id="suggest" type="button" data-i18n="suggest">رشّحلي أماكن</button>
+            <button class="btn btn--ghost btn--sm" id="clearCams" type="button" data-i18n="clear">امسح الكل</button>
+            <!-- Editing the plan is its own MODE rather than always-on handles.
+                 The common gesture on this drawing is placing and aiming a
+                 camera; scattering wall grips across it would put a drag target
+                 on top of the thing most people came here to do. -->
+            <button class="btn btn--ghost btn--sm" id="editWalls" type="button" aria-pressed="false" data-i18n="editWalls">عدّل الحيطان</button>
+          </div>
+        </div>
+
+        <!-- ---- EDITING THE PLAN ---- only while the mode is on -->
+        <div class="editbar" id="editBar" hidden>
+          <div class="editbar__row">
+            <label class="editbar__lab" for="planW" data-i18n="widthM">العرض (متر)</label>
+            <input class="editbar__num" id="planW" type="number" min="6" max="60" step="0.5" inputmode="decimal">
+            <label class="editbar__lab" for="planH" data-i18n="depthM">العمق (متر)</label>
+            <input class="editbar__num" id="planH" type="number" min="5" max="44" step="0.5" inputmode="decimal">
+            <button class="btn btn--ghost btn--sm" id="planReset" type="button" data-i18n="resetPlan">رجّع الأصلي</button>
+          </div>
+
+          <!-- The customer's own drawing, to measure against. Held in this tab
+               only and never uploaded — see the note in game.js. -->
+          <div class="editbar__row">
+            <label class="btn btn--ghost btn--sm" for="planRef" data-i18n="addDrawing">حط رسمة المكان</label>
+            <input id="planRef" type="file" accept="image/*" hidden>
+            <label class="editbar__lab" for="refFade" data-i18n="drawingFade">وضوح الرسمة</label>
+            <input class="editbar__range" id="refFade" type="range" min="10" max="90" value="45" disabled>
+            <button class="btn btn--ghost btn--sm" id="refClear" type="button" hidden data-i18n="removeDrawing">شيل الرسمة</button>
+          </div>
+
+          <p class="editbar__note" data-i18n="editHelp">اسحب حيطة برّانية عشان تكبّر المكان أو تصغّره، واسحب أي حيطة جوّه عشان تحرّكها. الرسمة اللي بترفعها بتفضل في التاب ده بس — مش بتترفع على السيرفر ولا بتتحفظ عندنا.</p>
+        </div>
+
+        <div class="glayout">
+          <div class="gplan">
+            <svg id="planSvg" class="planwrap" viewBox="0 0 20 14" role="img" aria-label="Floor plan"></svg>
+            <p class="gplan__hint" data-i18n="tapPlan">دوس على الرسمة عشان تحط كاميرا</p>
+          </div>
+
+          <aside class="gside">
+            <div class="card">
+              <h3 class="card__title" data-i18n="coverage">التغطية</h3>
+              <div class="cov">
+                <div class="cov__big"><b id="covPct">0%</b><span id="covGrade"></span></div>
+                <div class="meter"><i class="meter__fill" id="covBar" style="width:0"></i></div>
+                <p class="card__note"><span data-i18n="covered">مساحة مغطاة</span>: <b id="covArea">0 m²</b></p>
+              </div>
+              <div class="zonecols">
+                <div>
+                  <p class="zonecols__h" data-i18n="monitored">الأماكن المغطاة</p>
+                  <ul class="zonelist" id="zonesOk"></ul>
+                </div>
+                <div>
+                  <p class="zonecols__h" data-i18n="blind">أماكن مكشوفة</p>
+                  <ul class="zonelist" id="zonesBad"></ul>
+                </div>
+              </div>
+              <p class="card__note" data-i18n="approx">تقديري — بيحسب الحوائط، بس التركيب الفعلي بيتظبط في المعاينة.</p>
+            </div>
+
+            <div class="card">
+              <h3 class="card__title" data-i18n="camera">الكاميرات</h3>
+              <div id="camList"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============ STEP 3 ============ -->
+      <section class="gstep">
+        <h2 class="gstep__title"><span class="gstep__n">3</span><span data-i18n="sysTitle">النظام الكامل</span></h2>
+        <div class="card">
+          <p class="card__note" data-i18n="sysNote">الكاميرات لوحدها مش نظام. ده كل اللي محتاجه التركيب يشتغل.</p>
+          <div class="tablewrap" style="margin-top:12px">
+            <table class="att">
+              <thead><tr>
+                <th data-en="Item">الصنف</th>
+                <th class="num" data-en="Qty">عدد</th>
+                <th class="num" data-en="Price">السعر</th>
+              </tr></thead>
+              <tbody id="sysRows"></tbody>
+            </table>
+          </div>
+          <p class="systotal"><span data-i18n="total">الإجمالي</span>: <b id="sysTotal">—</b></p>
+          <div class="gcta">
+            <button class="btn" id="orderBtn" type="button" disabled data-i18n="order">اطلب النظام ده</button>
+            <button class="btn btn--ghost" id="printBtn" type="button" data-i18n="print">اطبع الملخص</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer__bar" style="border-top:0; margin-top:0">
+      <p>&copy; <span id="year">2026</span> Vision Guard. <span data-en="All rights reserved.">جميع الحقوق محفوظة.</span>
+        &nbsp;·&nbsp; <a href="privacy.html" data-en="Privacy policy">سياسة الخصوصية</a>
+        &nbsp;·&nbsp; <a href="terms.html" data-en="Terms of use">شروط الاستخدام</a>
+        &nbsp;·&nbsp; <a href="privacy.html#cookies" data-consent="open" data-en="Cookie settings">إعدادات الكوكيز</a></p>
+      <a class="totop" href="shop.html"><span data-en="Go to the shop">روح للمتجر</span> <i aria-hidden="true">←</i></a>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="game.js?v=66"></script>
+</body>
+</html>

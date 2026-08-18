@@ -1,0 +1,117 @@
+# Cloudflare Pages - project config
+#
+# public/ is shipped verbatim; functions/ is compiled into Pages Functions and
+# served under /api/*. Keeping the site in a subdirectory is deliberate - it
+# stops README.md, this file and node_modules from being served at the site
+# root, and it keeps lib/ (server-only code) off the public web.
+#
+# IMPORTANT: `name` must match your Cloudflare Pages project name exactly.
+# `wrangler pages deploy` reads it from here, and a mismatch fails the build
+# with "project not found". Check it in the dashboard under
+# Workers & Pages -> your project -> the name shown at the top.
+# If your project is named something else, either rename it here or pass
+# --project-name=<actual-name> on the deploy command.
+
+name = "visionguard"
+pages_build_output_dir = "public"
+
+compatibility_date = "2026-07-31"
+
+# --------------------------------------------------------------------------
+# Database - orders, accounts, attendance, mailing list.
+#
+# Apply the schema to it once (lib/db.js also self-heals a fresh database on
+# first request, so this is belt and braces):
+#   npx wrangler d1 execute visionguardegdata --remote --file=./schema.sql
+#
+# `wrangler pages dev` ignores database_id and uses a local SQLite file under
+# .wrangler/, so local development never touches production data.
+# --------------------------------------------------------------------------
+[[d1_databases]]
+binding = "DB"
+database_name = "visionguardegdata"
+database_id = "b538d110-35d6-43bd-b821-233c26e173bd"
+
+# --------------------------------------------------------------------------
+# Workers AI - powers the shop assistant at /api/assist.
+#
+# Nothing else to provision: the binding is the whole setup, and inference is
+# billed to this account in neurons (the Free plan includes a daily
+# allowance). `wrangler pages dev` proxies this to the real service, so local
+# development needs `npx wrangler login` once - without it the endpoint
+# answers 503 and the widget falls back to the WhatsApp number.
+#
+# The model is pinned in lib/assistant.js and can be overridden per
+# environment with an ASSISTANT_MODEL variable, no deploy required.
+# --------------------------------------------------------------------------
+[ai]
+binding = "AI"
+
+# --------------------------------------------------------------------------
+# Workers KV.
+#
+# Bound as KV, namespace 87aac66956bf4df382f679ce733a79fb. Declared in TOML
+# rather than the wrangler.jsonc form Cloudflare's snippet uses — this is a
+# Pages project and its config is this file; the two formats are equivalent.
+#
+# A NOTE ON WHAT THIS DOES AND DOES NOT FIX. It was added to cure a loading
+# timeout, and it is worth being straight about that: the timeout is not
+# reproducible. Measured against production, 600 requests at 200 concurrent
+# returned zero errors, p95 0.45s on the database path and 0.54s on the
+# homepage. The slow first byte that did exist came from cold isolates
+# running 13 schema statements before answering, and that is already fixed in
+# lib/db.js — p95 went from 2.21s to 0.66s.
+#
+# KV is genuinely good at one thing here: reads that are identical for every
+# visitor, cached at the edge. The catalogue is the candidate. It is a poor
+# fit for anything per-user or write-heavy — it is eventually consistent, so
+# a session, a cart or a rate-limit counter stored here would be wrong for up
+# to a minute, and D1 stays the right home for those.
+# --------------------------------------------------------------------------
+[[kv_namespaces]]
+binding = "KV"
+id = "87aac66956bf4df382f679ce733a79fb"
+
+# --------------------------------------------------------------------------
+# Non-secret settings. Secrets (SESSION_SECRET, WhatsApp credentials) do NOT
+# belong here - put them in .dev.vars locally and in the Pages dashboard for
+# production. See .dev.vars.example.
+# --------------------------------------------------------------------------
+[vars]
+# WhatsApp order alerts. Neither of these is a secret — the token and the
+# phone id are, and they stay in the dashboard.
+#
+# The template matters. A plain-text WhatsApp message is only deliverable
+# inside a 24-hour window after the recipient last messaged the business
+# number, and an order alert to the shop's own phone is essentially never
+# inside that window — it fails with error 131047 and the alert is lost at
+# exactly the moment it is wanted. A template has no such limit.
+#
+# This name and language must match a template APPROVED in the WhatsApp
+# Manager, and its body must take two parameters in this order:
+#   {{1}} order number      {{2}} total
+# Those are what functions/api/orders.js passes. If the approved template
+# differs, change it there and here together, or the send is rejected for a
+# parameter-count mismatch.
+WHATSAPP_TEMPLATE = "new_order_alert"
+WHATSAPP_TEMPLATE_LANG = "en_US"
+
+# Firebase Auth. Not a secret: the project id ships in the browser config on
+# every site that uses Firebase. It is still required — lib/firebase.js checks
+# each ID token's `aud` against it, and that check is the only thing stopping
+# a token minted by somebody else's Firebase project from signing in here. If
+# this is unset the sign-in endpoint refuses to run rather than verify
+# nothing.
+FIREBASE_PROJECT_ID = "visionguard-7425d"
+
+# Contracted working day, in hours. Drives the attendance targets.
+WORK_DAY_HOURS = "6"
+# Flat shipping fee in EGP. 0 means "quoted per governorate at confirmation",
+# which is what the store actually does today.
+SHIPPING_FLAT = "0"
+
+# Product images are stored in the KV namespace bound above, NOT in an external
+# object store. The Backblaze B2 placeholders that used to sit here are gone,
+# and no code ever read them — see lib/images.js for where the bytes live and
+# functions/assets/products/[[path]].js for how they are served. There is
+# nothing to configure: binding KV is the whole setup.

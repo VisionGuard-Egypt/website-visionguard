@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="RG59 coaxial cable roll">
+  <!-- Line-art stand-in for a coax roll. Drawn rather than photographed:
+       a wrong photograph is worse than an honest drawing, and every roll in
+       the list is the same cable at a different length. -->
+  <g fill="none" stroke="#12202A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- outer coil -->
+    <ellipse cx="300" cy="235" rx="150" ry="140"/>
+    <ellipse cx="300" cy="235" rx="112" ry="104"/>
+    <!-- inner hub -->
+    <ellipse cx="300" cy="235" rx="52" ry="48"/>
+    <!-- wound turns -->
+    <path d="M300 95c-58 22-92 74-92 140" opacity=".55"/>
+    <path d="M300 375c58-22 92-74 92-140" opacity=".55"/>
+    <path d="M168 190c40-28 84-40 132-40" opacity=".35"/>
+    <path d="M432 280c-40 28-84 40-132 40" opacity=".35"/>
+    <!-- loose tail with a stripped end -->
+    <path d="M450 210c38-14 62-6 74 22 10 24 2 44-22 58"/>
+    <path stroke="#1B9DD9" d="M502 290l-26 14"/>
+    <circle cx="470" cy="308" r="9" fill="#1B9DD9" stroke="none"/>
+  </g>
+  <text x="300" y="425" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="34" font-weight="600" letter-spacing="2" fill="#12202A">RG59</text>
+</svg>

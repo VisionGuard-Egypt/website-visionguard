@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="64GB microSD memory card">
+  <g fill="none" stroke="#12202A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- microSD outline: notched top-left corner, angled bottom-right -->
+    <path d="M232 96h136v52l-28 0v206a12 12 0 0 1-12 12H232a12 12 0 0 1-12-12V166z"/>
+    <!-- contact pads -->
+    <path d="M252 308h24v34h-24zM290 308h24v34h-24zM328 308h24v34h-24z" opacity=".45" stroke-width="6"/>
+    <!-- write-protect notch cue -->
+    <path stroke="#1B9DD9" d="M220 166l24-24"/>
+  </g>
+  <text x="294" y="232" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="52" font-weight="700" fill="#12202A">64</text>
+  <text x="294" y="272" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="26" font-weight="600" letter-spacing="2" fill="#12202A" opacity=".65">GB</text>
+  <text x="300" y="420" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="24" font-weight="500" letter-spacing="3" fill="#12202A" opacity=".55">microSD</text>
+</svg>

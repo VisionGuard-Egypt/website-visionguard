@@ -1,0 +1,24 @@
+# Vision Guard — visionguardeg.com
+#
+# THIS FILE DID NOT EXIST, AND THAT WAS A BUG. With no robots.txt at the
+# origin, Cloudflare served its own managed block and Pages appended the SPA
+# fallback to it — so /robots.txt answered with crawler directives followed
+# by the entire HTML of the homepage. Crawlers stop at the first thing they
+# cannot parse, so the directives were read, but the file was nonsense and
+# there was nowhere to advertise the sitemap.
+#
+# Cloudflare's managed content (the AI-crawler block list) is added around
+# this by the zone, between its own BEGIN/END markers. Do not paste a copy of
+# it here — it is maintained upstream and would drift.
+
+User-agent: *
+Allow: /
+
+# The signed-in dashboard. It already carries noindex and is served no-store;
+# this saves a crawler the request.
+Disallow: /account
+Disallow: /account.html
+
+# Generated from the products table on every request, so it never goes stale
+# — see functions/sitemap.xml.js.
+Sitemap: https://visionguardeg.com/sitemap.xml

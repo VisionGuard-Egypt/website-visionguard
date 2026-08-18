@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" role="img" aria-label="Cat6 UTP cable pull box">
+  <g fill="none" stroke="#12202A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- pull box -->
+    <path d="M150 175h300v210H150z"/>
+    <path d="M150 175l52-52h300l-52 52M450 175l52-52v210l-52 52"/>
+    <!-- pay-out hole -->
+    <ellipse cx="300" cy="222" rx="34" ry="15"/>
+    <!-- cable coming out and away -->
+    <path d="M300 222c0 44 26 66 66 66 44 0 70-26 70-62"/>
+    <path stroke="#1B9DD9" d="M436 226v-38"/>
+    <!-- RJ45 plug on the end -->
+    <path d="M414 150h44v38h-44z"/>
+    <path d="M424 150v-16h24v16"/>
+  </g>
+  <text x="300" y="345" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="42" font-weight="700" letter-spacing="1" fill="#12202A">Cat6</text>
+  <text x="300" y="378" text-anchor="middle" font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="22" font-weight="500" letter-spacing="3" fill="#12202A" opacity=".6">UTP 305m</text>
+</svg>

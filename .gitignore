@@ -1,0 +1,23 @@
+node_modules/
+.wrangler/
+.dev.vars
+.env
+.env.*
+
+# local editor / agent tooling
+.claude/
+
+# Saved web pages kept locally for reference while wiring up the Meta pixel.
+# They are NOT source, and they must not be published: this repository is
+# public, and a page saved from a logged-in Facebook session carries whatever
+# that session had in it. "Events Manager.html" contains EAA-prefixed strings
+# 200 and 219 characters long, which is exactly the shape of a Meta access
+# token. Neither file has ever been pushed — keep it that way.
+Events Manager.html
+Events Manager_files/
+Parameter Builder Library.md
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini

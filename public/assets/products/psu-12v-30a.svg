@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Power Supply 12V 30A">
+  <rect width="800" height="800" fill="#ffffff"/>
+  <rect x="180" y="180" width="440" height="440" rx="32" fill="#f6f8fb" stroke="#2d4059" stroke-width="10"/>
+  <rect x="230" y="240" width="340" height="220" rx="22" fill="#d9e3f0" stroke="#2d4059" stroke-width="8"/>
+  <rect x="280" y="495" width="240" height="40" rx="20" fill="#2d4059"/>
+  <rect x="350" y="570" width="100" height="30" rx="15" fill="#2d4059"/>
+  <circle cx="345" cy="360" r="22" fill="#ffffff" stroke="#2d4059" stroke-width="6"/>
+  <circle cx="455" cy="360" r="22" fill="#ffffff" stroke="#2d4059" stroke-width="6"/>
+  <text x="400" y="120" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" fill="#16263a">Power Supply</text>
+  <text x="400" y="165" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#16263a">12V · 30A</text>
+</svg>
